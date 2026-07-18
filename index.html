@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Enter BOYOWORLD: five games, one masked menace, and official BOYO music rewards.">
+  <meta property="og:title" content="BOYOWORLD — The Game">
+  <meta property="og:description" content="Play five chaotic BOYO game genres and unlock official music videos.">
+  <meta property="og:image" content="assets/brand-hero.png">
+  <meta property="og:type" content="website">
+  <title>BOYOWORLD — The Game</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="icon" href="assets/boyo-mask-reference.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#game">Skip to game</a>
+
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="mini-mark" href="#top" aria-label="BOYOWORLD home">
+      <span>BOYO</span><span>WORLD</span>
+    </a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="#game">Play</a>
+      <a href="#levels">Levels</a>
+      <a href="#music">Music</a>
+      <a href="https://www.boyoworld.com/" target="_blank" rel="noreferrer">Merch</a>
+    </nav>
+    <a class="signal-link" href="https://linktr.ee/BOYOWORLD" target="_blank" rel="noreferrer">
+      All transmissions <span aria-hidden="true">↗</span>
+    </a>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-collage" aria-hidden="true">
+        <figure class="poster poster-a"><img src="assets/video-red-brick.jpg" alt=""></figure>
+        <figure class="poster poster-b"><img src="assets/tiktok/boyo-03.jpg" alt=""></figure>
+        <figure class="poster poster-c"><img src="assets/video-fuming.jpg" alt=""></figure>
+        <figure class="poster poster-d"><img src="assets/boyo-mask-reference.png" alt=""></figure>
+        <figure class="poster poster-e"><img src="assets/frames/spitfire-2.jpg" alt=""></figure>
+        <figure class="poster poster-f"><img src="assets/tiktok/boyo-12.jpg" alt=""></figure>
+        <span class="tape tape-a"></span>
+        <span class="tape tape-b"></span>
+        <span class="scribble">6P / NO WEAKIES</span>
+      </div>
+
+      <div class="hero-copy">
+        <p class="hero-stamp">Five games. One masked menace.</p>
+        <h1 id="hero-title" aria-label="BOYOWORLD">
+          <span>BOYO</span>
+          <span>WORLD</span>
+        </h1>
+        <p class="hero-intro">
+          Run it. Tap down. Spin the block. Survive five genres and crack open
+          a random BOYO transmission every time you win.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#game">Insert chaos</a>
+          <a class="button button-ghost" href="https://www.youtube.com/@BOYOWORLD" target="_blank" rel="noreferrer">
+            Watch BOYO <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-aside" aria-label="BOYOWORLD status">
+        <img src="assets/linktree-profile.jpg" alt="BOYO in the distinctive white knitted mask">
+        <div>
+          <strong>BOYO IS ONLINE</strong>
+          <span>Artist / producer / trouble</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="transmission" aria-label="BOYO links">
+      <div class="transmission-track">
+        <a href="https://www.youtube.com/@BOYOWORLD" target="_blank" rel="noreferrer">YOUTUBE ↗</a>
+        <span>WEAKIES</span>
+        <a href="https://www.tiktok.com/@boyo_world" target="_blank" rel="noreferrer">TIKTOK ↗</a>
+        <span>SPIN THE BLOCK</span>
+        <a href="https://www.instagram.com/boyoworld/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a>
+        <span>WET EGG</span>
+        <a href="https://open.spotify.com/artist/7J2xeLqwL4RSJ4OqCWL00d" target="_blank" rel="noreferrer">SPOTIFY ↗</a>
+        <span>LIAR</span>
+      </div>
+    </div>
+
+    <section class="visual-archive" aria-label="Scenes from BOYOWORLD">
+      <div class="archive-wordmark" aria-hidden="true">BOYO<br><span>WORLD</span></div>
+      <div class="archive-strip">
+        <a href="https://www.youtube.com/watch?v=0o7RmMrxvko" target="_blank" rel="noreferrer">
+          <img src="assets/frames/red-brick-2.jpg" alt="Scene from BOYO Red Brick">
+          <span>RED BRICK</span>
+        </a>
+        <a href="https://www.tiktok.com/@boyo_world" target="_blank" rel="noreferrer">
+          <img src="assets/tiktok/boyo-03.jpg" alt="BOYO High on Life TikTok artwork">
+          <span>LIVE CHAOS</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=rRkw3Q7A8cQ" target="_blank" rel="noreferrer">
+          <img src="assets/frames/spitfire-3.jpg" alt="Scene from BOYO Spitfire">
+          <span>SPITFIRE</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=fuyD1Tkhkcc" target="_blank" rel="noreferrer">
+          <img src="assets/frames/fuming-1.jpg" alt="Scene from BOYO Fuming">
+          <span>FUMING</span>
+        </a>
+        <a href="https://www.tiktok.com/@boyo_world" target="_blank" rel="noreferrer">
+          <img src="assets/tiktok/boyo-12.jpg" alt="BOYO wearing the white mask and playing guitar">
+          <span>NO NORMAL</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=SEBZABjtZBU" target="_blank" rel="noreferrer">
+          <img src="assets/frames/raw-pap-2.jpg" alt="Scene from BOYO Raw Pap">
+          <span>RAW PAP</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=HNUtBySf-aU" target="_blank" rel="noreferrer">
+          <img src="assets/frames/pay-me-3.jpg" alt="Scene from BOYO Pay Me">
+          <span>PAY ME</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="game-section" id="game" aria-labelledby="game-title">
+      <div class="section-heading">
+        <div>
+          <p>BOYO SYSTEM / UNIT 6P</p>
+          <h2 id="game-title">Choose your disturbance.</h2>
+        </div>
+        <p>Five genres. Shared progress. Official music-video drops after every win.</p>
+      </div>
+
+      <div class="cabinet">
+        <div class="cabinet-top">
+          <div class="brand-plate"><span>BOYO</span>WORLD</div>
+          <div class="machine-readout">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="machineStatus">SYSTEM READY</span>
+          </div>
+          <div class="speaker-slots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="screen-bezel">
+          <div class="screen-header">
+            <span id="levelReadout">SELECT LEVEL</span>
+            <span id="scoreReadout">SCORE 000000</span>
+            <span id="lifeReadout">BOYO × 3</span>
+          </div>
+
+          <div class="screen" id="screen">
+            <div id="gameCanvas" tabindex="0"
+              aria-label="BOYOWORLD Phaser game screen. Select a level below to begin."></div>
+            <div class="scanlines" aria-hidden="true"></div>
+            <div class="screen-vignette" aria-hidden="true"></div>
+
+            <div class="game-menu" id="gameMenu">
+              <div class="menu-mask" aria-hidden="true">
+                <div class="mask-eyes"><i></i><i></i></div>
+                <div class="mask-mouth"></div>
+                <strong>BOYO</strong>
+              </div>
+              <div class="menu-copy">
+                <p>THE BOYO SYSTEM</p>
+                <h3>Pick a level.<br>Make some noise.</h3>
+                <span>Keyboard, touch, and controller-style controls supported.</span>
+              </div>
+              <div class="level-select" role="group" aria-label="Select a game level">
+                <button data-level="0"><b>01</b><span>Red Brick Run<small>Platform runner</small></span></button>
+                <button data-level="1"><b>02</b><span>Spitfire Beat<small>Rhythm strike</small></span></button>
+                <button data-level="2"><b>03</b><span>Fuming Escape<small>Top-down chase</small></span></button>
+                <button data-level="3"><b>04</b><span>Raw Pap Arena<small>Survival shooter</small></span></button>
+                <button data-level="4"><b>05</b><span>Pay Me Panic<small>Memory reaction</small></span></button>
+              </div>
+            </div>
+
+            <div class="level-card" id="levelCard" hidden>
+              <p id="levelGenre">LEVEL GENRE</p>
+              <h3 id="levelName">LEVEL NAME</h3>
+              <p id="levelObjective">Objective</p>
+              <button class="button button-primary" id="beginLevel">Start level</button>
+            </div>
+
+            <div class="pause-card" id="pauseCard" hidden>
+              <p>TRANSMISSION HELD</p>
+              <h3>BOYO paused.</h3>
+              <button class="button button-primary" id="resumeGame">Resume</button>
+              <button class="button button-ghost" id="restartGame">Restart</button>
+              <button class="button button-ghost" id="exitGame">Level select</button>
+            </div>
+
+            <div class="reward-card" id="rewardCard" hidden>
+              <div class="reward-copy">
+                <p>LEVEL CLEARED / TRANSMISSION UNLOCKED</p>
+                <h3 id="rewardTitle">BOYO TV</h3>
+              </div>
+              <div class="video-frame">
+                <iframe id="rewardVideo" title="Random official BOYO music video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+              </div>
+              <div class="reward-actions">
+                <button class="button button-primary" id="nextLevel">Next level</button>
+                <button class="button button-ghost" id="randomVideo">Another video</button>
+                <button class="button button-ghost" id="skipReward">Skip video</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-footer">
+            <span id="objectiveReadout">SELECT A LEVEL TO BOOT</span>
+            <span id="quoteReadout" aria-live="polite">“TAP DOWN”</span>
+          </div>
+        </div>
+
+        <div class="cabinet-controls">
+          <div class="cabinet-buttons">
+            <button id="menuButton" class="hardware-button" aria-label="Return to level select"><i></i>Menu</button>
+            <button id="pauseButton" class="hardware-button" aria-label="Pause or resume game"><i></i>Pause</button>
+            <button id="soundToggle" class="hardware-button" aria-pressed="true" aria-label="Mute game sounds"><i></i>Sound on</button>
+          </div>
+          <div class="cabinet-instructions">
+            <span><kbd>WASD</kbd> / <kbd>ARROWS</kbd> MOVE</span>
+            <span><kbd>SPACE</kbd> ACTION</span>
+            <span><kbd>P</kbd> PAUSE</span>
+            <span><kbd>R</kbd> RETRY</span>
+          </div>
+          <button class="power-button" id="fullscreenButton" aria-label="Enter fullscreen game mode">
+            <span aria-hidden="true">⛶</span> Full screen
+          </button>
+        </div>
+      </div>
+
+      <div class="touch-controls" id="touchControls" aria-label="Touch game controls">
+        <div class="dpad">
+          <button data-input="up" aria-label="Move up">↑</button>
+          <button data-input="left" aria-label="Move left">←</button>
+          <button data-input="down" aria-label="Move down">↓</button>
+          <button data-input="right" aria-label="Move right">→</button>
+        </div>
+        <div class="action-pad">
+          <button data-input="action" aria-label="Primary action">A</button>
+          <button data-input="secondary" aria-label="Secondary action">B</button>
+        </div>
+      </div>
+
+      <p class="sr-only" id="gameAnnouncements" aria-live="polite"></p>
+    </section>
+
+    <section class="level-showcase" id="levels" aria-labelledby="levels-title">
+      <div class="showcase-title">
+        <p>THE FIVE DISTURBANCES</p>
+        <h2 id="levels-title">Every door leads somewhere worse.</h2>
+      </div>
+      <article class="showcase-row">
+        <div class="showcase-number">01</div>
+        <div class="showcase-media">
+          <img src="assets/frames/red-brick-1.jpg" alt="BOYO Red Brick street scene">
+          <img src="assets/frames/red-brick-2.jpg" alt="BOYO in Red Brick">
+          <img src="assets/frames/red-brick-3.jpg" alt="Red Brick video scene">
+        </div>
+        <div><h3>Red Brick Run</h3><p>Vault bins, boots, and bad decisions. Collect six red bricks before the street closes in.</p></div>
+        <button data-launch="0">Run it <span>→</span></button>
+      </article>
+      <article class="showcase-row">
+        <div class="showcase-number">02</div>
+        <div class="showcase-media">
+          <img src="assets/frames/spitfire-1.jpg" alt="BOYO Spitfire scene one">
+          <img src="assets/frames/spitfire-2.jpg" alt="BOYO Spitfire scene two">
+          <img src="assets/frames/spitfire-3.jpg" alt="BOYO Spitfire scene three">
+        </div>
+        <div><h3>Spitfire Beat</h3><p>Four lanes. One pulse. Strike the line with D, F, J, and K. No weak timing.</p></div>
+        <button data-launch="1">Tap down <span>→</span></button>
+      </article>
+      <article class="showcase-row">
+        <div class="showcase-number">03</div>
+        <div class="showcase-media">
+          <img src="assets/frames/fuming-1.jpg" alt="BOYO Fuming scene one">
+          <img src="assets/frames/fuming-2.jpg" alt="BOYO Fuming scene two">
+          <img src="assets/frames/fuming-3.jpg" alt="BOYO Fuming scene three">
+        </div>
+        <div><h3>Fuming Escape</h3><p>Collect the six signals while the whole concrete maze turns against BOYO.</p></div>
+        <button data-launch="2">Get out <span>→</span></button>
+      </article>
+      <article class="showcase-row">
+        <div class="showcase-number">04</div>
+        <div class="showcase-media">
+          <img src="assets/frames/raw-pap-1.jpg" alt="BOYO Raw Pap scene one">
+          <img src="assets/frames/raw-pap-2.jpg" alt="BOYO Raw Pap scene two">
+          <img src="assets/frames/raw-pap-3.jpg" alt="BOYO Raw Pap scene three">
+        </div>
+        <div><h3>Raw Pap Arena</h3><p>Spin the block. Fire raw signals. Clear twelve pests before BOYO gets folded.</p></div>
+        <button data-launch="3">Spin it <span>→</span></button>
+      </article>
+      <article class="showcase-row">
+        <div class="showcase-number">05</div>
+        <div class="showcase-media">
+          <img src="assets/frames/pay-me-1.jpg" alt="BOYO Pay Me scene one">
+          <img src="assets/frames/pay-me-2.jpg" alt="BOYO Pay Me scene two">
+          <img src="assets/frames/pay-me-3.jpg" alt="BOYO Pay Me scene three">
+        </div>
+        <div><h3>Pay Me Panic</h3><p>Watch the pattern, hold your nerve, and pay the correct pads in the correct order.</p></div>
+        <button data-launch="4">Pay up <span>→</span></button>
+      </article>
+    </section>
+
+    <section class="music-section" id="music" aria-labelledby="music-title">
+      <div class="music-copy">
+        <p>OFFICIAL BOYO TRANSMISSIONS</p>
+        <h2 id="music-title">The soundtrack survives the game.</h2>
+        <p>Win a level to unlock a random official video inside the cabinet, or choose your own disturbance now.</p>
+        <div class="stream-links">
+          <a href="https://open.spotify.com/artist/7J2xeLqwL4RSJ4OqCWL00d" target="_blank" rel="noreferrer">Spotify ↗</a>
+          <a href="https://music.apple.com/gb/artist/boyo/1562715707" target="_blank" rel="noreferrer">Apple Music ↗</a>
+          <a href="https://soundcloud.com/boyoworld" target="_blank" rel="noreferrer">SoundCloud ↗</a>
+          <a href="https://boyoworld.bandcamp.com/follow_me" target="_blank" rel="noreferrer">Bandcamp ↗</a>
+        </div>
+      </div>
+      <div class="record-stack">
+        <a href="https://www.youtube.com/watch?v=0o7RmMrxvko" target="_blank" rel="noreferrer" class="record record-one">
+          <img src="assets/video-red-brick.jpg" alt="Watch Red Brick by BOYO">
+          <span>RED BRICK / PLAY ↗</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=rRkw3Q7A8cQ" target="_blank" rel="noreferrer" class="record record-two">
+          <img src="assets/video-spitfire.jpg" alt="Watch Spitfire by BOYO">
+          <span>SPITFIRE / PLAY ↗</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=fuyD1Tkhkcc" target="_blank" rel="noreferrer" class="record record-three">
+          <img src="assets/video-fuming.jpg" alt="Watch Fuming by BOYO">
+          <span>FUMING / PLAY ↗</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="social-wall" aria-labelledby="social-title">
+      <img src="assets/brand-hero.png" alt="BOYOWORLD official banner artwork">
+      <div class="social-wall-copy">
+        <h2 id="social-title">Follow the noise.</h2>
+        <p>New music, live chaos, clothes, clips, and whatever BOYO decides counts as normal.</p>
+      </div>
+      <div class="social-grid">
+        <a href="https://www.tiktok.com/@boyo_world" target="_blank" rel="noreferrer"><b>TikTok</b><span>@boyo_world ↗</span></a>
+        <a href="https://www.instagram.com/boyoworld/" target="_blank" rel="noreferrer"><b>Instagram</b><span>@boyoworld ↗</span></a>
+        <a href="https://www.youtube.com/@BOYOWORLD" target="_blank" rel="noreferrer"><b>YouTube</b><span>@BOYOWORLD ↗</span></a>
+        <a href="https://twitter.com/BOYOWORLD" target="_blank" rel="noreferrer"><b>X / Twitter</b><span>@BOYOWORLD ↗</span></a>
+        <a href="https://www.facebook.com/BOYOWORLD" target="_blank" rel="noreferrer"><b>Facebook</b><span>BOYOWORLD ↗</span></a>
+        <a href="https://www.boyoworld.com/" target="_blank" rel="noreferrer"><b>Wildlife</b><span>Official merch ↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-mark">BOYO<span>WORLD</span></div>
+    <p>BOYOWORLD interactive game draft using authorized source imagery and official outbound links.</p>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <noscript>
+    <div class="noscript">BOYOWORLD needs JavaScript enabled to run the game.</div>
+  </noscript>
+  <script src="assets/vendor/phaser.min.js"></script>
+  <script src="game.js" defer></script>
+</body>
+</html>
