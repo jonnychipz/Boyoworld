@@ -48,8 +48,28 @@ test("exposes accessible controls and reduced motion", () => {
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /id="soundToggle"/);
   assert.match(html, /id="touchControls"/);
+  assert.match(html, /id="gameGuide"/);
+  assert.match(html, /id="gameBriefing"/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /:focus-visible/);
+});
+
+test("explains win conditions and requests audible autoplay", () => {
+  const source = read("game.js");
+  for (const goal of [
+    "COLLECT 6 RED BRICKS",
+    "HIT 12 NOTES",
+    "COLLECT 6 SIGNALS",
+    "DESTROY 12 ENEMIES",
+    "COMPLETE 3 PATTERNS"
+  ]) {
+    assert.match(source, new RegExp(goal));
+  }
+  assert.match(source, /autoplay=1&playsinline=1/);
+  assert.doesNotMatch(source, /mute=1/);
+  assert.match(source, /rewardScrollY = window\.scrollY/);
+  assert.doesNotMatch(source, /nextLevel"\)\.focus/);
+  assert.match(source, /updateGuide\(game\.(collected|hits|kills|round)\)/);
 });
 
 test("uses official BOYO destinations", () => {

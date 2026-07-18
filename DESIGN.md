@@ -40,6 +40,8 @@ The promotional page surrounds one dominant old-LCD game cabinet. Navigation and
 - **Torn poster:** clipped image with tape and offset label
 - **Transmission strip:** scrolling but motion-safe promotional links
 - **Reward takeover:** official YouTube embed with replay, skip, and next-level actions
+- **Game guide:** persistent high-contrast goal, progress bar, count, and control reminder
+- **Level briefing:** short protected reading period before hazards or notes begin
 
 ## Motion
 
@@ -56,6 +58,10 @@ Phaser 3 is vendored locally and renders five distinct worlds in WebGL with Canv
 - Genre-specific environments rather than one reskinned playfield
 - A DOM-based accessible cabinet shell around the accelerated game canvas
 
+Gameplay art stays below targets in the hierarchy. Targets use glow and explicit labels; hazards use solid silhouettes; background footage is darkened and confined to a subdued centre plate and edge strips. The page can remain punk-chaotic, but the playfield must remain calm enough to parse instantly.
+
 ## Audio
 
 Use the Web Audio API to synthesize short original interface and game cues. Audio starts only after user interaction. Every sound has a visible counterpart.
+
+Music rewards use `youtube-nocookie.com` and request audible autoplay. Since browsers may block automatic playback with sound, the native embedded controls remain visible for immediate one-click playback.

@@ -157,6 +157,27 @@
           <div class="screen" id="screen">
             <div id="gameCanvas" tabindex="0"
               aria-label="BOYOWORLD Phaser game screen. Select a level below to begin."></div>
+            <aside class="game-guide" id="gameGuide" hidden aria-label="Current level objective">
+              <div class="guide-goal">
+                <span>HOW TO WIN</span>
+                <strong id="guideGoal">Collect 6 red bricks</strong>
+              </div>
+              <div class="guide-progress">
+                <div class="guide-track"><i id="guideProgress"></i></div>
+                <b id="guideCount">0 / 6</b>
+              </div>
+              <div class="guide-control">
+                <span>CONTROL</span>
+                <strong id="guideControl">SPACE = JUMP</strong>
+              </div>
+            </aside>
+            <div class="game-briefing" id="gameBriefing" hidden>
+              <span>HOW TO WIN</span>
+              <strong id="briefingGoal">COLLECT 6 RED BRICKS</strong>
+              <p id="briefingDetail">Jump over obstacles. Touch every glowing red brick.</p>
+              <b id="briefingControl">SPACE / UP = JUMP</b>
+              <em>WORLD STARTS AFTER THIS BRIEFING</em>
+            </div>
             <div class="scanlines" aria-hidden="true"></div>
             <div class="screen-vignette" aria-hidden="true"></div>
 
@@ -199,9 +220,11 @@
               <div class="reward-copy">
                 <p>LEVEL CLEARED / TRANSMISSION UNLOCKED</p>
                 <h3 id="rewardTitle">BOYO TV</h3>
+                <span>AUTOPLAY WITH SOUND REQUESTED<br>If blocked, tap Play once.</span>
               </div>
               <div class="video-frame">
                 <iframe id="rewardVideo" title="Random official BOYO music video"
+                  tabindex="-1"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen></iframe>
               </div>
@@ -295,7 +318,7 @@
           <img src="assets/frames/raw-pap-2.jpg" alt="BOYO Raw Pap scene two">
           <img src="assets/frames/raw-pap-3.jpg" alt="BOYO Raw Pap scene three">
         </div>
-        <div><h3>Raw Pap Arena</h3><p>Spin the block. Fire raw signals. Clear twelve pests before BOYO gets folded.</p></div>
+        <div><h3>Raw Pap Arena</h3><p>Move to aim, hold fire, and destroy twelve clearly marked red enemies.</p></div>
         <button data-launch="3">Spin it <span>→</span></button>
       </article>
       <article class="showcase-row">

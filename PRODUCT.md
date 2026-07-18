@@ -12,7 +12,7 @@ BOYO listeners, music-video viewers, social followers, gamers, and new visitors 
 
 BOYOWORLD is a promotional music universe with a five-level browser game at its centre. It turns BOYO's distinctive white balaclava, Welsh identity, underground visual language, music catalogue, merchandise, and social channels into one coherent, replayable destination.
 
-Success means visitors immediately recognise BOYO, enjoy a complete level without instructions getting in the way, discover a song as their reward, and continue to an official BOYO destination.
+Success means visitors immediately recognise BOYO, understand a level's exact win condition before danger begins, see their progress throughout play, complete a level, watch the automatically started music reward, and continue to an official BOYO destination.
 
 ## Brand Personality
 
@@ -34,6 +34,7 @@ Punk-chaotic, confrontational, and mischievous, but constructed with the precisi
 3. **Play unlocks music.** Every win becomes an immediate bridge into an official BOYO video.
 4. **Promotion is part of the world.** Social, streaming, and merchandise links appear as posters, transmissions, and physical artefacts rather than a detached link list.
 5. **Five levels, five genres, one universe.** Each level changes the interaction model without changing the character or brand language.
+6. **Never make the player guess.** Every world states how to win, the relevant controls, the target count, and current progress.
 
 ## Accessibility & Inclusion
 

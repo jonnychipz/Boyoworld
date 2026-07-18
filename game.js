@@ -62,8 +62,8 @@
     {
       name: "RAW PAP ARENA",
       genre: "LEVEL 04 / 360 SURVIVAL SHOOTER",
-      objective: "Move, aim with your direction, and fire with Space or A. Clear twelve pests.",
-      shortObjective: "PESTS 0 / 12",
+      objective: "Move to aim, then hold Space or A to fire. Destroy twelve red enemies.",
+      shortObjective: "ENEMIES 0 / 12",
       frames: ["raw1", "raw2", "raw3"]
     },
     {
@@ -72,6 +72,44 @@
       objective: "Watch the four-panel sequence, then repeat it with arrows, D/F/J/K, or touch.",
       shortObjective: "ROUND 1 / 3",
       frames: ["pay1", "pay2", "pay3"]
+    }
+  ];
+
+  const GUIDES = [
+    {
+      goal: "COLLECT 6 RED BRICKS",
+      detail: "Jump over street furniture. Touch every glowing red brick.",
+      control: "SPACE / UP = JUMP",
+      unit: "BRICKS",
+      target: 6
+    },
+    {
+      goal: "HIT 12 NOTES",
+      detail: "Press the matching lane key when a note touches the white line.",
+      control: "D · F · J · K = HIT",
+      unit: "HITS",
+      target: 12
+    },
+    {
+      goal: "COLLECT 6 SIGNALS",
+      detail: "Touch every glowing square. Keep away from the red hunters.",
+      control: "WASD / ARROWS = MOVE",
+      unit: "SIGNALS",
+      target: 6
+    },
+    {
+      goal: "DESTROY 12 ENEMIES",
+      detail: "Move to aim. Hold fire while BOYO auto-targets the nearest enemy.",
+      control: "WASD = MOVE · SPACE = FIRE",
+      unit: "ENEMIES",
+      target: 12
+    },
+    {
+      goal: "COMPLETE 3 PATTERNS",
+      detail: "Watch the lit panels, then repeat the exact sequence.",
+      control: "ARROWS / D F J K = REPEAT",
+      unit: "ROUNDS",
+      target: 3
     }
   ];
 
@@ -111,7 +149,16 @@
     machineStatus: document.getElementById("machineStatus"),
     announcements: document.getElementById("gameAnnouncements"),
     soundToggle: document.getElementById("soundToggle"),
-    pauseButton: document.getElementById("pauseButton")
+    pauseButton: document.getElementById("pauseButton"),
+    guide: document.getElementById("gameGuide"),
+    guideGoal: document.getElementById("guideGoal"),
+    guideProgress: document.getElementById("guideProgress"),
+    guideCount: document.getElementById("guideCount"),
+    guideControl: document.getElementById("guideControl"),
+    briefing: document.getElementById("gameBriefing"),
+    briefingGoal: document.getElementById("briefingGoal"),
+    briefingDetail: document.getElementById("briefingDetail"),
+    briefingControl: document.getElementById("briefingControl")
   };
 
   const state = {
@@ -124,7 +171,10 @@
     quote: "TAP DOWN",
     quoteTimer: 0,
     lastVideo: -1,
-    reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    briefingTimeout: null,
+    playReadyAt: 0,
+    rewardScrollY: 0
   };
 
   const controls = { down: new Set(), pressed: new Set() };
@@ -197,6 +247,38 @@
     ui.rewardCard.hidden = true;
   }
 
+  function hideGameGuidance() {
+    ui.guide.hidden = true;
+    ui.briefing.hidden = true;
+    if (state.briefingTimeout) {
+      window.clearTimeout(state.briefingTimeout);
+      state.briefingTimeout = null;
+    }
+  }
+
+  function showGameGuidance() {
+    const guide = GUIDES[state.levelIndex];
+    ui.guideGoal.textContent = guide.goal;
+    ui.guideControl.textContent = guide.control;
+    ui.briefingGoal.textContent = guide.goal;
+    ui.briefingDetail.textContent = guide.detail;
+    ui.briefingControl.textContent = guide.control;
+    ui.guide.hidden = false;
+    ui.briefing.hidden = false;
+    updateGuide(0, guide.target);
+    if (state.briefingTimeout) window.clearTimeout(state.briefingTimeout);
+    state.briefingTimeout = window.setTimeout(() => {
+      ui.briefing.hidden = true;
+      state.briefingTimeout = null;
+    }, state.reducedMotion ? 900 : 2300);
+  }
+
+  function updateGuide(value, target = GUIDES[state.levelIndex].target) {
+    const safeValue = Math.max(0, Math.min(target, value));
+    ui.guideProgress.style.width = `${(safeValue / target) * 100}%`;
+    ui.guideCount.textContent = `${safeValue} / ${target}`;
+  }
+
   function scene() {
     return phaserGame?.scene.getScene("BoyoScene");
   }
@@ -207,6 +289,7 @@
     controls.pressed.clear();
     stopRewardVideo();
     hideOverlays();
+    hideGameGuidance();
     ui.menu.hidden = false;
     ui.machineStatus.textContent = "PHASER SYSTEM READY";
     setObjective("SELECT A LEVEL TO BOOT");
@@ -221,6 +304,7 @@
     state.score = 0;
     state.lives = 3;
     hideOverlays();
+    hideGameGuidance();
     const level = LEVELS[state.levelIndex];
     ui.levelGenre.textContent = level.genre;
     ui.levelName.textContent = level.name;
@@ -245,6 +329,8 @@
     controls.down.clear();
     controls.pressed.clear();
     hideOverlays();
+    showGameGuidance();
+    state.playReadyAt = performance.now() + (state.reducedMotion ? 900 : 2300);
     ui.machineStatus.textContent = "WORLD ACTIVE";
     setHud();
     setObjective(LEVELS[state.levelIndex].shortObjective);
@@ -274,6 +360,7 @@
     state.mode = "brief";
     controls.down.clear();
     controls.pressed.clear();
+    hideGameGuidance();
     ui.levelGenre.textContent = "SIGNAL LOST / TRY AGAIN";
     ui.levelName.textContent = "NO WEAKIES.";
     ui.levelObjective.textContent = `${message} Restart ${LEVELS[state.levelIndex].name} and run it back.`;
@@ -287,9 +374,11 @@
 
   function completeLevel() {
     if (state.mode !== "playing") return;
+    state.rewardScrollY = window.scrollY;
     state.mode = "reward";
     controls.down.clear();
     controls.pressed.clear();
+    hideGameGuidance();
     ui.machineStatus.textContent = "LEVEL CLEARED";
     setObjective("TRANSMISSION UNLOCKED");
     sound.win();
@@ -299,8 +388,13 @@
       hideOverlays();
       ui.rewardCard.hidden = false;
       loadRandomVideo();
-      document.getElementById("nextLevel").focus({ preventScroll: true });
+      restoreRewardScroll();
     }, state.reducedMotion ? 0 : 650);
+  }
+
+  function restoreRewardScroll() {
+    if (state.mode !== "reward") return;
+    window.scrollTo({ top: state.rewardScrollY, behavior: "instant" });
   }
 
   function loadRandomVideo() {
@@ -309,7 +403,10 @@
     state.lastVideo = index;
     const [id, title] = VIDEOS[index];
     ui.rewardTitle.textContent = title;
-    ui.rewardVideo.src = `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
+    ui.rewardVideo.src =
+      `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1`;
+    window.requestAnimationFrame(restoreRewardScroll);
+    window.setTimeout(restoreRewardScroll, 120);
   }
 
   function stopRewardVideo() {
@@ -566,8 +663,8 @@
     }
 
     createRunner() {
-      this.createPhotoWorld(LEVELS[0].frames, 0.3);
-      this.add.rectangle(W / 2, 477, W, 126, P.redDark, 0.92);
+      this.createPhotoWorld(LEVELS[0].frames, 0.2);
+      this.add.rectangle(W / 2, 477, W, 126, P.blackSoft, 1).setStrokeStyle(3, P.white, 0.2);
       this.roadLines = [];
       for (let x = 0; x < W + 100; x += 100) {
         this.roadLines.push(this.add.rectangle(x, 493, 56, 5, P.white, 0.5));
@@ -584,8 +681,8 @@
     }
 
     createRhythm() {
-      this.createPhotoWorld(LEVELS[1].frames, 0.42);
-      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.45);
+      this.createPhotoWorld(LEVELS[1].frames, 0.18);
+      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.58);
       this.rhythm = {
         notes: [], timer: 0.22, next: 0, hits: 0, misses: 0,
         flashes: [0, 0, 0, 0], pattern: [0, 2, 1, 3, 0, 1, 3, 2, 2, 0, 3, 1, 0, 3, 1, 2]
@@ -594,8 +691,8 @@
       this.lanes = [];
       for (let i = 0; i < 4; i += 1) {
         const x = 265 + i * 145;
-        const lane = this.add.polygon(x, 280, [-62,-230, 62,-230, 82,220, -82,220], P.black, 0.48)
-          .setStrokeStyle(2, this.laneColors[i], 0.7);
+        const lane = this.add.polygon(x, 280, [-62,-230, 62,-230, 82,220, -82,220], P.black, 0.82)
+          .setStrokeStyle(3, this.laneColors[i], 0.95);
         const label = this.add.text(x, 474, ["D","F","J","K"][i], {
           fontFamily: "Consolas, monospace", fontSize: "24px", fontStyle: "900", color: CSS.white
         }).setOrigin(0.5);
@@ -616,12 +713,19 @@
     }
 
     createChase() {
-      this.createPhotoWorld(LEVELS[2].frames, 0.24);
-      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.68);
+      this.createPhotoWorld(LEVELS[2].frames, 0.14);
+      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.76);
       this.chase = {
         collected: 0, invulnerable: 0,
-        signals: [[180,100],[480,95],[800,120],[250,430],[530,310],[820,430]].map(([x,y]) =>
-          this.add.image(x, y, "signal").setDepth(12)),
+        signals: [[180,120],[480,120],[800,135],[250,430],[530,330],[820,430]].map(([x,y]) => {
+          const glow = this.add.circle(x, y, 31, P.screenInk, 0.16).setDepth(11);
+          const image = this.add.image(x, y, "signal").setDepth(12);
+          const label = this.add.text(x, y + 29, "COLLECT", {
+            fontFamily: "Consolas, monospace", fontSize: "9px", fontStyle: "900",
+            color: CSS.screenInk, backgroundColor: CSS.black
+          }).setOrigin(0.5).setPadding(3, 2).setDepth(13);
+          return { image, glow, label };
+        }),
         enemies: [],
         walls: [
           {x:300,y:0,w:36,h:165},{x:300,y:250,w:36,h:290},
@@ -635,6 +739,10 @@
       [[850,80,92],[850,470,108],[470,485,82]].forEach(([x,y,speed], index) => {
         const enemy = this.add.image(x, y, "enemy").setTint(index === 1 ? P.violet : P.red);
         enemy.speed = speed;
+        enemy.dangerLabel = this.add.text(x, y + 31, "AVOID", {
+          fontFamily: "Consolas, monospace", fontSize: "9px", fontStyle: "900",
+          color: CSS.white, backgroundColor: CSS.redDark
+        }).setOrigin(0.5).setPadding(3, 2).setDepth(26);
         this.chase.enemies.push(enemy);
       });
       this.boyo = new BoyoRig(this, 120, 320, 0.52);
@@ -648,8 +756,8 @@
     }
 
     createArena() {
-      this.createPhotoWorld(LEVELS[3].frames, 0.26);
-      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.62);
+      this.createPhotoWorld(LEVELS[3].frames, 0.14);
+      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.74);
       for (let radius = 76; radius <= 370; radius += 74) {
         this.add.circle(W/2, H/2, radius, P.black, 0).setStrokeStyle(3,
           radius % 148 === 0 ? P.red : P.white, radius % 148 === 0 ? 0.8 : 0.18);
@@ -664,8 +772,8 @@
     }
 
     createMemory() {
-      this.createPhotoWorld(LEVELS[4].frames, 0.4);
-      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.58);
+      this.createPhotoWorld(LEVELS[4].frames, 0.16);
+      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.72);
       this.memory = {
         round: 1, sequence: [], inputIndex: 0, phase: "waiting", timer: 0.8,
         showIndex: -1, active: -1, pads: []
@@ -690,12 +798,15 @@
 
     createPhotoWorld(frames, alpha) {
       this.photoPanels = [];
-      frames.forEach((key, index) => {
-        const panel = this.addCover(key, index * 320 + 160, H / 2, 340, H, alpha + index * 0.05);
-        panel.setTint(index === 0 ? P.white : index === 1 ? P.redSoft : P.violet);
-        this.photoPanels.push(panel);
-      });
-      this.add.rectangle(W/2, H/2, W, H, P.black, 0.3);
+      const backdrop = this.addCover(frames[0], W / 2, H / 2, W, H, alpha);
+      backdrop.setTint(P.white);
+      this.photoPanels.push(backdrop);
+      const left = this.addCover(frames[1], 80, H / 2, 160, H, 0.12).setTint(P.redSoft);
+      const right = this.addCover(frames[2], W - 80, H / 2, 160, H, 0.12).setTint(P.violet);
+      this.photoPanels.push(left, right);
+      this.add.rectangle(W / 2, H / 2, W, H, P.black, 0.45);
+      this.add.rectangle(W / 2, 310, 710, 395, P.black, 0.24)
+        .setStrokeStyle(1, P.white, 0.08);
       this.addNoiseBars();
     }
 
@@ -731,6 +842,12 @@
       if (state.mode !== "playing" || this.finished) return;
       const dt = Math.min(0.034, delta / 1000);
       this.elapsed += dt;
+      if (performance.now() < state.playReadyAt) {
+        this.boyo?.animate(time, false);
+        controls.pressed.clear();
+        setHud();
+        return;
+      }
       state.quoteTimer -= dt;
       if (state.quoteTimer <= 0) {
         let quote = state.quote;
@@ -773,10 +890,6 @@
         line.x -= game.speed * dt;
         if (line.x < -55) line.x += W + 100;
       });
-      this.photoPanels.forEach((panel, index) => {
-        panel.x -= game.speed * dt * (0.05 + index * 0.025);
-        if (panel.x < -230) panel.x += W + 420;
-      });
       game.obstacleTimer -= dt;
       if (game.obstacleTimer <= 0) {
         const height = Phaser.Math.Between(52, 92);
@@ -791,8 +904,14 @@
       }
       game.brickTimer -= dt;
       if (game.brickTimer <= 0) {
-        const brick = this.add.image(W + 35, Math.random() > 0.48 ? 355 : 295, "brick").setDepth(28);
-        game.bricks.push(brick);
+        const y = Math.random() > 0.48 ? 355 : 295;
+        const glow = this.add.circle(W + 35, y, 36, P.yellow, 0.2).setDepth(27);
+        const image = this.add.image(W + 35, y, "brick").setDepth(28);
+        const label = this.add.text(W + 35, y - 31, "COLLECT", {
+          fontFamily: "Consolas, monospace", fontSize: "9px", fontStyle: "900",
+          color: CSS.yellow, backgroundColor: CSS.black
+        }).setOrigin(0.5).setPadding(3, 2).setDepth(29);
+        game.bricks.push({ image, glow, label, taken: false });
         game.brickTimer = 0.95 + Math.random() * 0.72;
       }
       game.obstacles.forEach((obstacle) => {
@@ -809,11 +928,21 @@
         }
       });
       game.bricks.forEach((brick) => {
-        brick.x -= game.speed * dt; brick.rotation += dt * 4.5;
-        if (!brick.taken && Phaser.Math.Distance.Between(this.boyo.x, this.boyo.y - 72, brick.x, brick.y) < 55) {
-          brick.taken = true; brick.setVisible(false); game.collected += 1; state.score += 1000;
-          setObjective(`BRICKS ${game.collected} / 6`); sound.collect();
-          if (!state.reducedMotion) this.runnerParticles.explode(20, brick.x, brick.y);
+        brick.image.x -= game.speed * dt;
+        brick.image.rotation += dt * 4.5;
+        brick.glow.x = brick.image.x;
+        brick.glow.y = brick.image.y;
+        brick.glow.setScale(1 + Math.sin(this.elapsed * 7) * 0.12);
+        brick.label.x = brick.image.x;
+        if (!brick.taken &&
+            Phaser.Math.Distance.Between(this.boyo.x, this.boyo.y - 72, brick.image.x, brick.image.y) < 55) {
+          brick.taken = true;
+          game.collected += 1;
+          state.score += 1000;
+          setObjective(`BRICKS ${game.collected} / 6`);
+          updateGuide(game.collected);
+          sound.collect();
+          if (!state.reducedMotion) this.runnerParticles.explode(20, brick.image.x, brick.image.y);
           this.cameraFlash(90, 255, 30, 50);
           if (game.collected >= 6) completeLevel();
         }
@@ -823,7 +952,12 @@
         return true;
       });
       game.bricks = game.bricks.filter((brick) => {
-        if (brick.x < -50 || brick.taken) { brick.destroy(); return false; }
+        if (brick.image.x < -50 || brick.taken) {
+          brick.image.destroy();
+          brick.glow.destroy();
+          brick.label.destroy();
+          return false;
+        }
         return true;
       });
     }
@@ -852,7 +986,7 @@
         this.time.delayedCall(100, () => this.lanes[lane]?.lane.setFillStyle(P.black, 0.48));
         if (note && Math.abs(note.y - 430) < 78) {
           note.hit = true; game.hits += 1; state.score += Math.abs(note.y-430) < 25 ? 1400 : 900;
-          sound.beat(lane); setObjective(`HITS ${game.hits} / 12`);
+          sound.beat(lane); setObjective(`HITS ${game.hits} / 12`); updateGuide(game.hits);
           if (!state.reducedMotion) this.rhythmParticles.explode(22, note.x, 430);
           this.cameraShake(60, 0.004);
           if (game.hits >= 12) completeLevel();
@@ -881,10 +1015,13 @@
         this.boyo.face(dx); this.boyo.animate(time, true);
       } else this.boyo.animate(time, false);
       game.signals = game.signals.filter((signal) => {
-        signal.rotation += dt * 2.8;
-        if (Phaser.Math.Distance.Between(this.boyo.x, this.boyo.y - 60, signal.x, signal.y) < 48) {
-          game.collected += 1; state.score += 1500; sound.collect(); signal.destroy();
-          setObjective(`SIGNALS ${game.collected} / 6`);
+        signal.image.rotation += dt * 2.8;
+        signal.glow.setScale(1 + Math.sin(this.elapsed * 6) * 0.13);
+        if (Phaser.Math.Distance.Between(
+          this.boyo.x, this.boyo.y - 60, signal.image.x, signal.image.y) < 48) {
+          game.collected += 1; state.score += 1500; sound.collect();
+          signal.image.destroy(); signal.glow.destroy(); signal.label.destroy();
+          setObjective(`SIGNALS ${game.collected} / 6`); updateGuide(game.collected);
           this.cameraFlash(100, 50, 255, 100);
           if (game.collected >= 6) completeLevel();
           return false;
@@ -898,6 +1035,7 @@
         const wobble = Math.sin(this.elapsed * 2 + index) * 0.28;
         this.moveInMaze(enemy, ((vx/length)-(vy/length)*wobble)*enemy.speed*dt,
           ((vy/length)+(vx/length)*wobble)*enemy.speed*dt, game.walls, 20);
+        enemy.dangerLabel.setPosition(enemy.x, enemy.y + 31);
         if (game.invulnerable <= 0 &&
             Phaser.Math.Distance.Between(this.boyo.x, this.boyo.y-65, enemy.x, enemy.y) < 46) {
           game.invulnerable = 1.25; state.lives -= 1; this.boyo.x = 120; this.boyo.y = 320;
@@ -927,7 +1065,12 @@
         if (edge===0) {x=Math.random()*W;y=-30;} else if(edge===1){x=W+30;y=Math.random()*H;}
         else if(edge===2){x=Math.random()*W;y=H+30;} else{x=-30;y=Math.random()*H;}
         const enemy = this.add.image(x,y,"enemy").setTint(Math.random()>0.5?P.red:P.violet).setDepth(25);
-        enemy.speed = 78 + Math.random()*52; game.enemies.push(enemy);
+        enemy.speed = 78 + Math.random()*52;
+        enemy.targetLabel = this.add.text(x, y + 31, "DESTROY", {
+          fontFamily: "Consolas, monospace", fontSize: "9px", fontStyle: "900",
+          color: CSS.white, backgroundColor: CSS.redDark
+        }).setOrigin(0.5).setPadding(3, 2).setDepth(26);
+        game.enemies.push(enemy);
         game.spawn = Math.max(0.42, 0.95 - this.elapsed*0.012);
       }
       if ((down("action") || takePress("action")) && game.fire <= 0) {
@@ -948,6 +1091,7 @@
         enemy.rotation += dt*2;
         const angle=Phaser.Math.Angle.Between(enemy.x,enemy.y,this.boyo.x,this.boyo.y-62);
         enemy.x+=Math.cos(angle)*enemy.speed*dt;enemy.y+=Math.sin(angle)*enemy.speed*dt;
+        enemy.targetLabel.setPosition(enemy.x, enemy.y + 31);
         if(game.invulnerable<=0 && !enemy.dead &&
           Phaser.Math.Distance.Between(this.boyo.x,this.boyo.y-62,enemy.x,enemy.y)<45){
           enemy.dead=true;game.invulnerable=1.1;state.lives-=1;this.cameraShake(210,0.025);sound.hit();
@@ -957,7 +1101,7 @@
           if(!enemy.dead && Phaser.Math.Distance.Between(bullet.x,bullet.y,enemy.x,enemy.y)<30){
             enemy.dead=true;bullet.dead=true;game.kills+=1;state.score+=950;sound.collect();
             if(!state.reducedMotion)this.arenaParticles.explode(24,enemy.x,enemy.y);
-            setObjective(`PESTS ${game.kills} / 12`);
+            setObjective(`ENEMIES ${game.kills} / 12`);updateGuide(game.kills);
             if(game.kills>=12)completeLevel();
           }
         });
@@ -966,7 +1110,10 @@
         if(bullet.dead||bullet.x<-40||bullet.x>W+40||bullet.y<-40||bullet.y>H+40){bullet.destroy();return false;}
         return true;
       });
-      game.enemies=game.enemies.filter((enemy)=>{if(enemy.dead){enemy.destroy();return false;}return true;});
+      game.enemies=game.enemies.filter((enemy)=>{
+        if(enemy.dead){enemy.targetLabel?.destroy();enemy.destroy();return false;}
+        return true;
+      });
     }
 
     updateMemory(time, dt) {
@@ -1045,6 +1192,7 @@
       }
       state.score+=500;game.inputIndex+=1;
       if(game.inputIndex>=game.sequence.length){
+        updateGuide(game.round);
         if(game.round>=3){completeLevel();return;}
         game.round+=1;state.score+=1000;announce(`Round ${game.round-1} clear. Watch the next pattern.`);
         this.time.delayedCall(450,()=>{if(state.mode==="playing")this.prepareMemory(true);});
@@ -1180,6 +1328,7 @@
   document.getElementById("nextLevel").addEventListener("click",goToNextLevel);
   document.getElementById("skipReward").addEventListener("click",goToNextLevel);
   document.getElementById("randomVideo").addEventListener("click",loadRandomVideo);
+  ui.rewardVideo.addEventListener("load", restoreRewardScroll);
   ui.soundToggle.addEventListener("click",()=>{
     state.sound=!state.sound;ui.soundToggle.setAttribute("aria-pressed",String(state.sound));
     ui.soundToggle.setAttribute("aria-label",state.sound?"Mute game sounds":"Turn on game sounds");
