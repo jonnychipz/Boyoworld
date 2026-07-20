@@ -24,9 +24,12 @@
 BOYOWORLD is one large third-person night-city game running directly in the browser.
 
 - Explore five grimy surreal districts
-- Fifty individually named enemies roam the world; defeat **25** to win
+- Fifty individually named surreal humanoid enemies (anatomical two-part limbs, layered streetwear, varied skin, believable stride); defeat **25** to win
 - Collect **30 spinning BOYO coins** for score and health
-- Find six live BOYO video billboards whose music grows louder as BOYO approaches
+- **18 BOYO TV video billboard displays** across the city backed by **6 shared local video sources** — correct letterbox/aspect-fit, Y-swivel, corner beacons, BOYO TV labels, and protected collision/prop-clearance zones
+- **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME) with poster, glow pad, pylon and beacon; deep-link warp buttons on the page teleport BOYO to each station
+- At most one audible source active at a time (unified proximity arbitration across all billboards and Banshees); HUD signal readout shows current source and distance
+- 4.2-second cinematic opening camera that settles from a slightly elevated street-wide view into the follow camera; immediate for reduced motion
 - Discover the BOYOWORLD Banshees landmark and proximity soundtrack
 - Clear the world to unlock an official BOYO music video and scratch-to-reveal placeholder 15% merch code
 
@@ -65,9 +68,9 @@ The 3D character uses a fully procedural knitted white balaclava rather than a p
 - Knit texture and bump detail
 - Eye and mouth openings with visible eyes/skin
 - BOYO cheek mark and Welsh dragon forehead mark
-- Articulated head, torso, arms and legs
+- Articulated head, torso, arms, hands, legs and shoes with jacket panels and chrome zip detail
 - Run, turn, dash, fire, recoil, hit and win animation
-- Third-person camera, soft shadow and collision-safe movement
+- Lower third-person camera, soft shadow and collision-safe movement
 
 ## The surreal roster
 
@@ -75,11 +78,13 @@ All 50 enemies have unique silly names, humanoid anatomy beneath their surreal o
 
 Examples include Weakie Wally, Wet Egg Wendy, Lamp Lad Larry, Sofa Steve, Plug Head Pete, Damp Sock Derek, Kettle Karen, Mattress Mandy, Tin Foil Tim and Wall Plug Walter.
 
-## Music and rewards
+## Music and audio
 
-- Six official BOYO YouTube videos play on in-world billboards
-- Billboard volume responds to player distance
-- The supplied BOYOWORLD Banshees TikTok soundtrack rises near its landmark
+- **18 BOYO TV billboard displays** across the city, backed by 6 local MP4 sources (Red Brick, Spitfire, Fuming, Raw Pap, Pay Me, Chrome)
+- **Unified proximity audio**: at most one audible source active at any time (billboards + Banshees). Full volume ≤ 10 units from BOYO, silent ≥ 50 units. 4-unit hysteresis prevents rapid switching. All other sources run muted visuals.
+- HUD signal readout shows current active source and distance
+- Banshees soundtrack rises near its landmark (also part of unified arbitration)
+- Pause / fail / reward / menu silences all sources; resume restores behaviour
 - The win screen stays inside the cabinet and requests audible autoplay
 - A scratch panel reveals the fixed placeholder `TEST-NOT-REAL-CODE`
 

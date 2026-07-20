@@ -44,14 +44,45 @@
     { name: "RAW PAP YARD", x: 72, z: 68, color: 0x40f5c3 }
   ];
 
-  const VIDEO_BILLBOARDS = [
-    { src: "assets/billboards/red-brick.mp4", label: "RED BRICK LIVE FEED", x: -44, y: 10, z: -18 },
-    { src: "assets/billboards/spitfire.mp4", label: "SPITFIRE LIVE FEED", x: 44, y: 10, z: -18 },
-    { src: "assets/billboards/fuming.mp4", label: "FUMING LIVE FEED", x: -44, y: 10, z: 20 },
-    { src: "assets/billboards/raw-pap.mp4", label: "RAW PAP LIVE FEED", x: 44, y: 10, z: 20 },
-    { src: "assets/billboards/pay-me.mp4", label: "PAY ME LIVE FEED", x: -8, y: 12, z: 91 },
-    { src: "assets/billboards/chrome.mp4", label: "CHROME LIVE FEED", x: 8, y: 12, z: -91 }
+  const VIDEO_SOURCES = [
+    { src: "assets/billboards/red-brick.mp4", label: "RED BRICK", aspect: 16 / 9 },
+    { src: "assets/billboards/spitfire.mp4",  label: "SPITFIRE",  aspect: 16 / 9 },
+    { src: "assets/billboards/fuming.mp4",    label: "FUMING",    aspect: 16 / 9 },
+    { src: "assets/billboards/raw-pap.mp4",   label: "RAW PAP",   aspect: 16 / 9 },
+    { src: "assets/billboards/pay-me.mp4",    label: "PAY ME",    aspect: 16 / 9 },
+    { src: "assets/billboards/chrome.mp4",    label: "CHROME",    aspect: 1 }
   ];
+
+  // 18 display positions referencing six video sources by index (s)
+  const VIDEO_BILLBOARDS = [
+    { x: -28,  y: 10, z: -24,  s: 0 },
+    { x:  28,  y: 10, z: -24,  s: 1 },
+    { x: -28,  y: 10, z:  26,  s: 2 },
+    { x:  28,  y: 10, z:  26,  s: 3 },
+    { x:  -8,  y: 12, z:  91,  s: 4 },
+    { x:   8,  y: 12, z: -91,  s: 5 },
+    { x: -91,  y: 10, z: -10,  s: 0 },
+    { x:  91,  y: 10, z:  10,  s: 1 },
+    { x: -48,  y: 10, z:  68,  s: 2 },
+    { x:  48,  y: 10, z: -68,  s: 3 },
+    { x: -68,  y: 10, z: -48,  s: 4 },
+    { x:  68,  y: 10, z:  48,  s: 5 },
+    { x:  -4,  y: 12, z: -106, s: 0 },
+    { x:   4,  y: 12, z:  106, s: 1 },
+    { x: -106, y: 10, z:   4,  s: 2 },
+    { x:  106, y: 10, z:  -4,  s: 3 },
+    { x: -84,  y: 10, z:  84,  s: 4 },
+    { x:  84,  y: 10, z: -84,  s: 5 }
+  ];
+
+  const SIGNAL_STATIONS = [
+    { id: "red-brick", label: "RED BRICK",  poster: "assets/video-red-brick.jpg",  x: -90, z:  28, color: 0xe21c3d, section: "#world" },
+    { id: "spitfire",  label: "SPITFIRE",   poster: "assets/video-spitfire.jpg",   x:  86, z: -32, color: 0xff4a82, section: "#music" },
+    { id: "fuming",    label: "FUMING",     poster: "assets/video-fuming.jpg",     x:   0, z: -96, color: 0xffd33d, section: "#music" },
+    { id: "raw-pap",   label: "RAW PAP",    poster: "assets/video-raw-pap.jpg",    x:  36, z:  88, color: 0x40f5c3, section: "#world" },
+    { id: "pay-me",    label: "PAY ME",     poster: "assets/video-pay-me.jpg",     x: -86, z: -86, color: 0x8d6cff, section: "#music" }
+  ];
+  const BANSHEES_SITE = { x: 92, z: 92 };
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const rand = (min, max) => min + Math.random() * (max - min);
@@ -127,9 +158,9 @@
       this.hitCooldown = 0;
       this.dashCooldown = 0;
       this.damageGraceUntil = this.readyAt + 5000;
-      this.yaw = 0;
-      this.pitch = -0.12;
-      this.cameraDistance = 12;
+      this.yaw = -0.18;
+      this.pitch = -0.16;
+      this.cameraDistance = 18;
       this.clock = new THREE.Clock();
       this.elapsed = 0;
       this.bullets = [];
@@ -139,6 +170,18 @@
       this.obstacles = [];
       this.portals = [];
       this.particles = [];
+      this.signalStations = [];
+      // Cinematic intro
+      this.introElapsed = 0;
+      this.introDuration = this.reducedMotion ? 0 : 4.2;
+      this.introComplete = Boolean(this.reducedMotion);
+      // Unified proximity audio arbitration
+      this.audioActiveSource = null;
+      this.audioActiveDist = Infinity;
+      this.audioVolumeTimer = 0;
+      this.activeAudibleName = "";
+      this.activeAudibleDist = -1;
+      this.bansheesVolume = 0;
       this.pointer = { dragging: false, x: 0, y: 0, pinchDistance: 0, pinchX: 0, pinchY: 0 };
       this.activePointers = new Map();
       this.temp = {
@@ -154,7 +197,7 @@
       this.createWorld();
       this.createPlayer();
       this.createEnemies();
-      this.createVideoBillboards();
+      if (this.reducedMotion) this.updateCamera(1);
       this.bindInput();
       this.options.onProgress?.(0, WIN_TARGET);
       this.options.onHealth?.(this.health);
@@ -168,7 +211,13 @@
           defeatAll: () => this.debugDefeatAll(),
           damage: (amount = 10) => this.damagePlayer(amount),
           collectCoin: () => this.debugCollectCoin(),
-          setPlayer: (x, z) => this.player.position.set(x, 0, z)
+          setPlayer: (x, z) => this.player.position.set(x, 0, z),
+          getDisplayCount: () => this.videoBillboards?.length || 0,
+          getUniqueMediaCount: () => this.videoSources?.length || 0,
+          getStationCount: () => this.signalStations?.length || 0,
+          getActiveAudibleSource: () => this.activeAudibleName || null,
+          getCameraIntro: () => !this.introComplete,
+          warpToStation: (id) => this.warpPlayerToStation(id)
         };
       }
     }
@@ -185,7 +234,7 @@
       this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       this.renderer.outputColorSpace = THREE.SRGBColorSpace;
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      this.renderer.toneMappingExposure = 1.16;
+      this.renderer.toneMappingExposure = 1.48;
       this.renderer.domElement.className = "three-world-canvas";
       this.renderer.domElement.setAttribute("aria-label", "BOYOWORLD game world");
       this.container.appendChild(this.renderer.domElement);
@@ -193,15 +242,18 @@
 
     createScene() {
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color(0x060606);
-      this.scene.fog = new THREE.FogExp2(0x09050d, 0.008);
-      this.camera = new THREE.PerspectiveCamera(58, 16 / 9, 0.1, 500);
-      this.camera.position.set(0, 8, -12);
+      this.scene.background = new THREE.Color(0x1a0e2d);
+      this.scene.fog = new THREE.FogExp2(0x33204c, 0.0042);
+      this.camera = new THREE.PerspectiveCamera(60, 16 / 9, 0.1, 500);
+      this.camera.position.set(0, 14, -42);
 
-      const hemisphere = new THREE.HemisphereLight(0x9ebaff, 0x170307, 1.5);
+      // Richer violet-dusk hemisphere — bright sky, warm-violet bounce
+      const hemisphere = new THREE.HemisphereLight(0xcddaff, 0x2e0b3a, 2.8);
       this.scene.add(hemisphere);
+      this.scene.add(new THREE.AmbientLight(0xb9a7da, 0.72));
 
-      this.sun = new THREE.DirectionalLight(0xffffff, 2.5);
+      // Primary directional — warm dusk angle
+      this.sun = new THREE.DirectionalLight(0xffe0cc, 4.2);
       this.sun.position.set(-35, 58, -28);
       this.sun.castShadow = !this.reducedMotion;
       this.sun.shadow.mapSize.set(2048, 2048);
@@ -214,6 +266,11 @@
       this.sun.shadow.bias = -0.0002;
       this.scene.add(this.sun);
 
+      // Violet fill from opposite side
+      const fill = new THREE.DirectionalLight(0x4a1880, 1.6);
+      fill.position.set(35, 28, 28);
+      this.scene.add(fill);
+
       this.textureLoader = new THREE.TextureLoader();
       this.textureLoader.setCrossOrigin("anonymous");
       this.raycaster = new THREE.Raycaster();
@@ -224,6 +281,7 @@
       this.createGround();
       this.createRoadGrid();
       this.createDistricts();
+      this.createVideoBillboards();
       this.createBuildings();
       this.createBillboards();
       this.createWorldProps();
@@ -232,6 +290,7 @@
       this.createPortals();
       this.createCoins();
       this.createBansheesLandmark();
+      this.createSignalStations();
       this.createAtmosphere();
     }
 
@@ -240,14 +299,14 @@
       canvas.width = 512;
       canvas.height = 512;
       const context = canvas.getContext("2d");
-      context.fillStyle = "#111318";
+      context.fillStyle = "#282b36";
       context.fillRect(0, 0, 512, 512);
       const image = context.getImageData(0, 0, 512, 512);
       for (let index = 0; index < image.data.length; index += 4) {
-        const grain = Math.floor(rand(-13, 16));
-        image.data[index] = clamp(18 + grain, 4, 42);
-        image.data[index + 1] = clamp(19 + grain, 4, 42);
-        image.data[index + 2] = clamp(23 + grain, 5, 48);
+        const grain = Math.floor(rand(-13, 18));
+        image.data[index] = clamp(38 + grain, 14, 72);
+        image.data[index + 1] = clamp(40 + grain, 14, 74);
+        image.data[index + 2] = clamp(49 + grain, 18, 84);
         image.data[index + 3] = 255;
       }
       context.putImageData(image, 0, 0);
@@ -282,13 +341,13 @@
       canvas.width = 256;
       canvas.height = 512;
       const context = canvas.getContext("2d");
-      context.fillStyle = "#18181d";
+      context.fillStyle = "#20202a";
       context.fillRect(0, 0, 256, 512);
       for (let floor = 0; floor < 12; floor += 1) {
         for (let column = 0; column < 4; column += 1) {
-          const lit = Math.random() > 0.48;
-          context.fillStyle = lit ? accent : "#09090b";
-          context.globalAlpha = lit ? rand(0.24, 0.82) : 1;
+          const lit = Math.random() > 0.38;
+          context.fillStyle = lit ? accent : "#0a0a0d";
+          context.globalAlpha = lit ? rand(0.45, 1.0) : 1;
           context.fillRect(18 + column * 60, 16 + floor * 41, 36, 20);
           context.globalAlpha = 1;
         }
@@ -344,10 +403,10 @@
       const material = new THREE.ShaderMaterial({
         side: THREE.BackSide,
         uniforms: {
-          topColor: { value: new THREE.Color(0x280b35) },
-          bottomColor: { value: new THREE.Color(0x020203) },
-          offset: { value: 12 },
-          exponent: { value: 0.72 }
+          topColor: { value: new THREE.Color(0x8058b7) },
+          bottomColor: { value: new THREE.Color(0x351b4a) },
+          offset: { value: 14 },
+          exponent: { value: 0.65 }
         },
         vertexShader: `
           varying vec3 vWorldPosition;
@@ -376,14 +435,14 @@
     createGround() {
       this.asphaltTexture = this.createAsphaltTexture();
       const groundMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x15171c,
+        color: 0x3a3d50,
         map: this.asphaltTexture,
         bumpMap: this.asphaltTexture,
         bumpScale: 0.1,
-        roughness: 0.42,
-        metalness: 0.32,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.28
+        roughness: 0.48,
+        metalness: 0.28,
+        clearcoat: 0.52,
+        clearcoatRoughness: 0.24
       });
       const ground = new THREE.Mesh(new THREE.PlaneGeometry(WORLD_SIZE, WORLD_SIZE), groundMaterial);
       ground.rotation.x = -Math.PI / 2;
@@ -404,16 +463,16 @@
       roadTexture.repeat.set(2, 18);
       roadTexture.needsUpdate = true;
       const roadMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x090a0d,
+        color: 0x2a2d3a,
         map: roadTexture,
         bumpMap: roadTexture,
         bumpScale: 0.12,
-        roughness: 0.2,
-        metalness: 0.48,
-        clearcoat: 0.88,
-        clearcoatRoughness: 0.16
+        roughness: 0.18,
+        metalness: 0.54,
+        clearcoat: 0.92,
+        clearcoatRoughness: 0.14
       });
-      const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xe21c3d });
+      const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff5578 });
       [-72, 0, 72].forEach((offset) => {
         const vertical = new THREE.Mesh(new THREE.PlaneGeometry(18, WORLD_SIZE), roadMaterial);
         vertical.rotation.x = -Math.PI / 2;
@@ -439,7 +498,7 @@
         }
       });
 
-      const grid = new THREE.GridHelper(WORLD_SIZE, 48, 0x6f1732, 0x202027);
+      const grid = new THREE.GridHelper(WORLD_SIZE, 48, 0xd92f58, 0x4b4d61);
       grid.position.y = 0.05;
       grid.material.transparent = true;
       grid.material.opacity = 0.34;
@@ -472,7 +531,7 @@
     createBuildings() {
       const buildingGeometry = new THREE.BoxGeometry(1, 1, 1);
       const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xf22c50 });
-      const palette = [0x141418, 0x201426, 0x231016, 0x10191c, 0x242329];
+      const palette = [0x3d3d4d, 0x4d3359, 0x552d40, 0x2d4a54, 0x50495f];
       const facadeTextures = [
         this.createFacadeTexture("#d82042"),
         this.createFacadeTexture("#7a5ee8"),
@@ -486,6 +545,7 @@
         [-88, -54, 49, 83],
         [55, 89, 51, 85]
       ];
+      const reservedMedia = [...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE];
 
       for (let index = 0; index < 42; index += 1) {
         let x;
@@ -498,7 +558,8 @@
         } while (
           attempts < 30 &&
           (Math.abs(x) < 13 || Math.abs(z) < 13 ||
-            reserved.some(([minX, maxX, minZ, maxZ]) => x > minX && x < maxX && z > minZ && z < maxZ))
+            reserved.some(([minX, maxX, minZ, maxZ]) => x > minX && x < maxX && z > minZ && z < maxZ) ||
+            reservedMedia.some((site) => Math.hypot(x - site.x, z - site.z) < 17))
         );
 
         const width = rand(7, 16);
@@ -586,21 +647,38 @@
       });
     }
 
+    isNearMediaSite(x, z, clearance = 13) {
+      return [...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE].some(
+        (site) => Math.hypot(x - site.x, z - site.z) < clearance
+      );
+    }
+
+    findClearPropPosition(centerX, centerZ, spread, clearance = 13) {
+      for (let attempt = 0; attempt < 40; attempt += 1) {
+        const x = centerX + rand(-spread, spread);
+        const z = centerZ + rand(-spread, spread);
+        if (!this.isNearMediaSite(x, z, clearance)) return new THREE.Vector2(x, z);
+      }
+      return new THREE.Vector2(centerX, centerZ);
+    }
+
     createWorldProps() {
       const chrome = new THREE.MeshStandardMaterial({ color: 0xbfc4cc, metalness: 0.88, roughness: 0.2 });
       const red = new THREE.MeshStandardMaterial({ color: 0xc81435, emissive: 0x3d020d, roughness: 0.42 });
       const yellow = new THREE.MeshStandardMaterial({ color: 0xf2cb39, roughness: 0.64 });
 
       for (let index = 0; index < 18; index += 1) {
+        const position = this.findClearPropPosition(-70, 66, 17);
         const egg = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16), yellow);
         egg.scale.set(rand(1.2, 2.6), rand(2, 4.6), rand(1.2, 2.6));
-        egg.position.set(-70 + rand(-17, 17), egg.scale.y, 66 + rand(-17, 17));
+        egg.position.set(position.x, egg.scale.y, position.y);
         egg.castShadow = true;
         egg.receiveShadow = true;
         this.scene.add(egg);
       }
 
       for (let index = 0; index < 22; index += 1) {
+        const position = this.findClearPropPosition(70, -62, 18);
         const cone = new THREE.Group();
         const body = new THREE.Mesh(new THREE.ConeGeometry(1.15, 3.5, 18), red);
         body.position.y = 1.75;
@@ -609,17 +687,18 @@
         const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.63, 0.85, 0.42, 18), chrome);
         stripe.position.y = 1.7;
         cone.add(stripe);
-        cone.position.set(70 + rand(-18, 18), 0, -62 + rand(-18, 18));
+        cone.position.set(position.x, 0, position.y);
         this.scene.add(cone);
       }
 
       for (let index = 0; index < 16; index += 1) {
+        const position = this.findClearPropPosition(-72, -62, 18);
         const bin = new THREE.Mesh(new THREE.BoxGeometry(2.8, 4.2, 2.6), new THREE.MeshStandardMaterial({
           color: index % 2 ? 0x25252b : 0x4c1531,
           metalness: 0.45,
           roughness: 0.55
         }));
-        bin.position.set(-72 + rand(-18, 18), 2.1, -62 + rand(-18, 18));
+        bin.position.set(position.x, 2.1, position.y);
         bin.rotation.y = rand(0, Math.PI);
         bin.castShadow = true;
         this.scene.add(bin);
@@ -629,15 +708,18 @@
 
     createStreetlights() {
       const poleMaterial = new THREE.MeshStandardMaterial({
-        color: 0x7f838b,
+        color: 0x8a8e96,
         metalness: 0.92,
         roughness: 0.22
       });
       const bulbMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffe5ad,
-        emissive: 0xffc15b,
-        emissiveIntensity: 4,
-        roughness: 0.18
+        color: 0xffe8b8,
+        emissive: 0xffd06a,
+        emissiveIntensity: 6,
+        roughness: 0.12
+      });
+      const poolMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffc46b, transparent: true, opacity: 0.055, depthWrite: false
       });
       const positions = [];
       [-72, 0, 72].forEach((road) => {
@@ -647,6 +729,7 @@
         }
       });
       positions.filter((_, index) => index % 2 === 0).forEach(([x, z], index) => {
+        if (this.isNearMediaSite(x, z, 11)) return;
         const group = new THREE.Group();
         const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.2, 8.5, 10), poleMaterial);
         pole.position.y = 4.25;
@@ -658,8 +741,14 @@
         const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.34, 14, 10), bulbMaterial);
         lamp.position.set(2, 8.1, 0);
         group.add(lamp);
-        if (index % 4 === 0) {
-          const light = new THREE.PointLight(0xffc46b, 13, 27, 2);
+        // Luminous pool decal — cheap, no dynamic light
+        const pool = new THREE.Mesh(new THREE.CircleGeometry(3.8, 24), poolMaterial);
+        pool.rotation.x = -Math.PI / 2;
+        pool.position.set(2, 0.055, 0);
+        group.add(pool);
+        // One real point light every 8 lamps for performance
+        if (index % 8 === 0) {
+          const light = new THREE.PointLight(0xffc46b, 16, 30, 2);
           light.position.set(2, 7.8, 0);
           light.castShadow = false;
           group.add(light);
@@ -673,20 +762,23 @@
 
     createPuddles() {
       const puddleMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x101420,
+        color: 0x59698f,
         transparent: true,
-        opacity: 0.72,
-        roughness: 0.04,
-        metalness: 0.62,
+        opacity: 0.38,
+        roughness: 0.08,
+        metalness: 0.32,
         clearcoat: 1,
         clearcoatRoughness: 0.03,
         depthWrite: false
       });
       for (let index = 0; index < 34; index += 1) {
+        const x = rand(-110, 110);
+        const z = rand(-110, 110);
+        if (this.isNearMediaSite(x, z, 11)) continue;
         const puddle = new THREE.Mesh(new THREE.CircleGeometry(rand(1.2, 4.2), 28), puddleMaterial);
         puddle.rotation.x = -Math.PI / 2;
         puddle.scale.y = rand(0.28, 0.7);
-        puddle.position.set(rand(-110, 110), 0.055, rand(-110, 110));
+        puddle.position.set(x, 0.055, z);
         this.scene.add(puddle);
       }
     }
@@ -720,6 +812,10 @@
           1.55,
           clamp(district.z + Math.cos(angle) * radius, -108, 108)
         );
+        if (this.isNearMediaSite(group.position.x, group.position.z, 10)) {
+          const position = this.findClearPropPosition(district.x, district.z, 30, 10);
+          group.position.set(position.x, 1.55, position.y);
+        }
         group.rotation.y = angle;
         this.scene.add(group);
         this.coins.push({ group, baseY: group.position.y, phase: index * 0.53, collected: false });
@@ -755,7 +851,7 @@
     }
 
     createBansheesLandmark() {
-      const position = new THREE.Vector3(92, 10, 92);
+      const position = new THREE.Vector3(BANSHEES_SITE.x, 10, BANSHEES_SITE.z);
       const texture = this.textureLoader.load("assets/banshees/opening-1.jpg");
       texture.colorSpace = THREE.SRGBColorSpace;
       const backing = new THREE.Mesh(
@@ -846,6 +942,86 @@
       });
     }
 
+    createSignalStations() {
+      const pylonMat = new THREE.MeshStandardMaterial({ color: 0x16161e, metalness: 0.88, roughness: 0.18 });
+      SIGNAL_STATIONS.forEach((data) => {
+        const group = new THREE.Group();
+        group.position.set(data.x, 0, data.z);
+
+        // Glow pad on ground
+        const padMat = new THREE.MeshBasicMaterial({
+          color: data.color, transparent: true, opacity: 0.16, depthWrite: false
+        });
+        const pad = new THREE.Mesh(new THREE.CircleGeometry(4.8, 36), padMat);
+        pad.rotation.x = -Math.PI / 2;
+        pad.position.y = 0.06;
+        group.add(pad);
+
+        // Pylon
+        const pylon = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 15, 12), pylonMat);
+        pylon.position.y = 7.5;
+        pylon.castShadow = true;
+        group.add(pylon);
+
+        // Beacon top
+        const beaconMat = new THREE.MeshStandardMaterial({
+          color: data.color, emissive: new THREE.Color(data.color),
+          emissiveIntensity: 5, roughness: 0.14
+        });
+        const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.42, 14, 10), beaconMat);
+        beacon.position.y = 15.3;
+        group.add(beacon);
+
+        // Poster backing
+        const backing = new THREE.Mesh(
+          new THREE.BoxGeometry(8.8, 12.4, 0.52),
+          new THREE.MeshStandardMaterial({ color: 0x050508, metalness: 0.68, roughness: 0.26 })
+        );
+        backing.position.y = 8.0;
+        backing.castShadow = true;
+        group.add(backing);
+
+        // Poster image
+        const texture = this.textureLoader.load(data.poster);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        const poster = new THREE.Mesh(
+          new THREE.PlaneGeometry(8.2, 11.6),
+          new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })
+        );
+        poster.position.set(0, 8.0, 0.28);
+        group.add(poster);
+
+        // Glowing frame
+        const frameMat = new THREE.MeshBasicMaterial({
+          color: data.color, transparent: true, opacity: 0.26, depthWrite: false
+        });
+        const frame = new THREE.Mesh(new THREE.PlaneGeometry(9.4, 13.2), frameMat);
+        frame.position.set(0, 8.0, -0.27);
+        group.add(frame);
+
+        // Station label
+        const label = this.makeLabel(data.label, "SIGNAL STATION", data.color, 7.0, 1.3);
+        label.position.set(0, 15.0, 0.4);
+        group.add(label);
+
+        this.scene.add(group);
+        this.obstacles.push({ x: data.x, z: data.z, radius: 4.8 });
+
+        this.signalStations.push({
+          id: data.id,
+          label: data.label,
+          position: new THREE.Vector3(data.x, 0, data.z),
+          group,
+          pad,
+          padMat,
+          beaconMat,
+          color: data.color,
+          active: false,
+          wasActive: false
+        });
+      });
+    }
+
     createAtmosphere() {
       const count = this.reducedMotion ? 220 : 760;
       const positions = new Float32Array(count * 3);
@@ -909,12 +1085,28 @@
       belt.castShadow = true;
       this.player.add(belt);
 
+      const zipper = new THREE.Mesh(new THREE.BoxGeometry(0.09, 1.35, 0.08), chrome);
+      zipper.position.set(0, 2.68, 0.78);
+      this.player.add(zipper);
+      [-0.62, 0.62].forEach((x) => {
+        const jacketPanel = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.18, 0.12), red);
+        jacketPanel.position.set(x, 3.18, 0.7);
+        jacketPanel.rotation.z = x < 0 ? -0.18 : 0.18;
+        this.player.add(jacketPanel);
+      });
+
       this.playerLimbs = {};
       this.playerLimbs.leftLeg = this.makeLimb(black, -0.46, 1.36, 0, 0.28, 1.42);
       this.playerLimbs.rightLeg = this.makeLimb(black, 0.46, 1.36, 0, 0.28, 1.42);
       this.playerLimbs.leftArm = this.makeLimb(black, -1.02, 3.2, 0, 0.23, 1.26);
       this.playerLimbs.rightArm = this.makeLimb(black, 1.02, 3.2, 0, 0.23, 1.26);
       Object.values(this.playerLimbs).forEach((limb) => this.player.add(limb));
+      [this.playerLimbs.leftLeg, this.playerLimbs.rightLeg].forEach((limb) => {
+        const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.3, 1.0), black);
+        shoe.position.set(0, -1.38, 0.24);
+        shoe.castShadow = true;
+        limb.add(shoe);
+      });
 
       const skin = new THREE.MeshStandardMaterial({ color: 0xb98062, roughness: 0.82, metalness: 0 });
       const head = new THREE.Mesh(new THREE.SphereGeometry(0.87, 32, 24), skin);
@@ -975,6 +1167,13 @@
       mouth.position.set(0, 4.16, 1.01);
       this.player.add(mouth);
 
+      [this.playerLimbs.leftArm, this.playerLimbs.rightArm].forEach((limb) => {
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 9), skin);
+        hand.scale.set(0.9, 0.72, 0.82);
+        hand.position.set(0, -1.24, 0);
+        limb.add(hand);
+      });
+
       const boyoDecal = this.makeMaskDecal("BOYO", false);
       boyoDecal.position.set(-0.34, 4.4, 0.99);
       boyoDecal.scale.set(0.62, 0.2, 1);
@@ -1020,7 +1219,6 @@
       canvas.height = 256;
       const context = canvas.getContext("2d");
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "#080808";
       if (dragon) {
         context.save();
         context.translate(256, 130);
@@ -1036,9 +1234,15 @@
         context.lineTo(5, 92);
         context.lineTo(-38, 56);
         context.closePath();
+        context.lineJoin = "round";
+        context.lineWidth = 18;
+        context.strokeStyle = "#09070a";
+        context.stroke();
+        context.fillStyle = "#c8102e";
         context.fill();
         context.restore();
       } else {
+        context.fillStyle = "#080808";
         context.font = "1000 132px Arial Black, Segoe UI, sans-serif";
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -1051,9 +1255,10 @@
     }
 
     createVideoBillboards() {
-      this.videoBillboards = VIDEO_BILLBOARDS.map((data) => {
+      // Six shared video elements + textures (reused by all 18 displays)
+      this.videoSources = VIDEO_SOURCES.map((source) => {
         const video = document.createElement("video");
-        video.src = data.src;
+        video.src = source.src;
         video.loop = true;
         video.muted = true;
         video.playsInline = true;
@@ -1065,41 +1270,104 @@
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
+        return { ...source, video, texture, currentVolume: 0 };
+      });
+
+      const PANEL_W = 19.2;
+      const PANEL_H = 12.0;
+      const FRAME_COLORS = [0xff2255, 0x7a50ff, 0xffd23f, 0x40f5c0, 0xff7730, 0x50dfff];
+      const pylonMat = new THREE.MeshStandardMaterial({ color: 0x1e2030, metalness: 0.86, roughness: 0.22 });
+
+      this.videoBillboards = VIDEO_BILLBOARDS.map((data) => {
+        const source = this.videoSources[data.s];
+        const aspect = source.aspect;
+        // Letterbox: fit video aspect inside panel, preserving aspect ratio
+        let screenW, screenH;
+        if (aspect >= PANEL_W / PANEL_H) {
+          screenW = PANEL_W - 0.5;
+          screenH = (PANEL_W - 0.5) / aspect;
+        } else {
+          screenH = PANEL_H - 0.5;
+          screenW = (PANEL_H - 0.5) * aspect;
+        }
+
+        const fc = FRAME_COLORS[data.s];
         const group = new THREE.Group();
+
+        // Support pylon
+        const pylonHeight = data.y * 0.82;
+        const pylon = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.2, 0.32, pylonHeight, 10), pylonMat
+        );
+        pylon.position.y = -pylonHeight / 2 - 0.1;
+        pylon.castShadow = true;
+        group.add(pylon);
+
+        // Backing panel
         const backing = new THREE.Mesh(
-          new THREE.BoxGeometry(18.8, 11.2, 0.72),
-          new THREE.MeshStandardMaterial({ color: 0x050507, metalness: 0.76, roughness: 0.2 })
+          new THREE.BoxGeometry(PANEL_W, PANEL_H, 0.64),
+          new THREE.MeshStandardMaterial({ color: 0x04040a, metalness: 0.76, roughness: 0.2 })
         );
         backing.castShadow = true;
         group.add(backing);
+
+        // Video screen — aspect-correct letterbox
         const screen = new THREE.Mesh(
-          new THREE.PlaneGeometry(17.8, 10),
-          new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })
+          new THREE.PlaneGeometry(screenW, screenH),
+          new THREE.MeshBasicMaterial({ map: source.texture, toneMapped: false })
         );
-        screen.position.z = 0.38;
+        screen.position.z = 0.34;
         group.add(screen);
-        const frame = new THREE.Mesh(
-          new THREE.PlaneGeometry(19.4, 11.8),
-          new THREE.MeshBasicMaterial({ color: 0xe21c3d, transparent: true, opacity: 0.17 })
-        );
-        frame.position.z = -0.37;
+
+        // Glow frame border
+        const frameMat = new THREE.MeshBasicMaterial({ color: fc, transparent: true, opacity: 0.24 });
+        const frame = new THREE.Mesh(new THREE.PlaneGeometry(PANEL_W + 1.4, PANEL_H + 1.4), frameMat);
+        frame.position.z = -0.34;
         group.add(frame);
-        const label = this.makeLabel(data.label, "PROXIMITY AUDIO", 0xe21c3d, 8.5, 1.2);
-        label.position.set(0, -6.4, 0.5);
-        group.add(label);
+
+        // BOYO TV label below display
+        const labelTex = roundedCanvasTexture(`BOYO TV · ${source.label}`, {
+          width: 640, height: 112,
+          accent: `#${fc.toString(16).padStart(6, "0")}`,
+          subtext: "PROXIMITY AUDIO",
+          fontSize: 42
+        });
+        const labelMat = new THREE.SpriteMaterial({ map: labelTex, transparent: true, depthTest: false });
+        const labelSprite = new THREE.Sprite(labelMat);
+        labelSprite.scale.set(10, 1.4, 1);
+        labelSprite.renderOrder = 20;
+        labelSprite.position.set(0, -PANEL_H / 2 - 1.0, 0.5);
+        group.add(labelSprite);
+
+        // Beacon lights at top corners
+        const beaconMat = new THREE.MeshStandardMaterial({
+          color: fc, emissive: new THREE.Color(fc), emissiveIntensity: 4, roughness: 0.18
+        });
+        [-PANEL_W / 2 + 0.38, PANEL_W / 2 - 0.38].forEach((bx) => {
+          const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), beaconMat);
+          beacon.position.set(bx, PANEL_H / 2 + 0.32, 0.38);
+          group.add(beacon);
+        });
+
         group.position.set(data.x, data.y, data.z);
+        // Initial face-toward origin; swivel updated per-frame
         group.lookAt(0, data.y, 0);
         this.scene.add(group);
+        this.obstacles.push({ x: data.x, z: data.z, radius: PANEL_W * 0.48 });
+
         return {
           ...data,
+          label: `BOYO TV · ${source.label}`,
           position: new THREE.Vector3(data.x, data.y, data.z),
           group,
-          video,
-          texture,
+          video: source.video,
+          texture: source.texture,
+          sourceIndex: data.s,
+          fittedWidth: screenW,
+          fittedHeight: screenH,
           lastVolume: 0
         };
       });
-      this.videoVolumeTimer = 0;
     }
 
     makeLimb(material, x, y, z, radius, length) {
@@ -1116,17 +1384,20 @@
       for (let index = 0; index < ENEMY_COUNT; index += 1) {
         const type = ENEMY_TYPES[index % ENEMY_TYPES.length];
         const enemy = this.makeEnemy(type, index);
-        const angle = (index / ENEMY_COUNT) * Math.PI * 2 + rand(-0.22, 0.22);
-        const radius = 52 + (index % 7) * 9 + rand(-3, 4);
-        enemy.group.position.set(
-          clamp(Math.cos(angle) * radius + rand(-8, 8), -105, 105),
-          0,
-          clamp(Math.sin(angle) * radius + rand(-8, 8), -105, 105)
+        let attempts = 0;
+        do {
+          const angle = (index / ENEMY_COUNT) * Math.PI * 2 + rand(-0.35, 0.35);
+          const radius = 52 + (index % 7) * 9 + rand(-6, 8);
+          enemy.group.position.set(
+            clamp(Math.cos(angle) * radius + rand(-10, 10), -105, 105),
+            0,
+            clamp(Math.sin(angle) * radius + rand(-10, 10), -105, 105)
+          );
+          attempts += 1;
+        } while (
+          attempts < 80 &&
+          this.collidesWorld(enemy.group.position.x, enemy.group.position.z, 2.5)
         );
-        if (this.collidesWorld(enemy.group.position.x, enemy.group.position.z, 2.5)) {
-          enemy.group.position.x += rand(8, 16);
-          enemy.group.position.z += rand(8, 16);
-        }
         this.scene.add(enemy.group);
         this.enemies.push(enemy);
       }
@@ -1134,155 +1405,266 @@
 
     makeEnemy(type, index) {
       const group = new THREE.Group();
-      const seed = index + 1;
       const accent = [0xff3f65, 0x9f79ff, 0xffd23f, 0x46f5c0, 0x4cb7ff][index % 5];
+
+      // Less emissive, more physical body material
       const bodyMaterial = new THREE.MeshStandardMaterial({
         color: accent,
-        emissive: new THREE.Color(accent).multiplyScalar(0.1),
-        emissiveIntensity: 0.8,
-        roughness: 0.56,
-        metalness: index % 3 === 0 ? 0.5 : 0.12
+        emissive: new THREE.Color(accent).multiplyScalar(0.04),
+        emissiveIntensity: 0.28,
+        roughness: 0.66,
+        metalness: 0.12
       });
-      const dark = new THREE.MeshStandardMaterial({ color: 0x151519, roughness: 0.7, metalness: 0.22 });
       const chrome = new THREE.MeshStandardMaterial({ color: 0xbfc4cc, roughness: 0.2, metalness: 0.9 });
-      const eyeMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: 0xffffff,
-        emissiveIntensity: 1.4,
-        roughness: 0.3
+
+      // Varied skin palette
+      const skinColors = [0xc89578, 0x8c5f47, 0xd9af91, 0xb07050, 0xe8c4a0, 0x7a5040, 0xf2d0a8, 0xa06848];
+      const skinMat = new THREE.MeshStandardMaterial({
+        color: skinColors[index % skinColors.length], roughness: 0.78, metalness: 0
       });
 
+      // Layered streetwear — darker, muted clothing
+      const clothHues = [0x1c2033, 0x2d1c1c, 0x1a2a1a, 0x2a1a2a, 0x1c1c2a, 0x1a1f2a, 0x2a2218, 0x1c2224];
+      const clothColor = clothHues[index % clothHues.length];
+      const upperBodyMat = new THREE.MeshStandardMaterial({ color: clothColor, roughness: 0.68, metalness: 0.06 });
+      const pantsClr = new THREE.Color(clothColor).multiplyScalar(0.72);
+      const pantsMat = new THREE.MeshStandardMaterial({ color: pantsClr, roughness: 0.72, metalness: 0.04 });
+      const beltMat = new THREE.MeshStandardMaterial({ color: 0x111116, roughness: 0.5, metalness: 0.44 });
+      const shoeMat = new THREE.MeshStandardMaterial({ color: 0x181820, roughness: 0.62, metalness: 0.14 });
+
+      // White eyes / dark pupils (non-emissive)
+      const scleraMat = new THREE.MeshStandardMaterial({ color: 0xeeeef8, roughness: 0.18, metalness: 0 });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: 0x050508 });
+
       const parts = { limbs: [] };
-      const skin = new THREE.MeshStandardMaterial({
-        color: index % 3 === 0 ? 0xc89578 : index % 3 === 1 ? 0x8c5f47 : 0xd9af91,
-        roughness: 0.76,
-        metalness: 0
+
+      // ─── Two-part LEGS ───────────────────────────────────────────────
+      [-0.36, 0.36].forEach((lx, li) => {
+        const thighPivot = new THREE.Group();
+        thighPivot.position.set(lx, 2.62, 0);
+        const thigh = new THREE.Mesh(new THREE.CapsuleGeometry(0.22, 1.0, 5, 8), pantsMat);
+        thigh.position.y = -0.58;
+        thigh.castShadow = true;
+        thighPivot.add(thigh);
+
+        const kneePivot = new THREE.Group();
+        kneePivot.position.y = -1.14;
+        const shin = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 1.0, 5, 8), pantsMat);
+        shin.position.y = -0.55;
+        shin.castShadow = true;
+        kneePivot.add(shin);
+        const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.24, 0.86), shoeMat);
+        shoe.position.set(0.04, -1.12, 0.15);
+        kneePivot.add(shoe);
+
+        thighPivot.add(kneePivot);
+        group.add(thighPivot);
+        parts.limbs.push({ pivot: thighPivot, lower: kneePivot, direction: li ? -1 : 1, isLeg: true });
       });
-      const coreTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.58, 1.45, 7, 12), dark);
+
+      // ─── TORSO (core body) ─────────────────────────────────────────
+      const coreTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.58, 1.45, 7, 12), upperBodyMat);
       coreTorso.position.y = 2.85;
       coreTorso.castShadow = true;
       group.add(coreTorso);
-      if (type !== "WEAKIE WALLY") {
-        const humanHead = new THREE.Mesh(new THREE.SphereGeometry(0.68, 22, 16), skin);
-        humanHead.scale.y = 1.08;
-        humanHead.position.y = 4.72;
-        humanHead.castShadow = true;
-        group.add(humanHead);
-      }
-      [-1, 1].forEach((direction) => {
-        const armPivot = new THREE.Group();
-        armPivot.position.set(direction * 0.78, 3.45, 0);
-        const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 1.25, 5, 8), skin);
-        arm.position.y = -0.68;
-        arm.rotation.z = direction * 0.08;
-        arm.castShadow = true;
-        armPivot.add(arm);
-        group.add(armPivot);
-        parts.limbs.push({ pivot: armPivot, direction: -direction });
+
+      // Belt
+      const belt = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.18, 0.74), beltMat);
+      belt.position.set(0, 2.56, 0);
+      group.add(belt);
+
+      // Collar
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.09, 8, 22), upperBodyMat);
+      collar.rotation.x = Math.PI / 2;
+      collar.position.set(0, 4.28, 0);
+      group.add(collar);
+      const jacketZip = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.3, 0.06), bodyMaterial);
+      jacketZip.position.set(0, 3.05, 0.59);
+      group.add(jacketZip);
+      [-0.34, 0.34].forEach((x) => {
+        const pocket = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.08, 0.05), bodyMaterial);
+        pocket.position.set(x, 2.76, 0.59);
+        pocket.rotation.z = x < 0 ? 0.22 : -0.22;
+        group.add(pocket);
       });
+
+      // ─── Two-part ARMS ────────────────────────────────────────────
+      [-0.88, 0.88].forEach((ax, ai) => {
+        // Shoulder sphere
+        const shoulder = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 8), upperBodyMat);
+        shoulder.position.set(ax, 3.96, 0);
+        group.add(shoulder);
+
+        const upperArmPivot = new THREE.Group();
+        upperArmPivot.position.set(ax, 3.84, 0);
+        const upperArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 0.76, 5, 8), skinMat);
+        upperArm.position.y = -0.46;
+        upperArm.rotation.z = ax < 0 ? 0.06 : -0.06;
+        upperArm.castShadow = true;
+        upperArmPivot.add(upperArm);
+
+        const elbowPivot = new THREE.Group();
+        elbowPivot.position.y = -0.94;
+        const forearm = new THREE.Mesh(new THREE.CapsuleGeometry(0.14, 0.68, 5, 8), skinMat);
+        forearm.position.y = -0.38;
+        forearm.castShadow = true;
+        elbowPivot.add(forearm);
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), skinMat);
+        hand.scale.set(1.0, 0.72, 0.82);
+        hand.position.y = -0.78;
+        elbowPivot.add(hand);
+
+        upperArmPivot.add(elbowPivot);
+        group.add(upperArmPivot);
+        parts.limbs.push({ pivot: upperArmPivot, lower: elbowPivot, direction: -(ai * 2 - 1), isArm: true });
+      });
+
+      // ─── HEAD GROUP (for head-bob) ────────────────────────────────
+      const headBaseY = 4.72;
+      const headGroup = new THREE.Group();
+      headGroup.position.y = headBaseY;
+      group.add(headGroup);
+
+      // Neck
+      const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.21, 0.44, 10), skinMat);
+      neck.position.set(0, -0.22, 0);
+      headGroup.add(neck);
+
+      // Type-specific body props go BEFORE human head on shared enemies
       if (type === "BUM MAN") {
-        const coat = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.9, 1.25), dark);
-        coat.position.y = 2.25;
-        group.add(coat);
+        const coat = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.9, 1.25), upperBodyMat);
+        coat.position.y = 2.25 - headBaseY;
+        headGroup.add(coat);
         [-0.62, 0.62].forEach((x) => {
           const cheek = new THREE.Mesh(new THREE.SphereGeometry(0.8, 18, 14), bodyMaterial);
-          cheek.position.set(x, 1.55, -0.62);
+          cheek.position.set(x, 1.55 - headBaseY, -0.62);
           cheek.castShadow = true;
-          group.add(cheek);
+          headGroup.add(cheek);
         });
       } else if (type === "WEAKIE WALLY") {
         const body = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.58, 4.4, 12), bodyMaterial);
-        body.position.y = 3.1;
-        group.add(body);
-        const head = new THREE.Mesh(new THREE.BoxGeometry(1.35, 1.15, 0.8), chrome);
-        head.position.y = 5.65;
-        group.add(head);
+        body.position.set(0, 3.1 - headBaseY, 0);
+        headGroup.add(body);
+        const wallHead = new THREE.Mesh(new THREE.BoxGeometry(1.35, 1.15, 0.8), chrome);
+        wallHead.position.set(0, 5.65 - headBaseY, 0);
+        headGroup.add(wallHead);
       } else if (type === "WET EGG") {
         const egg = new THREE.Mesh(new THREE.SphereGeometry(1.25, 24, 18), bodyMaterial);
         egg.scale.y = 1.5;
-        egg.position.y = 2.7;
-        group.add(egg);
+        egg.position.set(0, 2.7 - headBaseY, 0);
+        headGroup.add(egg);
       } else if (type === "LAMP LAD") {
         const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.5, 3.5, 12), chrome);
-        stem.position.y = 2.4;
-        group.add(stem);
+        stem.position.set(0, 2.4 - headBaseY, 0);
+        headGroup.add(stem);
         const shade = new THREE.Mesh(new THREE.ConeGeometry(1.35, 1.8, 20, 1, true), bodyMaterial);
-        shade.position.y = 4.8;
-        group.add(shade);
-        const bulb = new THREE.PointLight(accent, 7, 10, 2);
-        bulb.position.y = 4.4;
-        group.add(bulb);
+        shade.position.set(0, 4.8 - headBaseY, 0);
+        headGroup.add(shade);
+        const bulb = new THREE.PointLight(accent, 5, 9, 2);
+        bulb.position.set(0, 4.4 - headBaseY, 0);
+        headGroup.add(bulb);
       } else if (type === "BIN GOBLIN") {
-        const bin = new THREE.Mesh(new THREE.BoxGeometry(2.3, 3.4, 2), dark);
-        bin.position.y = 2.4;
-        group.add(bin);
+        const bin = new THREE.Mesh(new THREE.BoxGeometry(2.3, 3.4, 2), upperBodyMat);
+        bin.position.set(0, 2.4 - headBaseY, 0);
+        headGroup.add(bin);
         const lid = new THREE.Mesh(new THREE.BoxGeometry(2.65, 0.3, 2.25), bodyMaterial);
-        lid.position.set(0, 4.15, -0.2);
+        lid.position.set(0, 4.15 - headBaseY, -0.2);
         lid.rotation.x = -0.22;
-        group.add(lid);
+        headGroup.add(lid);
       } else if (type === "SOFA STEVE") {
         const seat = new THREE.Mesh(new THREE.BoxGeometry(3.3, 1.35, 1.8), bodyMaterial);
-        seat.position.y = 1.65;
-        group.add(seat);
-        const back = new THREE.Mesh(new THREE.BoxGeometry(3.3, 1.9, 0.7), dark);
-        back.position.set(0, 2.75, -0.72);
-        group.add(back);
+        seat.position.set(0, 1.65 - headBaseY, 0);
+        headGroup.add(seat);
+        const back = new THREE.Mesh(new THREE.BoxGeometry(3.3, 1.9, 0.7), upperBodyMat);
+        back.position.set(0, 2.75 - headBaseY, -0.72);
+        headGroup.add(back);
         [-1.15, 1.15].forEach((x) => {
           const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.15, 8, 16), chrome);
-          wheel.position.set(x, 0.65, 0);
+          wheel.position.set(x, 0.65 - headBaseY, 0);
           wheel.rotation.y = Math.PI / 2;
-          group.add(wheel);
+          headGroup.add(wheel);
         });
       } else if (type === "TRAFFIC TONY") {
         const cone = new THREE.Mesh(new THREE.ConeGeometry(1.35, 4.3, 20), bodyMaterial);
-        cone.position.y = 2.5;
-        group.add(cone);
+        cone.position.set(0, 2.5 - headBaseY, 0);
+        headGroup.add(cone);
         const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.98, 0.42, 20), chrome);
-        stripe.position.y = 2.3;
-        group.add(stripe);
+        stripe.position.set(0, 2.3 - headBaseY, 0);
+        headGroup.add(stripe);
       } else if (type === "PLUG HEAD PETE") {
         const body = new THREE.Mesh(new THREE.BoxGeometry(2.1, 2.8, 1.45), bodyMaterial);
-        body.position.y = 2.2;
-        group.add(body);
+        body.position.set(0, 2.2 - headBaseY, 0);
+        headGroup.add(body);
         [-0.45, 0.45].forEach((x) => {
           const prong = new THREE.Mesh(new THREE.BoxGeometry(0.28, 1.4, 0.38), chrome);
-          prong.position.set(x, 4.35, 0);
-          group.add(prong);
+          prong.position.set(x, 4.35 - headBaseY, 0);
+          headGroup.add(prong);
         });
       } else if (type === "CABBAGE FACE") {
         const cabbage = new THREE.Mesh(new THREE.DodecahedronGeometry(1.7, 1), bodyMaterial);
-        cabbage.position.y = 3;
-        group.add(cabbage);
+        cabbage.position.set(0, 3 - headBaseY, 0);
+        headGroup.add(cabbage);
       } else {
-        const microwave = new THREE.Mesh(new THREE.BoxGeometry(2.7, 2.3, 1.65), dark);
-        microwave.position.y = 2.4;
-        group.add(microwave);
-        const screen = new THREE.Mesh(
+        // MICROWAVE MIKE
+        const microwave = new THREE.Mesh(new THREE.BoxGeometry(2.7, 2.3, 1.65), upperBodyMat);
+        microwave.position.set(0, 2.4 - headBaseY, 0);
+        headGroup.add(microwave);
+        const mwScreen = new THREE.Mesh(
           new THREE.PlaneGeometry(1.75, 1.15),
           new THREE.MeshBasicMaterial({ color: accent })
         );
-        screen.position.set(-0.25, 2.48, 0.84);
-        group.add(screen);
+        mwScreen.position.set(-0.25, 2.48 - headBaseY, 0.84);
+        headGroup.add(mwScreen);
       }
 
-      const eyeCount = type === "BUM MAN" ? 1 : 2;
-      const eyeY = type === "WEAKIE WALLY" ? 5.72 : 4.77;
-      for (let eye = 0; eye < eyeCount; eye += 1) {
-        const orb = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 10), eyeMaterial);
-        orb.position.set((eye - (eyeCount - 1) / 2) * 0.48, eyeY, type === "WEAKIE WALLY" ? 0.44 : 0.61);
-        group.add(orb);
-      }
+      // Human head (all except WEAKIE WALLY)
+      if (type !== "WEAKIE WALLY") {
+        const humanHead = new THREE.Mesh(new THREE.SphereGeometry(0.68, 22, 16), skinMat);
+        humanHead.scale.y = 1.08;
+        humanHead.castShadow = true;
+        headGroup.add(humanHead);
+        [-0.69, 0.69].forEach((x) => {
+          const ear = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), skinMat);
+          ear.scale.set(0.55, 1, 0.58);
+          ear.position.set(x, -0.02, 0);
+          headGroup.add(ear);
+        });
+        const headwear = new THREE.Mesh(
+          new THREE.SphereGeometry(0.71, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.52),
+          index % 2 ? upperBodyMat : bodyMaterial
+        );
+        headwear.scale.y = 0.72;
+        headwear.position.y = 0.48;
+        headGroup.add(headwear);
 
-      [-0.62, 0.62].forEach((x, limbIndex) => {
-        const legPivot = new THREE.Group();
-        legPivot.position.set(x, 1.15, 0);
-        const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 1.3, 5, 8), dark);
-        leg.position.y = -0.7;
-        leg.castShadow = true;
-        legPivot.add(leg);
-        group.add(legPivot);
-        parts.limbs.push({ pivot: legPivot, direction: limbIndex ? -1 : 1 });
-      });
+        const eyeY = type === "BUM MAN" ? 0.08 : 0.06;
+        const eyeCount = type === "BUM MAN" ? 1 : 2;
+        for (let e = 0; e < eyeCount; e += 1) {
+          const ex = (e - (eyeCount - 1) / 2) * 0.46;
+          const white = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 8), scleraMat);
+          white.position.set(ex, eyeY, 0.58);
+          headGroup.add(white);
+          const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.072, 10, 7), pupilMat);
+          pupil.position.set(ex, eyeY, 0.67);
+          headGroup.add(pupil);
+          // Brow
+          const brow = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.09, 0.05), pupilMat);
+          brow.position.set(ex, eyeY + 0.24, 0.62);
+          brow.rotation.z = ex < 0 ? 0.18 : -0.18;
+          headGroup.add(brow);
+        }
+
+        // Nose
+        const nose = new THREE.Mesh(new THREE.SphereGeometry(0.072, 8, 6), skinMat);
+        nose.scale.set(0.85, 0.82, 0.6);
+        nose.position.set(0, eyeY - 0.34, 0.66);
+        headGroup.add(nose);
+
+        // Mouth
+        const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.09, 0.06), pupilMat);
+        mouth.position.set(0, eyeY - 0.58, 0.63);
+        headGroup.add(mouth);
+      }
 
       group.traverse((child) => {
         if (child.isMesh) {
@@ -1300,6 +1682,8 @@
         accent,
         index,
         limbs: parts.limbs,
+        headGroup,
+        headBaseY,
         health,
         maxHealth: health,
         speed: boss ? 2.4 : rand(2.6, 4.2),
@@ -1414,7 +1798,7 @@
             this.cameraDistance = clamp(
               this.cameraDistance - (distance - this.pointer.pinchDistance) * 0.025,
               7,
-              18
+              24
             );
             this.yaw += (midpointX - this.pointer.pinchX) * 0.004;
             this.pitch = clamp(this.pitch - (midpointY - this.pointer.pinchY) * 0.003, -0.58, 0.24);
@@ -1444,7 +1828,7 @@
       };
       this.onWheel = (event) => {
         event.preventDefault();
-        this.cameraDistance = clamp(this.cameraDistance + Math.sign(event.deltaY), 7, 17);
+        this.cameraDistance = clamp(this.cameraDistance + Math.sign(event.deltaY), 7, 24);
       };
       this.renderer.domElement.addEventListener("pointerdown", this.onPointerDown);
       this.renderer.domElement.addEventListener("pointermove", this.onPointerMove);
@@ -1479,8 +1863,8 @@
       this.updateCoins(delta);
       this.updateTarget();
       this.updateDistrict();
-      this.updateVideoBillboards(delta);
-      this.updateBansheesAudio();
+      this.updateProximityAudio(delta);
+      this.updateBillboardSwivel();
     }
 
     updatePlayer(delta) {
@@ -1557,15 +1941,6 @@
           this.spawnBurst(coin.group.position, 0xffd24a, 24);
         }
       });
-    }
-
-    updateBansheesAudio() {
-      if (!this.bansheesAudio || !this.bansheesPosition) return;
-      const distance = this.player.position.distanceTo(this.bansheesPosition);
-      const enabled = this.options.soundEnabled?.() !== false;
-      const volume = enabled ? clamp(1 - (distance - 12) / 78, 0, 0.9) : 0;
-      this.bansheesAudio.volume += (volume - this.bansheesAudio.volume) * 0.16;
-      if (volume > 0.04 && this.bansheesAudio.paused) this.bansheesAudio.play().catch(() => {});
     }
 
     fire() {
@@ -1693,15 +2068,37 @@
           }
           const wanderX = Math.sin(enemy.wanderAngle);
           const wanderZ = Math.cos(enemy.wanderAngle);
-          enemy.group.position.x = clamp(enemy.group.position.x + wanderX * enemy.speed * 0.28 * delta, -HALF_WORLD, HALF_WORLD);
-          enemy.group.position.z = clamp(enemy.group.position.z + wanderZ * enemy.speed * 0.28 * delta, -HALF_WORLD, HALF_WORLD);
+          const nextX = clamp(
+            enemy.group.position.x + wanderX * enemy.speed * 0.28 * delta,
+            -HALF_WORLD,
+            HALF_WORLD
+          );
+          const nextZ = clamp(
+            enemy.group.position.z + wanderZ * enemy.speed * 0.28 * delta,
+            -HALF_WORLD,
+            HALF_WORLD
+          );
+          if (!this.collidesWorld(nextX, enemy.group.position.z, enemy.radius)) {
+            enemy.group.position.x = nextX;
+          }
+          if (!this.collidesWorld(enemy.group.position.x, nextZ, enemy.radius)) {
+            enemy.group.position.z = nextZ;
+          }
           enemy.group.rotation.y = enemy.wanderAngle;
         }
 
-        const swing = Math.sin(enemy.phase) * 0.62;
-        enemy.limbs.forEach(({ pivot, direction: limbDirection }) => {
-          pivot.rotation.x = swing * limbDirection;
+        const swing = Math.sin(enemy.phase) * 0.58;
+        enemy.limbs.forEach(({ pivot, lower, direction, isLeg, isArm }) => {
+          pivot.rotation.x = swing * direction * (isLeg ? 1.0 : 0.62);
+          if (lower) {
+            if (isLeg) lower.rotation.x = Math.max(0, -pivot.rotation.x) * 0.65;
+            else if (isArm) lower.rotation.x = Math.abs(pivot.rotation.x) * 0.32;
+          }
         });
+        if (enemy.headGroup) {
+          const bobAmt = distance < 52 ? 0.04 : 0.016;
+          enemy.headGroup.position.y = enemy.headBaseY + Math.abs(Math.sin(enemy.phase * 0.5)) * bobAmt;
+        }
         enemy.group.position.y = Math.abs(Math.sin(enemy.phase * 0.5)) * 0.08;
         enemy.group.scale.lerp(
           this.temp.b.setScalar(enemy.hitFlash > 0 ? 1.14 : 1),
@@ -1785,13 +2182,33 @@
       if (!this.player) return;
       const target = this.player.position.clone().add(new THREE.Vector3(0, 3.2, 0));
       const horizontal = Math.cos(this.pitch) * this.cameraDistance;
-      const desired = new THREE.Vector3(
+      const followPos = new THREE.Vector3(
         target.x - Math.sin(this.yaw) * horizontal,
-        target.y + 3.7 + Math.sin(-this.pitch) * this.cameraDistance,
+        target.y + 3.2 + Math.sin(-this.pitch) * this.cameraDistance,
         target.z - Math.cos(this.yaw) * horizontal
       );
+
+      if (!this.introComplete) {
+        this.introElapsed = Math.min(this.introElapsed + delta, this.introDuration);
+        const rawT = this.introDuration > 0 ? this.introElapsed / this.introDuration : 1;
+        // Cubic ease-in-out
+        const t = rawT < 0.5 ? 4 * rawT * rawT * rawT : 1 - Math.pow(-2 * rawT + 2, 3) / 2;
+        if (rawT >= 1) { this.introComplete = true; }
+        // Intro: elevated wide view sweeping down to follow position
+        const introX = followPos.x * t;
+        const introY = 14 + (followPos.y - 14) * t;
+        const introZ = -42 + (followPos.z + 42) * t;
+        this.camera.position.set(introX, introY, introZ);
+        this.camera.lookAt(
+          target.x * t,
+          4.8 + (target.y + 0.5 - 4.8) * t,
+          target.z * t
+        );
+        return;
+      }
+
       const smoothing = 1 - Math.pow(0.001, delta);
-      this.camera.position.lerp(desired, smoothing);
+      this.camera.position.lerp(followPos, smoothing);
       this.camera.lookAt(target.x, target.y + 0.5, target.z);
     }
 
@@ -1807,34 +2224,153 @@
         this.embers.rotation.y += delta * 0.012;
         this.embers.position.y = Math.sin(this.elapsed * 0.2) * 1.5;
       }
+      this.updateSignalStations(delta);
     }
 
-    updateVideoBillboards(delta) {
+    updateProximityAudio(delta) {
       if (!this.videoBillboards) return;
-      this.videoVolumeTimer -= delta;
-      let nearest = null;
-      let nearestDistance = Infinity;
-      this.videoBillboards.forEach((billboard) => {
-        const distance = billboard.position.distanceTo(this.player.position);
-        if (distance < nearestDistance) {
-          nearest = billboard;
-          nearestDistance = distance;
+      this.audioVolumeTimer -= delta;
+
+      // Build list of all proximity audio candidates
+      const candidates = this.videoBillboards.map((bb, i) => ({
+        type: "billboard", index: i,
+        dist: bb.position.distanceTo(this.player.position)
+      }));
+      if (this.bansheesPosition) {
+        candidates.push({
+          type: "banshees", index: -1,
+          dist: this.player.position.distanceTo(this.bansheesPosition)
+        });
+      }
+      candidates.sort((a, b) => a.dist - b.dist);
+      const nearest = candidates[0];
+      const nearestDist = nearest ? nearest.dist : Infinity;
+
+      // Refresh the currently selected source before applying hysteresis.
+      if (this.audioActiveSource) {
+        if (this.audioActiveSource.type === "billboard") {
+          this.audioActiveDist = this.videoBillboards[this.audioActiveSource.index].position
+            .distanceTo(this.player.position);
+        } else if (this.bansheesPosition) {
+          this.audioActiveDist = this.player.position.distanceTo(this.bansheesPosition);
+        }
+      }
+      const activeIsOutOfRange = this.audioActiveDist >= 50;
+      if (
+        !this.audioActiveSource ||
+        (activeIsOutOfRange && nearestDist < 50) ||
+        nearestDist < this.audioActiveDist - 4
+      ) {
+        this.audioActiveSource = nearest;
+        this.audioActiveDist = nearestDist;
+      }
+
+      if (this.audioVolumeTimer > 0) return;
+      this.audioVolumeTimer = 0.18;
+
+      const enabled = this.options.soundEnabled?.() !== false;
+      // Smoothstep curve: full at ≤10 units, silent at ≥50.
+      const volForDist = (d) => {
+        if (!enabled) return 0;
+        const t = clamp((d - 10) / 40, 0, 1);
+        return 1 - t * t * (3 - 2 * t);
+      };
+
+      const activeBillboard = enabled &&
+        this.audioActiveSource?.type === "billboard" &&
+        this.audioActiveDist < 50
+        ? this.videoBillboards[this.audioActiveSource.index]
+        : null;
+      const activeVideoSource = activeBillboard
+        ? this.videoSources[activeBillboard.sourceIndex]
+        : null;
+
+      // Hard-mute every inactive source so smoothing can never create overlap.
+      this.videoSources.forEach((source) => {
+        if (source !== activeVideoSource) {
+          source.currentVolume = 0;
+          source.video.muted = true;
+          source.video.volume = 0;
         }
       });
-      if (this.videoVolumeTimer > 0) return;
-      this.videoVolumeTimer = 0.25;
-      this.videoBillboards.forEach((billboard) => {
-        const active =
-          this.options.soundEnabled?.() !== false &&
-          billboard === nearest &&
-          nearestDistance < 82;
-        const volume = active ? Math.round(clamp(100 - (nearestDistance - 12) * 1.35, 8, 100)) : 0;
-        if (volume === billboard.lastVolume) return;
-        billboard.lastVolume = volume;
-        billboard.video.volume = volume / 100;
-        billboard.video.muted = volume === 0;
-        if (active && billboard.video.paused) billboard.video.play().catch(() => {});
-        if (active) this.options.onTarget?.(`${billboard.label} · VOLUME ${volume}%`);
+      this.videoBillboards.forEach((bb) => {
+        bb.lastVolume = 0;
+      });
+      const bansheesActive = enabled &&
+        this.audioActiveSource?.type === "banshees" &&
+        this.audioActiveDist < 50;
+      if (this.bansheesAudio && !bansheesActive) {
+        this.bansheesVolume = 0;
+        this.bansheesAudio.volume = 0;
+      }
+
+      let activeName = "";
+      let activeDist = Infinity;
+
+      if (this.audioActiveSource && this.audioActiveDist < 50) {
+        const vol = volForDist(this.audioActiveDist);
+        if (this.audioActiveSource.type === "billboard") {
+          const bb = this.videoBillboards[this.audioActiveSource.index];
+          if (bb) {
+            const source = this.videoSources[bb.sourceIndex];
+            source.currentVolume += (vol - source.currentVolume) * 0.35;
+            source.video.muted = source.currentVolume < 0.05;
+            source.video.volume = source.currentVolume;
+            bb.lastVolume = Math.round(source.currentVolume * 100);
+            if (vol > 0.05 && source.video.paused) source.video.play().catch(() => {});
+            activeName = bb.label;
+            activeDist = this.audioActiveDist;
+          }
+        } else if (this.audioActiveSource.type === "banshees" && this.bansheesAudio) {
+          const target = volForDist(this.audioActiveDist);
+          this.bansheesVolume += (target - this.bansheesVolume) * 0.35;
+          this.bansheesAudio.volume = this.bansheesVolume;
+          if (target > 0.04 && this.bansheesAudio.paused) this.bansheesAudio.play().catch(() => {});
+          activeName = "BANSHEES RISE";
+          activeDist = this.audioActiveDist;
+        }
+      }
+
+      this.activeAudibleName = activeName;
+      this.activeAudibleDist = activeDist < Infinity ? Math.round(activeDist) : -1;
+      const liveStation = this.signalStations.find((station) => station.active);
+      if (liveStation) {
+        this.options.onMediaSignal?.(
+          `SIGNAL STATION · ${liveStation.label}`,
+          liveStation.position.distanceTo(this.player.position)
+        );
+      } else {
+        this.options.onMediaSignal?.(activeName, activeDist < Infinity ? activeDist : -1);
+      }
+    }
+
+    updateBillboardSwivel() {
+      if (!this.videoBillboards) return;
+      this.videoBillboards.forEach((bb) => {
+        const dx = this.player.position.x - bb.position.x;
+        const dz = this.player.position.z - bb.position.z;
+        bb.group.rotation.y = Math.atan2(dx, dz);
+      });
+    }
+
+    updateSignalStations(delta) {
+      if (!this.signalStations) return;
+      this.signalStations.forEach((station) => {
+        const dist = station.position.distanceTo(this.player.position);
+        const proximity = clamp(1 - (dist - 4) / 18, 0, 1);
+        station.active = dist <= 9;
+        const dx = this.player.position.x - station.position.x;
+        const dz = this.player.position.z - station.position.z;
+        station.group.rotation.y = Math.atan2(dx, dz);
+        station.padMat.opacity = 0.08 + proximity * 0.32;
+        station.beaconMat.emissiveIntensity = 2.5 + proximity * 5 + Math.sin(this.elapsed * 3) * 0.5;
+        if (station.active && !station.wasActive) {
+          this.spawnBurst(station.position.clone().setY(1.2), station.color, 30);
+        }
+        station.wasActive = station.active;
+        if (proximity > 0.6 && !this.reducedMotion) {
+          station.pad.rotation.z += delta * 0.45;
+        }
       });
     }
 
@@ -1931,10 +2467,28 @@
         context.strokeRect(
           ((this.bansheesPosition.x + HALF_WORLD) / (HALF_WORLD * 2)) * width - 4,
           ((this.bansheesPosition.z + HALF_WORLD) / (HALF_WORLD * 2)) * height - 4,
-          8,
-          8
+          8, 8
         );
       }
+      // Billboard markers (cyan dots)
+      context.fillStyle = "#50dfff";
+      this.videoBillboards?.forEach((bb) => {
+        const mx = ((bb.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width;
+        const my = ((bb.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height;
+        context.fillRect(mx - 1.5, my - 1.5, 3, 3);
+      });
+      // Signal station markers (colored circles)
+      this.signalStations?.forEach((station) => {
+        context.strokeStyle = `#${station.color.toString(16).padStart(6, "0")}`;
+        context.lineWidth = 1.5;
+        context.beginPath();
+        context.arc(
+          ((station.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width,
+          ((station.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height,
+          4.5, 0, Math.PI * 2
+        );
+        context.stroke();
+      });
       const playerX = ((this.player.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width;
       const playerY = ((this.player.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height;
       context.save();
@@ -1989,7 +2543,14 @@
 
     setPaused(paused) {
       this.paused = paused;
-      if (!paused) this.clock.getDelta();
+      if (!paused) {
+        this.clock.getDelta();
+        this.videoSources?.forEach((source) => {
+          source.video.muted = true;
+          source.video.volume = 0;
+          source.video.play().catch(() => {});
+        });
+      }
     }
 
     getState() {
@@ -2000,22 +2561,68 @@
         health: this.health,
         paused: this.paused,
         district: this.currentDistrict,
-        renderer: "Three.js WebGL",
+        renderer: "WebGL",
         winTarget: WIN_TARGET,
         coins: this.coinCount,
+        // Billboard/media state
         videos: this.videoBillboards?.length || 0,
+        displayCount: this.videoBillboards?.length || 0,
+        uniqueMediaCount: this.videoSources?.length || 0,
+        aspectFitStatus: this.videoBillboards?.map((bb) => ({
+          label: bb.label,
+          sourceAspect: this.videoSources[bb.sourceIndex].aspect,
+          fittedWidth: Number(bb.fittedWidth.toFixed(2)),
+          fittedHeight: Number(bb.fittedHeight.toFixed(2)),
+          letterboxed: true
+        })) || [],
+        activeAudibleSource: this.activeAudibleName || null,
+        activeAudibleDist: this.activeAudibleDist,
+        // Camera / intro
+        cameraIntro: !this.introComplete,
+        cameraIntroProgress: this.introDuration > 0
+          ? Math.min(1, this.introElapsed / this.introDuration)
+          : 1,
+        cameraPosition: {
+          x: Number(this.camera.position.x.toFixed(2)),
+          y: Number(this.camera.position.y.toFixed(2)),
+          z: Number(this.camera.position.z.toFixed(2))
+        },
+        // Signal stations
+        stationCount: this.signalStations?.length || 0,
+        signalStations: this.signalStations?.map((station) => ({
+          id: station.id,
+          label: station.label,
+          x: station.position.x,
+          z: station.position.z,
+          active: station.active
+        })) || [],
         yaw: Number(this.yaw.toFixed(3)),
         cameraDistance: Number(this.cameraDistance.toFixed(2)),
         worldComplete: this.worldComplete,
         bansheesAudioPaused: this.bansheesAudio?.paused ?? true,
         bansheesVolume: Number((this.bansheesAudio?.volume || 0).toFixed(3)),
-        billboardVolumes: this.videoBillboards?.map((billboard) => billboard.lastVolume) || [],
-        billboardPaused: this.videoBillboards?.map((billboard) => billboard.video.paused) || [],
+        billboardVolumes: this.videoBillboards?.map((bb) => bb.lastVolume) || [],
+        billboardPaused: this.videoBillboards?.map((bb) => bb.video.paused) || [],
         player: {
           x: Number(this.player.position.x.toFixed(2)),
           z: Number(this.player.position.z.toFixed(2))
         }
       };
+    }
+
+    warpPlayerToStation(stationId) {
+      const station = this.signalStations?.find((s) => s.id === stationId);
+      const destination = station?.position ||
+        (stationId === "banshees" ? this.bansheesPosition : null);
+      if (!destination) return false;
+      this.player.position.set(destination.x, 0, destination.z + (station ? 7 : 16));
+      this.yaw = Math.atan2(
+        destination.x - this.player.position.x,
+        destination.z - this.player.position.z
+      );
+      this.introComplete = true;
+      this.updateCamera(1);
+      return true;
     }
 
     debugDefeatAll() {
@@ -2045,11 +2652,14 @@
       this.renderer.domElement.removeEventListener("pointercancel", this.onPointerUp);
       this.renderer.domElement.removeEventListener("wheel", this.onWheel);
       this.stopWorldAudio();
-      this.videoBillboards?.forEach((billboard) => {
-        billboard.video.pause();
-        billboard.video.removeAttribute("src");
-        billboard.video.load();
-        billboard.texture.dispose();
+      this.videoSources?.forEach((source) => {
+        source.video.pause();
+        source.video.removeAttribute("src");
+        source.video.load();
+        source.texture.dispose();
+      });
+      this.videoBillboards?.forEach((bb) => {
+        bb.video.pause();
       });
       if (this.bansheesAudio) {
         this.bansheesAudio.pause();

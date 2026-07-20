@@ -38,6 +38,13 @@ test("builds the procedural BOYO character and city", () => {
   assert.match(world, /createStreetlights/);
   assert.match(world, /createPuddles/);
   assert.match(world, /resolvePlayerPenetration/);
+  assert.match(world, /isNearMediaSite/);
+  assert.match(world, /PANEL_W \* 0\.48/);
+  assert.match(world, /BANSHEES_SITE/);
+  assert.match(world, /attempts < 80/);
+  assert.match(world, /collidesWorld\(nextX, enemy\.group\.position\.z, enemy\.radius\)/);
+  assert.match(world, /#c8102e/);
+  assert.match(html, /class="mask-dragon"/);
 });
 
 test("supports arrows, firing, touch look and pinch zoom", () => {
@@ -51,7 +58,10 @@ test("supports arrows, firing, touch look and pinch zoom", () => {
 
 test("integrates music, coins, Banshees and video billboards", () => {
   assert.match(world, /const VIDEO_BILLBOARDS = \[/);
-  assert.equal((world.match(/LIVE FEED/g) || []).length, 6);
+  assert.match(world, /const VIDEO_SOURCES = \[/);
+  // 18 billboard displays backed by 6 shared sources; labels use BOYO TV prefix
+  assert.match(world, /BOYO TV/);
+  assert.doesNotMatch(world, /LIVE FEED/);
   assert.match(world, /new THREE\.VideoTexture/);
   assert.match(world, /assets\/billboards\/red-brick\.mp4/);
   assert.match(world, /createCoins/);
@@ -90,4 +100,30 @@ test("preserves official links and public-facing copy", () => {
   }
   assert.doesNotMatch(html, /Three\.js|WebGL|renderer|Phaser/);
   assert.match(html, /BOYOWORLD/);
+});
+
+test("getState exposes extended display, media and camera fields", () => {
+  // displayCount — 18 billboard displays
+  assert.match(world, /displayCount:\s*this\.videoBillboards/);
+  // uniqueMediaCount — 6 shared video sources
+  assert.match(world, /uniqueMediaCount:\s*this\.videoSources/);
+  // aspectFitStatus present
+  assert.match(world, /aspectFitStatus/);
+  assert.match(world, /cameraPosition/);
+  // active audible source tracking
+  assert.match(world, /activeAudibleSource:\s*this\.activeAudibleName/);
+  // camera intro state
+  assert.match(world, /cameraIntro:\s*!this\.introComplete/);
+  // signal stations count
+  assert.match(world, /stationCount:\s*this\.signalStations/);
+  assert.match(world, /signalStations:\s*this\.signalStations/);
+  assert.match(world, /station\.active = dist <= 9/);
+  // unified audio arbitration replaces per-video calls
+  assert.match(world, /updateProximityAudio/);
+  assert.match(world, /warpPlayerToStation/);
+  assert.match(world, /activeIsOutOfRange && nearestDist < 50/);
+  assert.match(world, /destination\.z \+ \(station \? 7 : 16\)/);
+  assert.match(game, /\["playing", "paused"\]\.includes\(state\.mode\)/);
+  assert.match(game, /scrollIntoView/);
+  assert.match(game, /threeHud\.setAttribute\("aria-hidden", "false"\)/);
 });

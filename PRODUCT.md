@@ -12,7 +12,9 @@ BOYO listeners, social followers, gamers, and visitors discovering BOYOWORLD thr
 
 BOYOWORLD is a public promotional universe built around one flagship third-person browser game. The opening view combines the BOYOWORLD identity, game cabinet, music, social and merch routes. Playing turns BOYO's white mask, videos, Banshees signal, sayings and visual language into an explorable night city.
 
-Success means visitors immediately recognise BOYOWORLD, understand the arrow/Space controls, explore the city, defeat 25 of the 50 surreal enemies, collect BOYO coins, discover music landmarks, watch the in-cabinet reward, and continue to an official BOYO destination.
+Success means visitors immediately recognise BOYOWORLD, understand the arrow/Space controls, explore the city, defeat 25 of the 50 surreal enemies, collect BOYO coins, discover proximity signal stations (each representing an official track), watch the in-cabinet reward, and continue to an official BOYO destination.
+
+Deep-link station warp buttons (in the Banshees, world and music sections) start the game and teleport BOYO directly to the matching signal station, turning content browsing into immediate play.
 
 ## Brand Personality
 

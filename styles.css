@@ -331,6 +331,12 @@ img {
   background: var(--cp-game-white);
   box-shadow: var(--cp-game-shadow);
   filter: saturate(0.85) contrast(1.12);
+  transition: transform 0.12s ease-out;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster { transition: none !important; }
 }
 
 .poster::after {
@@ -1089,7 +1095,8 @@ img {
 
 .three-district,
 .three-wave,
-.three-coins {
+.three-coins,
+.three-signal {
   position: absolute;
   top: 82px;
   padding: 0.28rem 0.5rem;
@@ -1114,6 +1121,15 @@ img {
   left: 50%;
   color: var(--cp-game-yellow);
   transform: translateX(-50%);
+}
+
+.three-signal {
+  bottom: 68px;
+  left: 50%;
+  top: auto;
+  color: #50dfff;
+  transform: translateX(-50%);
+  letter-spacing: 0.04em;
 }
 
 .screen.three-active .scanlines {
@@ -1245,6 +1261,7 @@ img {
 .three-district,
 .three-wave,
 .three-coins,
+.three-signal,
 .three-target {
   font-size: 0.42rem;
 }
@@ -1379,6 +1396,34 @@ img {
   border-radius: 40% 40% 55% 55%;
   background: var(--cp-game-black);
   border: 3px solid var(--cp-game-red-dark);
+}
+
+.mask-dragon {
+  position: absolute;
+  top: 2%;
+  left: 22%;
+  width: 56%;
+  color: #c8102e;
+  text-align: center;
+  transform: rotate(4deg);
+}
+
+.mask-dragon svg {
+  width: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 2px 0 var(--cp-game-white));
+}
+
+.mask-dragon b {
+  display: block;
+  margin-top: -0.2rem;
+  color: #c8102e;
+  font-family: var(--cp-game-mono);
+  font-size: clamp(0.42rem, 1vw, 0.62rem);
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  text-shadow: 1px 1px 0 var(--cp-game-white);
 }
 
 .menu-mask strong {
@@ -2126,6 +2171,37 @@ kbd {
 .stream-links a:hover {
   background: var(--cp-game-red);
   border-color: var(--cp-game-red);
+}
+
+.station-warp-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+}
+
+.station-warp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.45rem 0.7rem;
+  letter-spacing: 0.03em;
+}
+
+.station-warp-btn img {
+  width: 22px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.station-warp-btn:hover,
+.station-warp-btn:focus-visible {
+  border-color: #50dfff;
+  color: #50dfff;
 }
 
 .record-stack {

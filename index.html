@@ -43,12 +43,12 @@
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-collage" aria-hidden="true">
-        <figure class="poster poster-a"><img src="assets/video-red-brick.jpg" alt=""></figure>
-        <figure class="poster poster-b"><img src="assets/tiktok/boyo-03.jpg" alt=""></figure>
-        <figure class="poster poster-c"><img src="assets/video-fuming.jpg" alt=""></figure>
-        <figure class="poster poster-d"><img src="assets/boyo-mask-reference.png" alt=""></figure>
-        <figure class="poster poster-e"><img src="assets/frames/spitfire-2.jpg" alt=""></figure>
-        <figure class="poster poster-f"><img src="assets/tiktok/boyo-12.jpg" alt=""></figure>
+        <figure class="poster poster-a" data-parallax="0.06"><img src="assets/video-red-brick.jpg" alt=""></figure>
+        <figure class="poster poster-b" data-parallax="-0.04"><img src="assets/tiktok/boyo-03.jpg" alt=""></figure>
+        <figure class="poster poster-c" data-parallax="0.08"><img src="assets/video-fuming.jpg" alt=""></figure>
+        <figure class="poster poster-d" data-parallax="-0.05"><img src="assets/boyo-mask-reference.png" alt=""></figure>
+        <figure class="poster poster-e" data-parallax="0.03"><img src="assets/frames/spitfire-2.jpg" alt=""></figure>
+        <figure class="poster poster-f" data-parallax="-0.07"><img src="assets/tiktok/boyo-12.jpg" alt=""></figure>
         <span class="tape tape-a"></span>
         <span class="tape tape-b"></span>
         <span class="scribble">6P / NO WEAKIES</span>
@@ -194,6 +194,7 @@
               <div class="three-district" id="threeDistrict">SPIN BLOCK CENTRAL</div>
               <div class="three-wave" id="threeWave">25 KILLS TO CLEAR</div>
               <div class="three-coins" id="threeCoins">BOYO COINS 0 / 30</div>
+              <div class="three-signal" id="threeSignal" aria-live="polite">NO SIGNAL</div>
             </div>
             <aside class="game-guide" id="gameGuide" hidden aria-label="Current level objective">
               <div class="guide-goal">
@@ -223,6 +224,18 @@
               <div class="menu-mask" aria-hidden="true">
                 <div class="mask-eyes"><i></i><i></i></div>
                 <div class="mask-mouth"></div>
+                <span class="mask-dragon">
+                  <svg viewBox="0 0 120 80" role="img" aria-label="Welsh dragon">
+                    <path fill="#c8102e" stroke="#09070a" stroke-width="4"
+                      d="M8 58c16-3 22-14 34-16 12-3 20-11 31-10l14-10 12 4 8-8 3 12 13 3-9 7 16 6-18 5 6 10-17-6c-9 14-24 15-34 4L56 74l-2-16c-14 0-26 11-43 14 12-7 14-11-3-14Z"/>
+                    <path fill="#c8102e" stroke="#09070a" stroke-width="4"
+                      d="M50 43 34 13l22 14L70 6l3 31Z"/>
+                    <path fill="#c8102e" stroke="#09070a" stroke-width="4"
+                      d="m70 58-7 18 12-9 4-11m18 1-1 18 10-10 1-10"/>
+                    <circle cx="101" cy="31" r="2.5" fill="#ffd33d"/>
+                  </svg>
+                  <b>CYMRU</b>
+                </span>
                 <strong>BOYO</strong>
               </div>
               <div class="menu-copy">
@@ -360,6 +373,10 @@
             <span>HIGH ON LIFE <b>WATCH ↗</b></span>
           </a>
         </div>
+        <button class="button button-ghost station-warp-btn" data-station="banshees"
+          aria-label="Start BOYOWORLD and warp to Banshees signal">
+          Enter world → Banshees signal ↗
+        </button>
       </div>
     </section>
 
@@ -367,6 +384,14 @@
       <div class="showcase-title">
         <p>THE SURREAL ROSTER</p>
         <h2 id="levels-title">Fifty things that should not exist.</h2>
+      </div>
+      <div class="station-warp-row" aria-label="Signal station shortcuts">
+        <button class="button button-ghost station-warp-btn" data-station="red-brick">
+          <img src="assets/video-red-brick.jpg" alt=""> RED BRICK signal ↗
+        </button>
+        <button class="button button-ghost station-warp-btn" data-station="raw-pap">
+          <img src="assets/video-raw-pap.jpg" alt=""> RAW PAP signal ↗
+        </button>
       </div>
       <article class="showcase-row">
         <div class="showcase-number">BOSS</div>
@@ -416,6 +441,17 @@
           <a href="https://music.apple.com/gb/artist/boyo/1562715707" target="_blank" rel="noreferrer">Apple Music ↗</a>
           <a href="https://soundcloud.com/boyoworld" target="_blank" rel="noreferrer">SoundCloud ↗</a>
           <a href="https://boyoworld.bandcamp.com/follow_me" target="_blank" rel="noreferrer">Bandcamp ↗</a>
+        </div>
+        <div class="station-warp-row" aria-label="Music signal stations">
+          <button class="button button-ghost station-warp-btn" data-station="spitfire">
+            <img src="assets/video-spitfire.jpg" alt=""> SPITFIRE signal ↗
+          </button>
+          <button class="button button-ghost station-warp-btn" data-station="fuming">
+            <img src="assets/video-fuming.jpg" alt=""> FUMING signal ↗
+          </button>
+          <button class="button button-ghost station-warp-btn" data-station="pay-me">
+            <img src="assets/video-pay-me.jpg" alt=""> PAY ME signal ↗
+          </button>
         </div>
       </div>
       <div class="record-stack">

@@ -38,6 +38,7 @@
     threeDistrict: document.getElementById("threeDistrict"),
     threeWave: document.getElementById("threeWave"),
     threeCoins: document.getElementById("threeCoins"),
+    threeSignal: document.getElementById("threeSignal"),
     screen: document.getElementById("screen"),
     scratchCanvas: document.getElementById("scratchCanvas"),
     discountCode: document.getElementById("discountCode"),
@@ -60,7 +61,8 @@
     rewardTimer: null,
     copyResetTimer: null,
     lastVideo: -1,
-    rewardScrollY: 0
+    rewardScrollY: 0,
+    pendingWarp: null
   };
 
   const controls = { down: new Set(), pressed: new Set() };
@@ -140,6 +142,7 @@
     ui.guide.hidden = true;
     ui.briefing.hidden = true;
     ui.threeHud.hidden = true;
+    ui.threeHud.setAttribute("aria-hidden", "true");
     ui.screen.classList.remove("three-active");
     ui.screen.classList.remove("reward-active");
     ui.machineStatus.textContent = "BOYOWORLD SIGNAL READY";
@@ -164,6 +167,7 @@
     ui.guide.hidden = false;
     ui.briefing.hidden = false;
     ui.threeHud.hidden = false;
+    ui.threeHud.setAttribute("aria-hidden", "false");
     ui.screen.classList.add("three-active");
     ui.screen.classList.remove("reward-active");
     ui.machineStatus.textContent = "BOROUGH ACTIVE";
@@ -204,8 +208,21 @@
       onTarget: (target) => { ui.threeTarget.textContent = target; },
       onDistrict: (district) => { ui.threeDistrict.textContent = district; },
       onComplete: completeWorld,
-      onFail: failWorld
+      onFail: failWorld,
+      onMediaSignal: (name, dist) => {
+        if (ui.threeSignal) {
+          ui.threeSignal.textContent = name
+            ? `📡 ${name} — ${Math.round(dist)}u`
+            : "NO SIGNAL";
+        }
+      }
     });
+    // Handle pending warp-to-station from deep-link buttons
+    if (state.pendingWarp) {
+      const id = state.pendingWarp;
+      state.pendingWarp = null;
+      setTimeout(() => state.world?.warpPlayerToStation?.(id), 600);
+    }
     if (state.briefingTimer) clearTimeout(state.briefingTimer);
     state.briefingTimer = setTimeout(() => {
       ui.briefing.hidden = true;
@@ -495,6 +512,40 @@
 
   bindTouchControls();
   bindArchiveInteractions();
+
+  // Station deep-link warp buttons
+  document.querySelectorAll(".station-warp-btn[data-station]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.station;
+      if (["playing", "paused"].includes(state.mode) && state.world) {
+        state.world.warpPlayerToStation?.(id);
+      } else {
+        state.pendingWarp = id;
+        startWorld();
+      }
+      document.getElementById("game")?.scrollIntoView({
+        behavior: state.reducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
+      document.getElementById("gameCanvas")?.focus({ preventScroll: true });
+    });
+  });
+
+  // Hero poster parallax (respects reduced-motion)
+  if (!state.reducedMotion) {
+    const posters = document.querySelectorAll(".poster[data-parallax]");
+    document.addEventListener("mousemove", (e) => {
+      const cx = innerWidth / 2;
+      const cy = innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      posters.forEach((el) => {
+        const f = parseFloat(el.dataset.parallax) || 0;
+        el.style.transform = `translate(${dx * f * 40}px, ${dy * f * 30}px)`;
+      });
+    });
+  }
+
   const main = document.querySelector("main");
   const gameSection = document.getElementById("game");
   if (main.firstElementChild !== gameSection) main.prepend(gameSection);
