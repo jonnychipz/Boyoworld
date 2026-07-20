@@ -103,24 +103,24 @@
 
   // 18 displays: each of the nine official YouTube/TikTok sources appears twice.
   const VIDEO_BILLBOARDS = [
-    { x: -28,  y: 10, z: -24,  s: 0 },
-    { x:  28,  y: 10, z: -24,  s: 1 },
-    { x: -28,  y: 10, z:  26,  s: 2 },
-    { x:  28,  y: 10, z:  26,  s: 3 },
-    { x:  -8,  y: 12, z:  91,  s: 4 },
-    { x:   8,  y: 12, z: -91,  s: 5 },
-    { x: -91,  y: 10, z: -10,  s: 6 },
-    { x:  91,  y: 10, z:  10,  s: 7 },
-    { x: -48,  y: 10, z:  68,  s: 8 },
-    { x:  48,  y: 10, z: -68,  s: 0 },
-    { x: -68,  y: 10, z: -48,  s: 1 },
-    { x:  68,  y: 10, z:  48,  s: 2 },
-    { x:  -4,  y: 12, z: -106, s: 3 },
-    { x:   4,  y: 12, z:  106, s: 4 },
-    { x: -106, y: 10, z:   4,  s: 5 },
-    { x:  106, y: 10, z:  -4,  s: 6 },
-    { x: -84,  y: 10, z:  84,  s: 7 },
-    { x:  84,  y: 10, z: -84,  s: 8 }
+    { x: -28, y: 10, z: -36, s: 0 },
+    { x: 28, y: 10, z: -36, s: 1 },
+    { x: -28, y: 10, z: 36, s: 2 },
+    { x: 28, y: 10, z: 36, s: 3 },
+    { x: -58, y: 10, z: -72, s: 4 },
+    { x: 58, y: 10, z: -72, s: 5 },
+    { x: -58, y: 10, z: 72, s: 6 },
+    { x: 58, y: 10, z: 72, s: 7 },
+    { x: -92, y: 10, z: -48, s: 8 },
+    { x: 92, y: 10, z: 8, s: 0 },
+    { x: -92, y: 10, z: 8, s: 1 },
+    { x: 92, y: 10, z: 52, s: 2 },
+    { x: -92, y: 10, z: 52, s: 3 },
+    { x: 92, y: 10, z: -48, s: 4 },
+    { x: -32, y: 12, z: -104, s: 5 },
+    { x: 32, y: 12, z: -104, s: 6 },
+    { x: -64, y: 12, z: 104, s: 7 },
+    { x: 64, y: 12, z: 104, s: 8 }
   ];
 
   const SIGNAL_STATIONS = [
@@ -228,6 +228,10 @@
       this.streetArtifactCount = 0;
       this.streetArtifactCategories = {};
       this.starCount = 0;
+      this.enemyLodTimer = 0;
+      this.fullDetailEnemies = new Set();
+      this.faceDetailEnemies = new Set();
+      this.mediaPrimed = false;
       this.killSpeechPhrase = "";
       this.killSpeechVisible = false;
       this.killSpeechUntil = 0;
@@ -290,6 +294,7 @@
             phrase: this.killSpeechPhrase,
             visible: this.killSpeechVisible
           }),
+          crowdEnemies: (count = 30) => this.debugCrowdEnemies(count),
           getEnvironmentState: () => ({
             buildingVariantCount: this.buildingVariantCount,
             moonVisible: Boolean(this.moon?.visible),
@@ -360,15 +365,15 @@
       this.createRoadGrid();
       this.createDistricts();
       this.createVideoBillboards();
+      this.createBansheesLandmark();
+      this.primeMedia();
       this.createBuildings();
-      this.createBillboards();
       this.createWorldProps();
       this.createStreetArtifacts();
       this.createStreetlights();
       this.createPuddles();
       this.createPortals();
       this.createCoins();
-      this.createBansheesLandmark();
       this.createSignalStations();
       this.createAtmosphere();
     }
@@ -1496,9 +1501,8 @@
 
       this.bansheesAudio = new Audio("assets/banshees/banshees-rise.mp3");
       this.bansheesAudio.loop = true;
-      this.bansheesAudio.preload = "auto";
+      this.bansheesAudio.preload = "metadata";
       this.bansheesAudio.volume = 0;
-      this.bansheesAudio.play().catch(() => {});
     }
 
     createPortals() {
@@ -2098,15 +2102,14 @@
         video.loop = true;
         video.muted = true;
         video.playsInline = true;
-        video.preload = "auto";
+        video.preload = "metadata";
         video.crossOrigin = "anonymous";
         video.volume = 0;
-        video.play().catch(() => {});
         const texture = new THREE.VideoTexture(video);
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
-        return { ...source, video, texture, currentVolume: 0 };
+        return { ...source, video, texture, currentVolume: 0, playBlocked: false };
       });
 
       const PANEL_W = 19.2;
@@ -2957,15 +2960,35 @@
       }
     }
 
+    refreshEnemyLod() {
+      const ranked = this.enemies
+        .filter((enemy) => !enemy.dead)
+        .map((enemy) => ({
+          enemy,
+          distance: enemy.group.position.distanceToSquared(this.player.position)
+        }))
+        .sort((left, right) => left.distance - right.distance);
+      const mobile = Math.min(innerWidth, innerHeight) < 700;
+      const fullLimit = mobile ? 8 : 14;
+      const faceLimit = mobile ? 3 : 7;
+      this.fullDetailEnemies = new Set(ranked.slice(0, fullLimit).map((item) => item.enemy));
+      this.faceDetailEnemies = new Set(ranked.slice(0, faceLimit).map((item) => item.enemy));
+    }
+
     updateEnemies(delta) {
+      this.enemyLodTimer -= delta;
+      if (this.enemyLodTimer <= 0) {
+        this.enemyLodTimer = 0.3;
+        this.refreshEnemyLod();
+      }
       for (const enemy of this.enemies) {
         if (enemy.dead) continue;
         enemy.phase += delta * 3.2;
         enemy.hitFlash = Math.max(0, enemy.hitFlash - delta);
         enemy.recoil = Math.max(0, enemy.recoil - delta * 5.5);
         const distance = enemy.group.position.distanceTo(this.player.position);
-        const useProxy = distance > 70;
-        const showDetails = !useProxy && distance < 36;
+        const useProxy = !this.fullDetailEnemies.has(enemy);
+        const showDetails = !useProxy && this.faceDetailEnemies.has(enemy);
         if (useProxy !== enemy.usingProxy) {
           enemy.renderMeshes.forEach((mesh) => { mesh.visible = !useProxy; });
           enemy.distanceProxy.visible = useProxy;
@@ -3012,18 +3035,20 @@
           enemy.group.rotation.y = enemy.wanderAngle;
         }
 
-        const swing = Math.sin(enemy.phase) * 0.58 * enemy.gaitScale;
-        enemy.limbs.forEach(({ pivot, lower, direction, isLeg, isArm }) => {
-          pivot.rotation.x = swing * direction * (isLeg ? 1.0 : 0.62);
-          if (lower) {
-            if (isLeg) lower.rotation.x = Math.max(0, -pivot.rotation.x) * 0.65;
-            else if (isArm) lower.rotation.x = Math.abs(pivot.rotation.x) * 0.32;
+        if (!useProxy) {
+          const swing = Math.sin(enemy.phase) * 0.58 * enemy.gaitScale;
+          enemy.limbs.forEach(({ pivot, lower, direction, isLeg, isArm }) => {
+            pivot.rotation.x = swing * direction * (isLeg ? 1.0 : 0.62);
+            if (lower) {
+              if (isLeg) lower.rotation.x = Math.max(0, -pivot.rotation.x) * 0.65;
+              else if (isArm) lower.rotation.x = Math.abs(pivot.rotation.x) * 0.32;
+            }
+          });
+          if (enemy.headGroup) {
+            const bobAmt = distance < 52 ? 0.04 : 0.016;
+            enemy.headGroup.position.y = enemy.headBaseY + Math.abs(Math.sin(enemy.phase * 0.5)) * bobAmt;
+            enemy.headGroup.rotation.x = -enemy.recoil * 0.22;
           }
-        });
-        if (enemy.headGroup) {
-          const bobAmt = distance < 52 ? 0.04 : 0.016;
-          enemy.headGroup.position.y = enemy.headBaseY + Math.abs(Math.sin(enemy.phase * 0.5)) * bobAmt;
-          enemy.headGroup.rotation.x = -enemy.recoil * 0.22;
         }
         enemy.group.position.y = Math.abs(Math.sin(enemy.phase * 0.5)) * 0.08;
         enemy.group.rotation.z = Math.sin(enemy.phase * 0.5) * 0.018 - enemy.recoil * 0.09;
@@ -3231,6 +3256,7 @@
       const activeVideoSource = activeBillboard
         ? this.videoSources[activeBillboard.sourceIndex]
         : null;
+      this.updateMediaPlayback(activeVideoSource);
 
       // Hard-mute every inactive source so smoothing can never create overlap.
       this.videoSources.forEach((source) => {
@@ -3264,7 +3290,13 @@
             source.video.muted = source.currentVolume < 0.05;
             source.video.volume = source.currentVolume;
             bb.lastVolume = Math.round(source.currentVolume * 100);
-            if (vol > 0.05 && source.video.paused) source.video.play().catch(() => {});
+            if (vol > 0.05 && source.video.paused) {
+              source.video.play()
+                .then(() => { source.playBlocked = false; })
+                .catch((error) => {
+                  if (error?.name !== "AbortError") source.playBlocked = true;
+                });
+            }
             activeName = bb.label;
             activeDist = this.audioActiveDist;
           }
@@ -3289,6 +3321,33 @@
       } else {
         this.options.onMediaSignal?.(activeName, activeDist < Infinity ? activeDist : -1);
       }
+    }
+
+    updateMediaPlayback(activeVideoSource) {
+      const desiredSources = new Set();
+      if (activeVideoSource) desiredSources.add(activeVideoSource);
+      const forward = this.camera.getWorldDirection(this.temp.c);
+      this.videoBillboards.forEach((billboard) => {
+        const offset = this.temp.b.copy(billboard.position).sub(this.camera.position);
+        const distance = offset.length();
+        if (distance > 88) return;
+        if (forward.dot(offset.normalize()) > -0.05) {
+          desiredSources.add(this.videoSources[billboard.sourceIndex]);
+        }
+      });
+      this.videoSources.forEach((source) => {
+        const shouldPlay = desiredSources.has(source);
+        if (shouldPlay && source.video.paused) {
+          source.video.muted = true;
+          source.video.play()
+            .then(() => { source.playBlocked = false; })
+            .catch((error) => {
+              if (error?.name !== "AbortError") source.playBlocked = true;
+            });
+        } else if (!shouldPlay && !source.video.paused) {
+          source.video.pause();
+        }
+      });
     }
 
     updateBillboardSwivel() {
@@ -3469,6 +3528,37 @@
       this.options.onTarget?.("25 SURREALS DEFEATED · WORLD CLEARED");
     }
 
+    primeMedia() {
+      if (this.mediaPrimePromise) {
+        const activeVideoSource = this.audioActiveSource?.type === "billboard"
+          ? this.videoSources[this.videoBillboards[this.audioActiveSource.index]?.sourceIndex]
+          : null;
+        this.updateMediaPlayback(activeVideoSource);
+        if (this.audioActiveSource?.type === "banshees" && this.bansheesAudio?.paused) {
+          this.bansheesAudio.play().catch(() => {});
+        }
+        return this.mediaPrimePromise;
+      }
+      this.mediaPrimed = true;
+      const attempts = this.videoSources?.map((source) => {
+        source.video.volume = 0;
+        source.video.muted = false;
+        return source.video.play()
+          .then(() => { source.playBlocked = false; })
+          .catch((error) => {
+            if (error?.name !== "AbortError") source.playBlocked = true;
+          });
+      }) || [];
+      if (this.bansheesAudio) {
+        this.bansheesAudio.volume = 0;
+        attempts.push(this.bansheesAudio.play().catch(() => {}));
+      }
+      this.mediaPrimePromise = Promise.allSettled(attempts).then(() => {
+        if (!this.destroyed) this.updateMediaPlayback(null);
+      });
+      return this.mediaPrimePromise;
+    }
+
     stopWorldAudio() {
       this.videoBillboards?.forEach((billboard) => {
         billboard.lastVolume = 0;
@@ -3492,11 +3582,7 @@
       this.paused = paused;
       if (!paused) {
         this.clock.getDelta();
-        this.videoSources?.forEach((source) => {
-          source.video.muted = true;
-          source.video.volume = 0;
-          source.video.play().catch(() => {});
-        });
+        this.primeMedia();
       }
     }
 
@@ -3524,6 +3610,9 @@
         })) || [],
         activeAudibleSource: this.activeAudibleName || null,
         activeAudibleDist: this.activeAudibleDist,
+        mediaPrimed: this.mediaPrimed,
+        playingMediaCount: this.videoSources?.filter((source) => !source.video.paused).length || 0,
+        blockedMediaCount: this.videoSources?.filter((source) => source.playBlocked).length || 0,
         // Camera / intro
         cameraIntro: !this.introComplete,
         cameraIntroProgress: this.introComplete ? 1 : this.introProgress,
@@ -3550,6 +3639,8 @@
         moonVisible: Boolean(this.moon?.visible),
         starCount: this.starCount,
         streetArtifactCount: this.streetArtifactCount,
+        fullEnemyLodCount: this.fullDetailEnemies.size,
+        faceEnemyLodCount: this.faceDetailEnemies.size,
         streetArtifactCategories: { ...this.streetArtifactCategories },
         yaw: Number(this.yaw.toFixed(3)),
         cameraDistance: Number(this.cameraDistance.toFixed(2)),
@@ -3596,6 +3687,22 @@
       const coin = this.coins.find((item) => !item.collected);
       if (!coin) return;
       this.player.position.copy(coin.group.position).setY(0);
+    }
+
+    debugCrowdEnemies(count = 30) {
+      const living = this.enemies.filter((enemy) => !enemy.dead).slice(0, count);
+      living.forEach((enemy, index) => {
+        const angle = (index / living.length) * Math.PI * 2;
+        const radius = 8 + (index % 4) * 2.4;
+        enemy.group.position.set(
+          this.player.position.x + Math.sin(angle) * radius,
+          0,
+          this.player.position.z + Math.cos(angle) * radius
+        );
+      });
+      this.damageGraceUntil = performance.now() + 10000;
+      this.enemyLodTimer = 0;
+      return living.length;
     }
 
     destroy() {

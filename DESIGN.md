@@ -22,7 +22,8 @@ No engine or implementation terminology appears in public-facing copy.
 - Dense stars, layered violet haze and a visible moon/halo with cool rim light retain night navigation
 - Reflective puddles, richer violet-dusk fog (`FogExp2`), emissive portals and luminous street-pool streetlights
 - Collision-safe buildings, bins, pillars, landmark and lamp posts
-- **18 BOYO TV video billboard displays** backed by **9 shared local video sources** (six verified BOYOWORLD YouTube videos and three newest playable @boyo_world TikToks); all are normalized to 16:9, swivel to face player, and use circular collision/spawn-clearance zones
+- **18 BOYO TV video billboard displays** in a balanced symmetric layout, backed by **9 shared local video sources** (six verified BOYOWORLD YouTube videos and three newest playable @boyo_world TikToks); all are normalized to 16:9, swivel to face player, and use circular collision/spawn-clearance zones
+- Media is primed during the Enter World gesture; only nearby/in-view sources continue decoding, keeping autoplay authorized and reducing CPU/video contention
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME/TONEDEF) with poster, glow pad, pylon, beacon; visual proximity feedback; deep-link buttons warp BOYO to the station from any page section
 - Thirty collectible BOYO coins
 - BOYOWORLD Banshees logo, soundtrack and graffiti landmark
@@ -33,6 +34,7 @@ No engine or implementation terminology appears in public-facing copy.
 
 - **Unified proximity arbitration**: at most one audible source across all 18 billboards and Banshees audio. Full volume ≤ 10 units, silent ≥ 50. 4-unit hysteresis prevents rapid switching. All other sources muted but visually active. HUD signal readout shows nearest active source and distance.
 - Pause / fail / reward / menu silence and pause all sources; resume restores behaviour.
+- Enemy crowd LOD hard-caps full geometry and facial detail, so close mobs cannot multiply draw calls without limit.
 
 ## Character
 

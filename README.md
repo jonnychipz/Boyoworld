@@ -26,7 +26,8 @@ BOYOWORLD is one large third-person night-city game running directly in the brow
 - Explore five grimy surreal districts
 - Fifty individually named surreal humanoid enemies (anatomical two-part limbs, layered streetwear, varied skin, believable stride); defeat **25** to win
 - Collect **30 spinning BOYO coins** for score and health
-- **18 BOYO TV video billboard displays** across the city backed by **9 shared local video sources** — six verified BOYOWORLD YouTube videos plus the three latest playable @boyo_world TikToks, all aspect-fitted with Y-swivel, beacons, labels and protected clearance zones
+- **18 BOYO TV video billboard displays** arranged symmetrically across the city and backed by **9 shared local video sources** — six verified BOYOWORLD YouTube videos plus the three latest playable @boyo_world TikToks, all aspect-fitted with Y-swivel, beacons, labels and protected clearance zones
+- Adaptive media playback keeps only nearby/in-view sources decoding; Enter World primes media during the user gesture so proximity autoplay and audio remain reliable
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME) with poster, glow pad, pylon and beacon; deep-link warp buttons on the page teleport BOYO to each station
 - At most one audible source active at a time (unified proximity arbitration across all billboards and Banshees); HUD signal readout shows current source and distance
 - 4.2-second cinematic opening camera that settles from a slightly elevated street-wide view into the follow camera; immediate for reduced motion
@@ -86,6 +87,7 @@ Examples include Weakie Wally, Wet Egg Wendy, Lamp Lad Larry, Sofa Steve, Plug H
 
 - **18 BOYO TV billboard displays** across the city, backed by 9 local MP4 sources: six verified BOYOWORLD YouTube videos (Red Brick, Spitfire, Fuming, Raw Pap, Pay Me, Dior) and three current @boyo_world TikToks (Live Documents, Battle Panic, High on Life)
 - **Unified proximity audio**: at most one audible source active at any time (billboards + Banshees). Full volume ≤ 10 units from BOYO, silent ≥ 50 units. 4-unit hysteresis prevents rapid switching. All other sources run muted visuals.
+- Crowd LOD caps full geometry to the nearest 14 enemies (8 mobile) and facial detail to the nearest 7 (3 mobile), preventing frame spikes when the mob surrounds BOYO
 - HUD signal readout shows current active source and distance
 - Banshees soundtrack rises near its landmark (also part of unified arbitration)
 - Pause / fail / reward / menu silences all sources; resume restores behaviour

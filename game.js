@@ -228,6 +228,7 @@
         }
       }
     });
+    state.world.primeMedia?.();
     // Handle pending warp-to-station from deep-link buttons
     if (state.pendingWarp) {
       const id = state.pendingWarp;
@@ -514,7 +515,10 @@
     ui.soundToggle.setAttribute("aria-pressed", String(state.sound));
     ui.soundToggle.setAttribute("aria-label", state.sound ? "Mute game sounds" : "Turn on game sounds");
     ui.soundToggle.lastChild.textContent = state.sound ? "Sound on" : "Sound off";
-    if (state.sound) sound.menu();
+    if (state.sound) {
+      state.world?.primeMedia?.();
+      sound.menu();
+    }
   });
   document.getElementById("fullscreenButton").addEventListener("click", async () => {
     try {

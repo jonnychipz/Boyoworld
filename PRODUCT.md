@@ -16,6 +16,8 @@ Success means visitors immediately recognise BOYOWORLD, understand the arrow/Spa
 
 Deep-link station warp buttons (in the Banshees, world and music sections) start the game and teleport BOYO directly to the matching signal station, turning content browsing into immediate play.
 
+Media playback is proximity-led and performance-aware: Enter World authorizes playback, only nearby or visible billboards decode, one source is audible, and enemy detail scales to a bounded nearest-crowd budget.
+
 ## Brand Personality
 
 Punk-chaotic, confrontational, funny, Welsh, surreal, and professionally constructed.

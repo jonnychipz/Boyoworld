@@ -132,6 +132,20 @@ test("upgrades enemy cloth, gait and recoil without changing combat invariants",
   assert.match(world, /const health = boss \? 5 : index % 7 === 0 \? 3 : 2/);
 });
 
+test("bounds crowd detail and media playback for smooth proximity transitions", () => {
+  assert.match(world, /refreshEnemyLod/);
+  assert.match(world, /const fullLimit = mobile \? 8 : 14/);
+  assert.match(world, /const faceLimit = mobile \? 3 : 7/);
+  assert.match(world, /debugCrowdEnemies/);
+  assert.match(world, /video\.preload = "metadata"/);
+  assert.match(world, /primeMedia/);
+  assert.match(world, /updateMediaPlayback/);
+  assert.match(world, /playingMediaCount/);
+  assert.match(world, /blockedMediaCount/);
+  assert.match(game, /state\.world\.primeMedia/);
+  assert.doesNotMatch(world, /this\.createBillboards\(\);/);
+});
+
 test("supports arrows, firing, touch look and pinch zoom", () => {
   assert.match(game, /arrowleft/);
   assert.match(game, /arrowright/);
