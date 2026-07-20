@@ -1651,8 +1651,16 @@ img {
   place-content: center;
   text-align: center;
   color: var(--cp-game-black);
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  z-index: 3;
+  z-index: 1;
+  transition: opacity 180ms ease-out;
+}
+
+.scratch-card.is-revealed .scratch-code {
+  opacity: 1;
+  visibility: visible;
 }
 
 .scratch-code span {

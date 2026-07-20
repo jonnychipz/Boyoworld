@@ -48,6 +48,90 @@ test("builds the procedural BOYO character and city", () => {
   assert.match(html, /class="mask-dragon"/);
 });
 
+test("mounts posed BOYO on an articulated procedural wooden horse", () => {
+  assert.match(world, /createWoodTexture\(\)/);
+  assert.match(world, /new THREE\.CanvasTexture\(canvas\)/);
+  assert.match(world, /map: woodTexture/);
+  assert.match(world, /bumpMap: woodTexture/);
+  assert.match(world, /roughness: 0\.72/);
+  assert.match(world, /createHorse\(\)/);
+  assert.match(world, /mounted movement root/);
+  assert.match(world, /mounted BOYO rider/);
+  assert.match(world, /this\.horseLegs\.forEach/);
+  assert.match(world, /footfallPhases = \[0, Math\.PI, Math\.PI \* 1\.5, Math\.PI \* 0\.5\]/);
+  assert.match(world, /this\.rider\.rotation\.z/);
+  assert.match(world, /this\.dashPoseUntil/);
+  assert.match(world, /assets\/mask-dragon\.png/);
+  assert.match(world, /makeMaskDecal\("BOYO", false\)/);
+  assert.match(world, /const playerRadius = 2\.1/);
+  for (const tack of [
+    "left leather rein", "right leather rein", "left stirrup strap",
+    "right stirrup strap", "left metal stirrup", "right metal stirrup",
+    "Welsh red saddle cloth"
+  ]) {
+    assert.ok(world.includes(tack), `${tack} is missing`);
+  }
+  assert.match(world, /updateReins\(\)/);
+  assert.match(world, /segment\.quaternion\.setFromUnitVectors\(UP/);
+  assert.match(world, /this\.playerLimbs\.leftArm\.rotation\.x = -0\.72/);
+  assert.match(world, /this\.playerLimbs\.rightArm\.rotation\.x = -0\.62/);
+});
+
+test("shows every required BOYO kill phrase in an anchored accessible bubble", () => {
+  for (const phrase of [
+    "LIAR!", "WEAKIE!", "TAP DOWN!", "BLEUGH!", "6P!", "'AVE IT!",
+    "RUN IT!", "NO WEAKIES!", "SPIN THE BLOCK!"
+  ]) {
+    assert.ok(world.includes(`"${phrase}"`), `${phrase} is missing`);
+  }
+  assert.match(world, /createKillSpeechBubble/);
+  assert.match(world, /this\.rider\.add\(this\.killSpeech\)/);
+  assert.match(world, /this\.killSpeechUntil = this\.elapsed \+ rand\(1\.5, 2\)/);
+  assert.match(world, /const phrase = this\.showKillSpeech\(\)/);
+  assert.match(world, /debugDefeatAll\(\)[\s\S]*?this\.defeatEnemy\(enemy\)/);
+  assert.match(world, /debugDefeatOne\(\)/);
+  assert.match(game, /BOYO says \$\{phrase \|\| "NO WEAKIES!"\}/);
+});
+
+test("builds four rich building families and performant night dressing", () => {
+  for (const variant of ["brick", "concrete", "render", "glassMetal"]) {
+    assert.match(world, new RegExp(`id: "${variant}"`));
+  }
+  assert.match(world, /createBuildingTexture/);
+  assert.match(world, /reservedMedia\.some[\s\S]*?< 23/);
+  assert.match(world, /createStreetArtifacts/);
+  assert.match(world, /new THREE\.InstancedMesh/);
+  assert.match(world, /this\.streetArtifactCount \+= amount/);
+  assert.match(world, /count\(category, transforms\.length\)/);
+  for (const category of [
+    "curb sidewalk ribbons", "crosswalks", "bollards", "complete benches",
+    "identifiable hydrants", "road signs", "traffic lights", "parked stylized cars",
+    "parked stylized vans", "utility boxes", "drains", "litter", "posters",
+    "steam vents", "street markings"
+  ]) {
+    assert.ok(world.includes(`"${category}"`), `${category} street dressing is missing`);
+  }
+  for (const detail of [
+    "building door", "shopfront", "shop awning", "rooftop water tank",
+    "rooftop vent", "fire escape silhouette"
+  ]) {
+    assert.ok(world.includes(detail), `${detail} is missing`);
+  }
+  assert.match(world, /streetArtifactCategories:\s*\{ \.\.\.this\.streetArtifactCategories \}/);
+  assert.match(world, /this\.starCount = mobile \? 720 : 1400/);
+  assert.match(world, /this\.moon = new THREE\.Mesh/);
+  assert.match(world, /this\.moonHalo = new THREE\.Sprite/);
+});
+
+test("upgrades enemy cloth, gait and recoil without changing combat invariants", () => {
+  assert.match(world, /createEnemyFabricTexture/);
+  assert.match(world, /bumpMap: fabric/);
+  assert.match(world, /gaitScale:/);
+  assert.match(world, /enemy\.recoil = 1/);
+  assert.match(world, /enemy\.headGroup\.rotation\.x = -enemy\.recoil/);
+  assert.match(world, /const health = boss \? 5 : index % 7 === 0 \? 3 : 2/);
+});
+
 test("supports arrows, firing, touch look and pinch zoom", () => {
   assert.match(game, /arrowleft/);
   assert.match(game, /arrowright/);
@@ -100,12 +184,16 @@ test("keeps the video and scratch reward in the cabinet", () => {
   assert.match(game, /autoplay=1&playsinline=1/);
   assert.doesNotMatch(game, /mute=1/);
   assert.match(game, /setupScratchCard/);
+  assert.match(game, /context\.fillText\("SCRATCH ME"/);
+  assert.doesNotMatch(game, /SCRATCH \/ RUB TO REVEAL/);
   assert.match(game, /TEST-NOT-REAL-CODE/);
   assert.match(game, /navigator\.clipboard\.writeText/);
   assert.match(html, /id="copyDiscountCode"/);
   assert.match(game, /scratchMoves >= 12/);
   assert.match(game, /rewardScrollY/);
   assert.match(html, /id="scratchCanvas"/);
+  assert.match(html, /id="scratchCodePanel" aria-hidden="true"/);
+  assert.match(game, /scratchCard\.classList\.add\("is-revealed"\)/);
   assert.match(world, /stopWorldAudio/);
   assert.match(world, /billboard\.video\.volume = 0/);
   assert.match(world, /billboard\.video\.muted = true/);
@@ -151,4 +239,12 @@ test("getState exposes extended display, media and camera fields", () => {
   assert.match(game, /\["playing", "paused"\]\.includes\(state\.mode\)/);
   assert.match(game, /scrollIntoView/);
   assert.match(game, /threeHud\.setAttribute\("aria-hidden", "false"\)/);
+  assert.match(world, /mounted:\s*Boolean\(this\.horse && this\.rider\)/);
+  assert.match(world, /horseParts:\s*this\.horseParts/);
+  assert.match(world, /speechPhrase:\s*this\.killSpeechPhrase/);
+  assert.match(world, /speechVisible:\s*this\.killSpeechVisible/);
+  assert.match(world, /buildingVariantCount:\s*this\.buildingVariantCount/);
+  assert.match(world, /moonVisible:\s*Boolean\(this\.moon\?\.visible\)/);
+  assert.match(world, /starCount:\s*this\.starCount/);
+  assert.match(world, /streetArtifactCount:\s*this\.streetArtifactCount/);
 });

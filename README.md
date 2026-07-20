@@ -31,6 +31,8 @@ BOYOWORLD is one large third-person night-city game running directly in the brow
 - At most one audible source active at a time (unified proximity arbitration across all billboards and Banshees); HUD signal readout shows current source and distance
 - 4.2-second cinematic opening camera that settles from a slightly elevated street-wide view into the follow camera; immediate for reduced motion
 - Discover the BOYOWORLD Banshees landmark and proximity soundtrack
+- Ride a hand-built procedural wooden toy horse with carved grain, articulated gait, reins, stirrups and a visibly mounted BOYO
+- See BOYO call every defeat through an in-world comic speech bubble with an accessible announcement
 - Clear the world to unlock an official BOYO music video and scratch-to-reveal placeholder 15% merch code
 
 ## Controls
@@ -51,7 +53,7 @@ BOYOWORLD is one large third-person night-city game running directly in the brow
 
 ## The world
 
-The city uses procedural wet-asphalt, grime and façade textures, reflective puddles, streetlights, emissive portals, BOYO image walls, graffiti, dynamic shadows, fog, particles and collision-safe props.
+The city uses procedural wet-asphalt, grime and four façade families (brick, concrete, render and glass-metal), explicit doors and shopfronts, awnings, roof tanks/vents and occasional fire escapes. Grounded, mostly instanced street dressing includes sidewalks, crosswalks, benches, hydrants, signs, traffic lights, parked cars/vans, utilities, drains, litter/posters, steam vents and road markings while preserving protected media clearances and collision routes.
 
 Districts:
 
@@ -63,18 +65,20 @@ Districts:
 
 ## BOYO
 
-The 3D character uses a fully procedural knitted white balaclava rather than a pasted portrait:
+The 3D character is visibly posed on a detailed procedural wooden toy horse while retaining the fully procedural knitted white balaclava:
 
 - Knit texture and bump detail
 - Eye and mouth openings with visible eyes/skin
 - BOYO cheek mark and solid-black Welsh dragon forehead mark
-- Articulated head, torso, arms, hands, legs and shoes with jacket panels and chrome zip detail
-- Run, turn, dash, fire, recoil, hit and win animation
+- Canvas-textured carved wood grain used for colour, bump and roughness response, with saddle, bridle, leather reins/straps, metal stirrups, Welsh-red saddle cloth, mane, tail, glass eyes and brass trim
+- Articulated horse legs, knees, neck, head and tail plus mounted head, torso, arms, hands, legs and shoes
+- Coordinated idle, gait, turn, dash, fire, recoil, hit and win animation; reduced motion keeps essential movement with restrained articulation
+- Comic kill speech appears above BOYO for 1.5–2 seconds and is mirrored to the game announcement region
 - Lower third-person camera, soft shadow and collision-safe movement
 
 ## The surreal roster
 
-All 50 enemies have unique silly names, humanoid anatomy beneath their surreal object construction, multi-hit health, hit feedback and a temporary name/health card when shot.
+All 50 enemies keep their unique names, health and targets while adding procedural woven clothing surfaces, richer physical materials, differentiated gait, joint follow-through and hit recoil. Humanoid anatomy remains beneath their surreal object construction, with multi-hit health, hit feedback and a temporary name/health card when shot.
 
 Examples include Weakie Wally, Wet Egg Wendy, Lamp Lad Larry, Sofa Steve, Plug Head Pete, Damp Sock Derek, Kettle Karen, Mattress Mandy, Tin Foil Tim and Wall Plug Walter.
 

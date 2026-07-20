@@ -44,6 +44,8 @@
     threeCoins: document.getElementById("threeCoins"),
     threeSignal: document.getElementById("threeSignal"),
     screen: document.getElementById("screen"),
+    scratchCard: document.getElementById("scratchCard"),
+    scratchCodePanel: document.getElementById("scratchCodePanel"),
     scratchCanvas: document.getElementById("scratchCanvas"),
     discountCode: document.getElementById("discountCode"),
     copyDiscountCode: document.getElementById("copyDiscountCode"),
@@ -192,10 +194,15 @@
       minimap: ui.threeMinimap,
       sound,
       soundEnabled: () => state.sound,
-      onProgress: (kills, target, enemyName) => {
+      onProgress: (kills, target, enemyName, phrase) => {
         updateHud(kills, target);
         ui.threeWave.textContent = kills >= target ? "BOROUGH CLEARED" : `${target - kills} SURREALS REMAIN`;
-        if (enemyName) announce(`${enemyName} defeated. ${target - kills} surreal enemies remain.`);
+        if (enemyName) {
+          announce(
+            `${enemyName} defeated. BOYO says ${phrase || "NO WEAKIES!"} ` +
+            `${target - kills} surreal enemies remain.`
+          );
+        }
       },
       onHealth: (health) => {
         ui.threeHealthBar.style.width = `${health}%`;
@@ -306,6 +313,8 @@
     ui.copyCodeStatus.textContent = "";
     ui.copyDiscountCode.textContent = "Copy code";
     ui.copyDiscountCode.hidden = true;
+    ui.scratchCard.classList.remove("is-revealed");
+    ui.scratchCodePanel.setAttribute("aria-hidden", "true");
     const canvas = ui.scratchCanvas;
     canvas.classList.remove("is-revealed");
     canvas.style.pointerEvents = "auto";
@@ -329,11 +338,13 @@
     context.fillStyle = "#111";
     context.font = "900 28px Consolas, monospace";
     context.textAlign = "center";
-    context.fillText("SCRATCH / RUB TO REVEAL", canvas.width / 2, canvas.height / 2 + 9);
+    context.fillText("SCRATCH ME", canvas.width / 2, canvas.height / 2 + 9);
     let scratching = false;
     let scratchMoves = 0;
     const revealCode = () => {
       ui.copyDiscountCode.hidden = false;
+      ui.scratchCard.classList.add("is-revealed");
+      ui.scratchCodePanel.setAttribute("aria-hidden", "false");
       canvas.classList.add("is-revealed");
       canvas.style.pointerEvents = "none";
     };
@@ -568,6 +579,7 @@
       scratchVisible: Boolean(ui.scratchCanvas.offsetParent),
       discountCode: ui.discountCode.textContent,
       copyStatus: ui.copyCodeStatus.textContent,
+      announcement: ui.announcements.textContent,
       gameFirst: document.querySelector("main").firstElementChild?.id === "game",
       viewportWidth: innerWidth,
       reducedMotion: state.reducedMotion,
@@ -584,6 +596,10 @@
       startWorld();
       if (testParams.get("probe") === "1") {
         setTimeout(writeTestState, 3500);
+      }
+      if (testParams.get("autoKill") === "1") {
+        setTimeout(() => window.__BOYO_THREE_TEST__?.defeatOne(), 2800);
+        setTimeout(writeTestState, 3100);
       }
       if (testParams.get("autoPause") === "1") {
         setTimeout(() => {
