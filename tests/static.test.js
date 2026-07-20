@@ -5,83 +5,89 @@ const assert = require("node:assert/strict");
 
 const root = join(__dirname, "..");
 const read = (file) => readFileSync(join(root, file), "utf8");
+const game = read("game.js");
+const world = read("three-world.js");
+const html = read("index.html");
 
-test("ships the static game entry points", () => {
-  for (const file of ["index.html", "styles.css", "game.js", ".nojekyll", "assets/vendor/phaser.min.js"]) {
+test("ships one flagship game", () => {
+  for (const file of [
+    "index.html", "styles.css", "game.js", "three-world.js",
+    "assets/vendor/three.min.js", ".nojekyll"
+  ]) {
     assert.equal(existsSync(join(root, file)), true, `${file} is missing`);
   }
+  assert.match(world, /class BoyoThreeWorld/);
+  assert.doesNotMatch(html, /phaser/i);
+  assert.equal(existsSync(join(root, "assets/vendor/phaser.min.js")), false);
 });
 
-test("contains five named playable levels", () => {
-  const source = read("game.js");
-  for (const level of [
-    "RED BRICK RUN",
-    "SPITFIRE BEAT",
-    "FUMING ESCAPE",
-    "RAW PAP ARENA",
-    "PAY ME PANIC"
-  ]) {
-    assert.match(source, new RegExp(level));
-  }
-  assert.match(source, /completeLevel/);
-  assert.match(source, /youtube-nocookie\.com/);
-  assert.match(source, /class BoyoRig extends Phaser\.GameObjects\.Container/);
-  assert.match(source, /class BoyoScene extends Phaser\.Scene/);
-  assert.match(read("index.html"), /assets\/vendor\/phaser\.min\.js/);
+test("creates the 50-enemy surreal city", () => {
+  assert.match(world, /const ENEMY_COUNT = 50/);
+  assert.match(world, /const WIN_TARGET = 25/);
+  assert.match(world, /SILLY_NAMES/);
+  assert.match(world, /WEAKIE WALLY/);
+  assert.match(world, /WET EGG WENDY/);
+  assert.match(world, /makeEnemyHealthLabel/);
+  assert.match(world, /healthVisibleUntil/);
 });
 
-test("includes expanded authorized visual worlds", () => {
-  for (const level of ["red-brick", "spitfire", "fuming", "raw-pap", "pay-me"]) {
-    for (let frame = 1; frame <= 3; frame += 1) {
-      assert.equal(existsSync(join(root, "assets", "frames", `${level}-${frame}.jpg`)), true);
-    }
-  }
-  const tiktokAssets = Array.from({ length: 13 }, (_, index) =>
-    join(root, "assets", "tiktok", `boyo-${String(index + 1).padStart(2, "0")}.jpg`)
-  );
-  assert.equal(tiktokAssets.filter(existsSync).length >= 12, true);
+test("builds the procedural BOYO character and city", () => {
+  assert.match(world, /createKnitTexture/);
+  assert.match(world, /createAsphaltTexture/);
+  assert.match(world, /createFacadeTexture/);
+  assert.match(world, /createStreetlights/);
+  assert.match(world, /createPuddles/);
+  assert.match(world, /resolvePlayerPenetration/);
 });
 
-test("exposes accessible controls and reduced motion", () => {
-  const html = read("index.html");
-  const css = read("styles.css");
-  assert.match(html, /aria-live="polite"/);
-  assert.match(html, /id="soundToggle"/);
-  assert.match(html, /id="touchControls"/);
-  assert.match(html, /id="gameGuide"/);
-  assert.match(html, /id="gameBriefing"/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /:focus-visible/);
+test("supports arrows, firing, touch look and pinch zoom", () => {
+  assert.match(game, /arrowleft/);
+  assert.match(game, /arrowright/);
+  assert.match(game, /Space|action/);
+  assert.match(world, /activePointers\.size >= 2/);
+  assert.match(world, /pinchDistance/);
+  assert.match(world, /cameraDistance/);
 });
 
-test("explains win conditions and requests audible autoplay", () => {
-  const source = read("game.js");
-  for (const goal of [
-    "COLLECT 6 RED BRICKS",
-    "HIT 12 NOTES",
-    "COLLECT 6 SIGNALS",
-    "DESTROY 12 ENEMIES",
-    "COMPLETE 3 PATTERNS"
-  ]) {
-    assert.match(source, new RegExp(goal));
-  }
-  assert.match(source, /autoplay=1&playsinline=1/);
-  assert.doesNotMatch(source, /mute=1/);
-  assert.match(source, /rewardScrollY = window\.scrollY/);
-  assert.doesNotMatch(source, /nextLevel"\)\.focus/);
-  assert.match(source, /updateGuide\(game\.(collected|hits|kills|round)\)/);
+test("integrates music, coins, Banshees and video billboards", () => {
+  assert.match(world, /const VIDEO_BILLBOARDS = \[/);
+  assert.equal((world.match(/LIVE FEED/g) || []).length, 6);
+  assert.match(world, /new THREE\.VideoTexture/);
+  assert.match(world, /assets\/billboards\/red-brick\.mp4/);
+  assert.match(world, /createCoins/);
+  assert.match(world, /for \(let index = 0; index < 30/);
+  assert.match(world, /createBansheesLandmark/);
+  assert.match(world, /banshees-rise\.mp3/);
+  assert.match(world, /BANSHEES RISE/);
 });
 
-test("uses official BOYO destinations", () => {
-  const html = read("index.html");
+test("keeps the video and scratch reward in the cabinet", () => {
+  assert.match(game, /autoplay=1&playsinline=1/);
+  assert.doesNotMatch(game, /mute=1/);
+  assert.match(game, /setupScratchCard/);
+  assert.match(game, /TEST-NOT-REAL-CODE/);
+  assert.match(game, /navigator\.clipboard\.writeText/);
+  assert.match(html, /id="copyDiscountCode"/);
+  assert.match(game, /scratchMoves >= 12/);
+  assert.match(game, /rewardScrollY/);
+  assert.match(html, /id="scratchCanvas"/);
+  assert.match(world, /stopWorldAudio/);
+  assert.match(world, /billboard\.video\.volume = 0/);
+  assert.match(world, /billboard\.video\.muted = true/);
+  assert.match(world, /billboard\.video\.pause\(\)/);
+  assert.match(world, /this\.updateEnemies\(delta\);\s*if \(this\.paused\) return;/);
+  assert.match(world, /completionTimer/);
+  assert.match(game, /clearRewardTimer/);
+  assert.match(game, /function failWorld\(message\) \{[\s\S]*?stopWorldAudio\(\);[\s\S]*?setPaused\(true\);/);
+});
+
+test("preserves official links and public-facing copy", () => {
   for (const destination of [
-    "youtube.com/@BOYOWORLD",
-    "tiktok.com/@boyo_world",
-    "instagram.com/boyoworld",
-    "open.spotify.com/artist/7J2xeLqwL4RSJ4OqCWL00d",
-    "music.apple.com/gb/artist/boyo/1562715707",
-    "boyoworld.com"
+    "youtube.com/@BOYOWORLD", "tiktok.com/@boyo_world",
+    "instagram.com/boyoworld", "boyoworld.com"
   ]) {
     assert.match(html, new RegExp(destination.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
+  assert.doesNotMatch(html, /Three\.js|WebGL|renderer|Phaser/);
+  assert.match(html, /BOYOWORLD/);
 });

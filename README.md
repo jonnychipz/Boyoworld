@@ -4,95 +4,95 @@
   </a>
 </p>
 
-<h1 align="center">BOYOWORLD: THE GAME</h1>
+<h1 align="center">BOYOWORLD</h1>
 
 <p align="center">
-  <strong>Five game worlds. One masked menace. Official BOYO music rewards.</strong>
+  <strong>One masked world. Twenty-five kills to win. Thirty BOYO coins.</strong>
 </p>
 
 <p align="center">
-  <a href="https://jonnychipz.github.io/Boyoworld/"><strong>PLAY BOYOWORLD</strong></a>
-  ·
-  <a href="https://www.youtube.com/@BOYOWORLD">YouTube</a>
-  ·
-  <a href="https://www.tiktok.com/@boyo_world">TikTok</a>
-  ·
-  <a href="https://linktr.ee/BOYOWORLD">All BOYO links</a>
+  <a href="https://jonnychipz.github.io/Boyoworld/"><strong>ENTER BOYOWORLD</strong></a>
+  · <a href="https://www.youtube.com/@BOYOWORLD">YouTube</a>
+  · <a href="https://www.tiktok.com/@boyo_world">TikTok</a>
+  · <a href="https://linktr.ee/BOYOWORLD">All links</a>
 </p>
 
 ---
 
-## Enter BOYOWORLD
+## The game
 
-BOYOWORLD is a promotional music-game universe built around BOYO's distinctive white knitted mask, Welsh dragon mark, music videos, live chaos, and punk visual language.
+BOYOWORLD is one large third-person night-city game running directly in the browser.
 
-The game runs entirely in the browser on GitHub Pages. Every level uses a different genre, but the same animated BOYO character. Win a level and the cabinet immediately unlocks and auto-plays a random official BOYO music video.
+- Explore five grimy surreal districts
+- Fifty individually named enemies roam the world; defeat **25** to win
+- Collect **30 spinning BOYO coins** for score and health
+- Find six live BOYO video billboards whose music grows louder as BOYO approaches
+- Discover the BOYOWORLD Banshees landmark and proximity soundtrack
+- Clear the world to unlock an official BOYO music video and scratch-to-reveal placeholder 15% merch code
 
-> **Chaos in the frame. Clarity in the controls.**
+## Controls
 
-## The five disturbances
+| Control | Action |
+|---|---|
+| `↑` / `↓` | Run forward / backward |
+| `←` / `→` | Inverted turn/pan: Left turns right, Right turns left |
+| `Q` / `E` | Strafe |
+| `Space` | Fire |
+| `B` | Dash |
+| Pointer drag | Look around |
+| Mouse wheel | Zoom |
+| Touch drag | Look around |
+| Touch pinch | Zoom |
+| `P` / `Escape` | Pause |
+| `R` | Restart |
 
-| World | Genre | How to win | Controls |
-|---|---|---|---|
-| **Red Brick Run** | Cinematic street runner | Collect **6 glowing red bricks** while jumping the labelled obstacles | `Space` / `↑` to jump |
-| **Spitfire Beat** | Four-lane rhythm game | Hit **12 notes** when they touch the white strike line | `D` `F` `J` `K` |
-| **Fuming Escape** | Top-down urban chase | Collect **6 glowing signals** without touching the red hunters | `WASD` / arrows |
-| **Raw Pap Arena** | 360-degree survival shooter | Destroy **12 red enemies**; BOYO auto-aims at the nearest target | `WASD` + hold `Space` |
-| **Pay Me Panic** | Visual memory reaction | Complete **3 patterns** by repeating each illuminated panel sequence | Arrows / `D` `F` `J` `K` / touch |
+## The world
 
-Every world begins with a short **HOW TO WIN** briefing. A persistent HUD then shows the exact goal, controls, progress bar, and current count throughout play.
+The city uses procedural wet-asphalt, grime and façade textures, reflective puddles, streetlights, emissive portals, BOYO image walls, graffiti, dynamic shadows, fog, particles and collision-safe props.
 
-## BOYO, animated
+Districts:
 
-The playable BOYO is a layered Phaser rig built around the supplied mask photography:
+1. Spin Block Central
+2. Banshees Quarter
+3. Weakie Wally Way
+4. Wet Egg Plaza
+5. Raw Pap Yard
 
-- Articulated head, scarf, torso, arms, and legs
-- Walk, run, jump, dance, recoil, hit, and celebration states
-- Welsh dragon mask mark and BOYO detailing
-- Dynamic shadow, facing direction, speech bubbles, and character quotes
-- Keyboard, pointer, and mobile touch control
+## BOYO
 
-## Visual world
+The 3D character uses a fully procedural knitted white balaclava rather than a pasted portrait:
 
-The title experience and levels combine authorized material from BOYO's official channels:
+- Knit texture and bump detail
+- Eye and mouth openings with visible eyes/skin
+- BOYO cheek mark and Welsh dragon forehead mark
+- Articulated head, torso, arms and legs
+- Run, turn, dash, fire, recoil, hit and win animation
+- Third-person camera, soft shadow and collision-safe movement
 
-- 15 selected in-video scene frames across five music videos
-- Artwork from the complete 18-video YouTube playlist
-- 14 TikTok cover images
-- Official BOYOWORLD storefront banner and artwork
-- The supplied white BOYO balaclava reference
+## The surreal roster
 
-Gameplay keeps those images deliberately subdued behind high-contrast targets, hazards, lanes, walls, and guidance. Full-strength imagery is reserved for title screens, transitions, the visual archive, and promotional sections.
+All 50 enemies have unique silly names, humanoid anatomy beneath their surreal object construction, multi-hit health, hit feedback and a temporary name/health card when shot.
 
-## Music rewards
+Examples include Weakie Wally, Wet Egg Wendy, Lamp Lad Larry, Sofa Steve, Plug Head Pete, Damp Sock Derek, Kettle Karen, Mattress Mandy, Tin Foil Tim and Wall Plug Walter.
 
-Completing a level opens a privacy-enhanced YouTube embed inside the game cabinet.
+## Music and rewards
 
-- A random official BOYO video is selected
-- The player requests autoplay with sound
-- Browsers that block audible autoplay leave the embedded player ready for one click on Play
-- The page remains fixed on the LCD cabinet; the reward never jumps to another site section
-- Choose another random video, skip it, or continue to the next level
+- Six official BOYO YouTube videos play on in-world billboards
+- Billboard volume responds to player distance
+- The supplied BOYOWORLD Banshees TikTok soundtrack rises near its landmark
+- The win screen stays inside the cabinet and requests audible autoplay
+- A scratch panel reveals the fixed placeholder `TEST-NOT-REAL-CODE`
 
-## Controls and accessibility
-
-- **Move:** arrows or `WASD`
-- **Action / jump / fire:** `Space`
-- **Pause:** `P` or `Escape`
-- **Restart:** `R`
-- **Sound:** cabinet sound control
-- **Fullscreen:** includes the game and mobile controls
-
-The experience includes visible keyboard focus, touch controls, high-contrast guidance, non-audio cues, responsive layouts, pause/retry controls, and reduced-motion support. Outside active gameplay, arrow keys and Space retain their normal page-navigation behaviour.
+The 15% code is a prototype and is not connected to the live storefront yet.
 
 ## Technology
 
-- [Phaser 3](https://phaser.io/) vendored locally for reliable GitHub Pages hosting
-- WebGL rendering with Canvas fallback
-- Web Audio API for original synthesized game effects
-- Static HTML, CSS, and JavaScript
-- GitHub Actions deployment to GitHub Pages
-- No build step or runtime backend
+- Three.js vendored locally
+- Static HTML, CSS and JavaScript
+- Web Audio API effects
+- YouTube privacy-enhanced embeds
+- GitHub Actions and GitHub Pages
+- No backend or build step
 
 ## Run locally
 
@@ -101,25 +101,9 @@ Set-Location "C:\Users\johnlunn\OneDrive - Microsoft\Documents\Projects\Boyoworl
 npx serve .
 ```
 
-Then open the local URL shown by `serve`.
+## Sources
 
-## Project structure
-
-```text
-Boyoworld/
-├── index.html              # Promotional site and game cabinet
-├── styles.css              # BOYOWORLD interface and responsive design
-├── game.js                 # Phaser scenes, BOYO rig, five games, rewards
-├── assets/
-│   ├── frames/             # Selected music-video scene frames
-│   ├── tiktok/             # Official TikTok cover imagery
-│   ├── youtube/            # Official YouTube artwork
-│   └── vendor/phaser.min.js
-├── tests/static.test.js
-└── .github/workflows/pages.yml
-```
-
-## Official BOYO destinations
+Visual and promotional material comes from the project owner's supplied references and BOYO's official public destinations:
 
 - [BOYOWORLD Linktree](https://linktr.ee/BOYOWORLD)
 - [YouTube](https://www.youtube.com/@BOYOWORLD)
@@ -128,15 +112,6 @@ Boyoworld/
 - [Spotify](https://open.spotify.com/artist/7J2xeLqwL4RSJ4OqCWL00d)
 - [Apple Music](https://music.apple.com/gb/artist/boyo/1562715707)
 - [SoundCloud](https://soundcloud.com/boyoworld)
-- [Bandcamp](https://boyoworld.bandcamp.com/follow_me)
 - [Official storefront](https://www.boyoworld.com/)
 
-## Visual-source note
-
-The project uses BOYO-authorized source imagery supplied by the project owner and collected from BOYO's official public YouTube, TikTok, Linktree, and storefront destinations. The imagery is used only within this BOYOWORLD promotional experience.
-
----
-
-<p align="center">
-  <strong>MASK ON. SIGNAL LIVE. NO WEAKIES.</strong>
-</p>
+<p align="center"><strong>MASK ON. SIGNAL LIVE. NO WEAKIES.</strong></p>

@@ -2,66 +2,40 @@
 
 ## Intent
 
-A professional game campaign assembled like a hand-built punk venue: black-painted walls, hard white light, hazard red, chrome, photocopied posters, torn video stills, tape, speaker cones, and a precise LCD game cabinet.
+A polished public music-game campaign assembled like a wet, poster-covered punk city at night: hard white knit, BOYO red, black asphalt, chrome, glowing streetlights, torn video stills, Banshees graffiti and a precise game cabinet.
 
-## Palette
+## Public Hierarchy
 
-The public interface uses the mandatory Clawpilot token vocabulary plus BOYOWORLD-specific `--cp-game-*` tokens.
+1. BOYOWORLD identity and game in the opening viewport
+2. Animated BOYO image/link marquee with looping background wordmarks
+3. Surreal enemy and world dossier
+4. Separate Banshees feature and TikTok links
+5. Official music, social and merch routes
 
-- Background: near-black neutral
-- Main ink: cold white
-- Signal: BOYO red
-- Secondary signal: electric violet, used sparingly
-- Chrome: cool neutral highlights
-- Success and danger: inherited semantic tokens
+No engine or implementation terminology appears in public-facing copy.
 
-All body text must retain at least 4.5:1 contrast. Game-critical text targets 7:1.
+## Game World
 
-## Typography
+- Procedural wet asphalt and grime textures
+- Reflective puddles, fog, emissive portals and streetlights
+- Collision-safe buildings, bins, pillars, landmark and lamp posts
+- Six proximity-aware official video billboards
+- Thirty collectible BOYO coins
+- BOYOWORLD Banshees logo, soundtrack and graffiti landmark
+- Five visually distinct districts
 
-Use Segoe UI/Aptos for interface clarity. Heavy, compressed-feeling display treatments are created with weight, transform, outline, and spacing rather than a remote font dependency. Monospace is reserved for scores, timers, and machine readouts.
+## Character
 
-## Image Treatment
+BOYO uses a procedural 3D knitted balaclava with bump detail, eye/mouth openings, visible eyes/skin, BOYO wordmark, Welsh dragon mark and articulated streetwear body.
 
-- Official BOYOWORLD, YouTube, TikTok, and supplied imagery is stored locally.
-- Video stills are treated as torn posters, scene backdrops, and reward covers.
-- Never place a busy image directly behind game-critical text without a solid contrast plate.
-- The supplied white balaclava reference defines the playable character's silhouette and mask details.
+## Enemies
 
-## Layout
-
-The promotional page surrounds one dominant old-LCD game cabinet. Navigation and social destinations remain direct and familiar. On small screens the cabinet becomes edge-to-edge and touch controls move below the display.
-
-## Components
-
-- **Boyo wordmark:** oversized white block lettering with a red registration shadow
-- **Signal button:** hard rectangular action with a one-pixel border and physical pressed state
-- **LCD cabinet:** deep shell, hardware top rail, screen bezel, scanline surface, status display
-- **Torn poster:** clipped image with tape and offset label
-- **Transmission strip:** scrolling but motion-safe promotional links
-- **Reward takeover:** official YouTube embed with replay, skip, and next-level actions
-- **Game guide:** persistent high-contrast goal, progress bar, count, and control reminder
-- **Level briefing:** short protected reading period before hazards or notes begin
+Fifty uniquely named surreal humanoids combine recognisable bodies/heads with object archetypes. A target card names the current enemy. Shooting reveals a multi-hit health bar for several seconds.
 
 ## Motion
 
-Movement should feel mechanical and responsive. Use 150-250ms interface transitions. Gameplay runs at the browser frame rate. When reduced motion is requested, disable decorative jitter, scrolling strips, parallax, and screen shake while retaining essential gameplay movement.
+Movement conveys state. Respect reduced motion by removing decorative camera shake, particles, scrolling marquees, portal motion and tile choreography while preserving essential game movement.
 
-## Game Rendering
+## Reward
 
-Phaser 3 is vendored locally and renders five distinct worlds in WebGL with Canvas fallback. The visual stack combines:
-
-- Three music-video frames per level
-- Independent depth/tint layers
-- An articulated BOYO rig using the supplied real mask reference
-- Particle bursts, fog, stage beams, rhythm perspective, camera flash and shake
-- Genre-specific environments rather than one reskinned playfield
-- A DOM-based accessible cabinet shell around the accelerated game canvas
-
-Gameplay art stays below targets in the hierarchy. Targets use glow and explicit labels; hazards use solid silhouettes; background footage is darkened and confined to a subdued centre plate and edge strips. The page can remain punk-chaotic, but the playfield must remain calm enough to parse instantly.
-
-## Audio
-
-Use the Web Audio API to synthesize short original interface and game cues. Audio starts only after user interaction. Every sound has a visible counterpart.
-
-Music rewards use `youtube-nocookie.com` and request audible autoplay. Since browsers may block automatic playback with sound, the native embedded controls remain visible for immediate one-click playback.
+The win state remains inside the cabinet, requests audible official-video autoplay, and adds a scratch-to-reveal placeholder 15% merch code.
