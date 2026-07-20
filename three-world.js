@@ -45,15 +45,63 @@
   ];
 
   const VIDEO_SOURCES = [
-    { src: "assets/billboards/red-brick.mp4", label: "RED BRICK", aspect: 16 / 9 },
-    { src: "assets/billboards/spitfire.mp4",  label: "SPITFIRE",  aspect: 16 / 9 },
-    { src: "assets/billboards/fuming.mp4",    label: "FUMING",    aspect: 16 / 9 },
-    { src: "assets/billboards/raw-pap.mp4",   label: "RAW PAP",   aspect: 16 / 9 },
-    { src: "assets/billboards/pay-me.mp4",    label: "PAY ME",    aspect: 16 / 9 },
-    { src: "assets/billboards/chrome.mp4",    label: "CHROME",    aspect: 1 }
+    {
+      src: "assets/billboards/red-brick.mp4",
+      label: "RED BRICK · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=0o7RmMrxvko"
+    },
+    {
+      src: "assets/billboards/spitfire.mp4",
+      label: "SPITFIRE · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=rRkw3Q7A8cQ"
+    },
+    {
+      src: "assets/billboards/fuming.mp4",
+      label: "FUMING · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=fuyD1Tkhkcc"
+    },
+    {
+      src: "assets/billboards/raw-pap.mp4",
+      label: "RAW PAP · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=SEBZABjtZBU"
+    },
+    {
+      src: "assets/billboards/pay-me.mp4",
+      label: "PAY ME · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=HNUtBySf-aU"
+    },
+    {
+      src: "assets/billboards/dior.mp4",
+      label: "DIOR · YOUTUBE",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.youtube.com/watch?v=u_IWzvxKSek"
+    },
+    {
+      src: "assets/billboards/tiktok-live-documents.mp4",
+      label: "LIVE DOCUMENTS · TIKTOK",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.tiktok.com/@boyo_world/video/7648670517238730006"
+    },
+    {
+      src: "assets/billboards/tiktok-battle-panic.mp4",
+      label: "BATTLE PANIC · TIKTOK",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.tiktok.com/@boyo_world/video/7627545119566073110"
+    },
+    {
+      src: "assets/billboards/tiktok-high-on-life.mp4",
+      label: "HIGH ON LIFE · TIKTOK",
+      aspect: 16 / 9,
+      sourceUrl: "https://www.tiktok.com/@boyo_world/video/7619364492010343702"
+    }
   ];
 
-  // 18 display positions referencing six video sources by index (s)
+  // 18 displays: each of the nine official YouTube/TikTok sources appears twice.
   const VIDEO_BILLBOARDS = [
     { x: -28,  y: 10, z: -24,  s: 0 },
     { x:  28,  y: 10, z: -24,  s: 1 },
@@ -61,18 +109,18 @@
     { x:  28,  y: 10, z:  26,  s: 3 },
     { x:  -8,  y: 12, z:  91,  s: 4 },
     { x:   8,  y: 12, z: -91,  s: 5 },
-    { x: -91,  y: 10, z: -10,  s: 0 },
-    { x:  91,  y: 10, z:  10,  s: 1 },
-    { x: -48,  y: 10, z:  68,  s: 2 },
-    { x:  48,  y: 10, z: -68,  s: 3 },
-    { x: -68,  y: 10, z: -48,  s: 4 },
-    { x:  68,  y: 10, z:  48,  s: 5 },
-    { x:  -4,  y: 12, z: -106, s: 0 },
-    { x:   4,  y: 12, z:  106, s: 1 },
-    { x: -106, y: 10, z:   4,  s: 2 },
-    { x:  106, y: 10, z:  -4,  s: 3 },
-    { x: -84,  y: 10, z:  84,  s: 4 },
-    { x:  84,  y: 10, z: -84,  s: 5 }
+    { x: -91,  y: 10, z: -10,  s: 6 },
+    { x:  91,  y: 10, z:  10,  s: 7 },
+    { x: -48,  y: 10, z:  68,  s: 8 },
+    { x:  48,  y: 10, z: -68,  s: 0 },
+    { x: -68,  y: 10, z: -48,  s: 1 },
+    { x:  68,  y: 10, z:  48,  s: 2 },
+    { x:  -4,  y: 12, z: -106, s: 3 },
+    { x:   4,  y: 12, z:  106, s: 4 },
+    { x: -106, y: 10, z:   4,  s: 5 },
+    { x:  106, y: 10, z:  -4,  s: 6 },
+    { x: -84,  y: 10, z:  84,  s: 7 },
+    { x:  84,  y: 10, z: -84,  s: 8 }
   ];
 
   const SIGNAL_STATIONS = [
@@ -608,7 +656,7 @@
         ["assets/tiktok/boyo-12.jpg", 44, 20, -Math.PI / 2],
         ["assets/video-red-brick.jpg", -8, 91, Math.PI],
         ["assets/video-fuming.jpg", 8, -91, 0],
-        ["assets/youtube/MjKuMiU7b-w.jpg", -91, 14, Math.PI / 2],
+        ["assets/youtube/u_IWzvxKSek.jpg", -91, 14, Math.PI / 2],
         ["assets/youtube/2nJmvEeFbSE.jpg", 91, -14, -Math.PI / 2],
         ["assets/tiktok/boyo-03.jpg", -72, 87, Math.PI],
         ["assets/tiktok/boyo-08.jpg", 72, -87, 0],
@@ -1214,40 +1262,25 @@
     }
 
     makeMaskDecal(text, dragon = false) {
+      if (dragon) {
+        const texture = this.textureLoader.load("assets/mask-dragon.png");
+        texture.colorSpace = THREE.SRGBColorSpace;
+        return new THREE.Sprite(new THREE.SpriteMaterial({
+          map: texture,
+          transparent: true,
+          depthTest: true
+        }));
+      }
       const canvas = document.createElement("canvas");
       canvas.width = 512;
       canvas.height = 256;
       const context = canvas.getContext("2d");
       context.clearRect(0, 0, canvas.width, canvas.height);
-      if (dragon) {
-        context.save();
-        context.translate(256, 130);
-        context.beginPath();
-        context.moveTo(-130, 50);
-        context.lineTo(-72, -20);
-        context.lineTo(-100, -92);
-        context.lineTo(-8, -48);
-        context.lineTo(62, -88);
-        context.lineTo(48, -12);
-        context.lineTo(136, 36);
-        context.lineTo(54, 42);
-        context.lineTo(5, 92);
-        context.lineTo(-38, 56);
-        context.closePath();
-        context.lineJoin = "round";
-        context.lineWidth = 18;
-        context.strokeStyle = "#09070a";
-        context.stroke();
-        context.fillStyle = "#c8102e";
-        context.fill();
-        context.restore();
-      } else {
-        context.fillStyle = "#080808";
-        context.font = "1000 132px Arial Black, Segoe UI, sans-serif";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText(text, 256, 132);
-      }
+      context.fillStyle = "#080808";
+      context.font = "1000 132px Arial Black, Segoe UI, sans-serif";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillText(text, 256, 132);
       const texture = new THREE.CanvasTexture(canvas);
       texture.colorSpace = THREE.SRGBColorSpace;
       const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: true });
@@ -1255,7 +1288,7 @@
     }
 
     createVideoBillboards() {
-      // Six shared video elements + textures (reused by all 18 displays)
+      // Nine shared official video elements + textures (reused by all 18 displays)
       this.videoSources = VIDEO_SOURCES.map((source) => {
         const video = document.createElement("video");
         video.src = source.src;
@@ -1291,7 +1324,7 @@
           screenW = (PANEL_H - 0.5) * aspect;
         }
 
-        const fc = FRAME_COLORS[data.s];
+        const fc = FRAME_COLORS[data.s % FRAME_COLORS.length];
         const group = new THREE.Group();
 
         // Support pylon
@@ -1330,7 +1363,7 @@
           width: 640, height: 112,
           accent: `#${fc.toString(16).padStart(6, "0")}`,
           subtext: "PROXIMITY AUDIO",
-          fontSize: 42
+          fontSize: source.label.length > 20 ? 32 : 42
         });
         const labelMat = new THREE.SpriteMaterial({ map: labelTex, transparent: true, depthTest: false });
         const labelSprite = new THREE.Sprite(labelMat);

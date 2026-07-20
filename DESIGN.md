@@ -19,7 +19,7 @@ No engine or implementation terminology appears in public-facing copy.
 - Procedural wet asphalt and grime textures with brighter midtone palette
 - Reflective puddles, richer violet-dusk fog (`FogExp2`), emissive portals and luminous street-pool streetlights
 - Collision-safe buildings, bins, pillars, landmark and lamp posts
-- **18 BOYO TV video billboard displays** backed by **6 shared local video sources** (6 `<video>` elements / `VideoTexture`s reused across all displays); correct aspect-fit letterboxing for 16:9 and square sources; swivel to face player; circular collision and spawn-clearance zones prevent characters, props, coins, puddles and lamps crossing screens
+- **18 BOYO TV video billboard displays** backed by **9 shared local video sources** (six verified BOYOWORLD YouTube videos and three newest playable @boyo_world TikToks); all are normalized to 16:9, swivel to face player, and use circular collision/spawn-clearance zones
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME/TONEDEF) with poster, glow pad, pylon, beacon; visual proximity feedback; deep-link buttons warp BOYO to the station from any page section
 - Thirty collectible BOYO coins
 - BOYOWORLD Banshees logo, soundtrack and graffiti landmark
@@ -33,7 +33,7 @@ No engine or implementation terminology appears in public-facing copy.
 
 ## Character
 
-BOYO uses a procedural 3D knitted balaclava with bump detail, eye/mouth openings, visible eyes/skin, BOYO wordmark, red Welsh dragon mark and an articulated streetwear body with hands, shoes, jacket panels and chrome zip detail. The start-screen mask carries the matching red dragon and CYMRU mark.
+BOYO uses a procedural 3D knitted balaclava with bump detail, eye/mouth openings, visible eyes/skin, BOYO wordmark, solid-black Welsh dragon mark and an articulated streetwear body with hands, shoes, jacket panels and chrome zip detail. The start-screen mask carries the matching restrained black dragon above the eye openings.
 
 ## Enemies
 

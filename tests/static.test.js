@@ -43,7 +43,8 @@ test("builds the procedural BOYO character and city", () => {
   assert.match(world, /BANSHEES_SITE/);
   assert.match(world, /attempts < 80/);
   assert.match(world, /collidesWorld\(nextX, enemy\.group\.position\.z, enemy\.radius\)/);
-  assert.match(world, /#c8102e/);
+  assert.equal(existsSync(join(root, "assets/mask-dragon.png")), true);
+  assert.match(world, /assets\/mask-dragon\.png/);
   assert.match(html, /class="mask-dragon"/);
 });
 
@@ -59,16 +60,40 @@ test("supports arrows, firing, touch look and pinch zoom", () => {
 test("integrates music, coins, Banshees and video billboards", () => {
   assert.match(world, /const VIDEO_BILLBOARDS = \[/);
   assert.match(world, /const VIDEO_SOURCES = \[/);
-  // 18 billboard displays backed by 6 shared sources; labels use BOYO TV prefix
+  // 18 billboard displays backed by 9 shared official YouTube/TikTok sources
   assert.match(world, /BOYO TV/);
   assert.doesNotMatch(world, /LIVE FEED/);
   assert.match(world, /new THREE\.VideoTexture/);
   assert.match(world, /assets\/billboards\/red-brick\.mp4/);
+  assert.match(world, /assets\/billboards\/dior\.mp4/);
+  assert.match(world, /assets\/billboards\/tiktok-live-documents\.mp4/);
+  assert.match(world, /assets\/billboards\/tiktok-battle-panic\.mp4/);
+  assert.match(world, /assets\/billboards\/tiktok-high-on-life\.mp4/);
+  for (const id of [
+    "7648670517238730006",
+    "7627545119566073110",
+    "7619364492010343702"
+  ]) {
+    assert.match(world, new RegExp(id));
+  }
   assert.match(world, /createCoins/);
   assert.match(world, /for \(let index = 0; index < 30/);
   assert.match(world, /createBansheesLandmark/);
   assert.match(world, /banshees-rise\.mp3/);
   assert.match(world, /BANSHEES RISE/);
+});
+
+test("uses only verified BOYOWORLD YouTube reward videos", () => {
+  for (const id of [
+    "eFhGFcPTNWc", "0o7RmMrxvko", "rRkw3Q7A8cQ", "fuyD1Tkhkcc",
+    "HNUtBySf-aU", "u_IWzvxKSek", "9GRk3C1SbDQ", "J9dtVaabyVM",
+    "SEBZABjtZBU", "-TRfGBNlQ5E"
+  ]) {
+    assert.match(game, new RegExp(id));
+  }
+  for (const id of ["6CNonJ8PaUE", "wY0ll0rtcWE", "MjKuMiU7b-w", "g5uCrJZbvXc", "2nJmvEeFbSE"]) {
+    assert.doesNotMatch(game, new RegExp(id));
+  }
 });
 
 test("keeps the video and scratch reward in the cabinet", () => {
@@ -105,7 +130,7 @@ test("preserves official links and public-facing copy", () => {
 test("getState exposes extended display, media and camera fields", () => {
   // displayCount — 18 billboard displays
   assert.match(world, /displayCount:\s*this\.videoBillboards/);
-  // uniqueMediaCount — 6 shared video sources
+  // uniqueMediaCount — 9 shared official video sources
   assert.match(world, /uniqueMediaCount:\s*this\.videoSources/);
   // aspectFitStatus present
   assert.match(world, /aspectFitStatus/);

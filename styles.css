@@ -1400,30 +1400,16 @@ img {
 
 .mask-dragon {
   position: absolute;
-  top: 2%;
-  left: 22%;
-  width: 56%;
-  color: #c8102e;
-  text-align: center;
-  transform: rotate(4deg);
+  top: 4%;
+  left: 28%;
+  width: 44%;
+  transform: rotate(2deg);
 }
 
-.mask-dragon svg {
+.mask-dragon img {
   width: 100%;
   display: block;
-  overflow: visible;
-  filter: drop-shadow(0 2px 0 var(--cp-game-white));
-}
-
-.mask-dragon b {
-  display: block;
-  margin-top: -0.2rem;
-  color: #c8102e;
-  font-family: var(--cp-game-mono);
-  font-size: clamp(0.42rem, 1vw, 0.62rem);
-  font-weight: 1000;
-  letter-spacing: 0.08em;
-  text-shadow: 1px 1px 0 var(--cp-game-white);
+  filter: drop-shadow(0 1px 0 var(--cp-game-white));
 }
 
 .menu-mask strong {

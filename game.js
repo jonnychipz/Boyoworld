@@ -2,12 +2,16 @@
   "use strict";
 
   const VIDEOS = [
-    ["fuyD1Tkhkcc", "FUMING"], ["J9dtVaabyVM", "PWY WYT TI"],
-    ["SEBZABjtZBU", "RAW PAP"], ["0o7RmMrxvko", "RED BRICK"],
-    ["rRkw3Q7A8cQ", "SPITFIRE"], ["6CNonJ8PaUE", "SITUATION"],
-    ["u_IWzvxKSek", "DIOR"], ["wY0ll0rtcWE", "VALLEY BOUNCE"],
-    ["HNUtBySf-aU", "PAY ME"], ["MjKuMiU7b-w", "CHROME"],
-    ["g5uCrJZbvXc", "TWIN TOWN"], ["2nJmvEeFbSE", "S.T.A.R."]
+    ["eFhGFcPTNWc", "TONEDEF"],
+    ["0o7RmMrxvko", "RED BRICK"],
+    ["rRkw3Q7A8cQ", "SPITFIRE"],
+    ["fuyD1Tkhkcc", "FUMING"],
+    ["HNUtBySf-aU", "PAY ME"],
+    ["u_IWzvxKSek", "DIOR"],
+    ["9GRk3C1SbDQ", "SAVAGE"],
+    ["J9dtVaabyVM", "PWY WYT TI"],
+    ["SEBZABjtZBU", "RAW PAP"],
+    ["-TRfGBNlQ5E", "RAW PAP TRAILER"]
   ];
   const QUOTES = ["WEAKIES", "LIAR", "TAP DOWN", "6P", "WET EGG", "SPIN THE BLOCK", "RUN IT"];
 
