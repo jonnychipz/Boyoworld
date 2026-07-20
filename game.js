@@ -72,6 +72,8 @@
   };
 
   const controls = { down: new Set(), pressed: new Set() };
+  const mobileMoveModes = ["up", "left"];
+  let mobileMoveModeIndex = 0;
 
   function announce(message) {
     ui.announcements.textContent = "";
@@ -109,8 +111,42 @@
   const sound = {
     menu: () => tone(180, 0.07, "square", 0.028, 120),
     fire: () => {
-      tone(145, 0.055, "sawtooth", 0.048, -75);
-      setTimeout(() => tone(68, 0.08, "square", 0.025, -24), 22);
+      const audio = audioContext();
+      if (!audio) return;
+      const now = audio.currentTime;
+      const duration = 0.13;
+      const buffer = audio.createBuffer(1, Math.ceil(audio.sampleRate * duration), audio.sampleRate);
+      const samples = buffer.getChannelData(0);
+      for (let index = 0; index < samples.length; index += 1) {
+        const envelope = Math.exp(-index / (audio.sampleRate * 0.022));
+        samples[index] = (Math.random() * 2 - 1) * envelope;
+      }
+      const crack = audio.createBufferSource();
+      const crackFilter = audio.createBiquadFilter();
+      const crackGain = audio.createGain();
+      crack.buffer = buffer;
+      crackFilter.type = "bandpass";
+      crackFilter.frequency.setValueAtTime(1850, now);
+      crackFilter.Q.setValueAtTime(0.72, now);
+      crackGain.gain.setValueAtTime(0.16, now);
+      crackGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      crack.connect(crackFilter).connect(crackGain).connect(audio.destination);
+
+      const body = audio.createOscillator();
+      const bodyFilter = audio.createBiquadFilter();
+      const bodyGain = audio.createGain();
+      body.type = "sine";
+      body.frequency.setValueAtTime(115, now);
+      body.frequency.exponentialRampToValueAtTime(42, now + 0.09);
+      bodyFilter.type = "lowpass";
+      bodyFilter.frequency.value = 180;
+      bodyGain.gain.setValueAtTime(0.085, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
+      body.connect(bodyFilter).connect(bodyGain).connect(audio.destination);
+      crack.start(now);
+      crack.stop(now + duration);
+      body.start(now);
+      body.stop(now + 0.12);
     },
     hit: () => tone(88, 0.16, "sawtooth", 0.048, -48),
     collect: () => {
@@ -159,6 +195,32 @@
     announce("BOYOWORLD is ready.");
   }
 
+  function isMobileGameView() {
+    return matchMedia("(pointer: coarse)").matches || innerWidth <= 820;
+  }
+
+  async function enterMobileGame() {
+    if (!isMobileGameView()) {
+      startWorld();
+      return;
+    }
+    const fullscreenTarget = document.querySelector(".cabinet");
+    try {
+      if (!document.fullscreenElement) {
+        await fullscreenTarget.requestFullscreen({ navigationUI: "hide" });
+      }
+    } catch {
+      fullscreenTarget.classList.add("is-mobile-expanded");
+      document.body.classList.add("mobile-game-active");
+    }
+    try {
+      await screen.orientation?.lock?.("landscape");
+    } catch {
+      // Orientation locking is optional and often unavailable outside installed apps.
+    }
+    startWorld();
+  }
+
   function startWorld() {
     destroyWorld();
     clearRewardTimer();
@@ -203,6 +265,7 @@
             `${target - kills} surreal enemies remain.`
           );
         }
+
       },
       onHealth: (health) => {
         ui.threeHealthBar.style.width = `${health}%`;
@@ -220,10 +283,10 @@
       onDistrict: (district) => { ui.threeDistrict.textContent = district; },
       onComplete: completeWorld,
       onFail: failWorld,
-      onMediaSignal: (name, dist) => {
+      onMediaSignal: (name, dist, volume = 0) => {
         if (ui.threeSignal) {
           ui.threeSignal.textContent = name
-            ? `📡 ${name} — ${Math.round(dist)}u`
+            ? `📡 ${name} — ${Math.round(dist)}u · ${Math.round(volume * 100)}%`
             : "NO SIGNAL";
         }
       }
@@ -306,7 +369,7 @@
       setupScratchCard();
       loadRandomVideo();
       restoreRewardScroll();
-    }, state.reducedMotion ? 0 : 700);
+    }, 0);
   }
 
   function setupScratchCard() {
@@ -439,7 +502,19 @@
     const normalized = normalizeKey(event.key);
     if (["left", "right", "up", "down", "action"].includes(normalized) &&
         ["playing", "paused"].includes(state.mode)) event.preventDefault();
-    if (event.key.toLowerCase() === "p" || event.key === "Escape") {
+    if (event.key === "Escape") {
+      if (document.fullscreenElement) {
+        event.preventDefault();
+        controls.down.clear();
+        document.exitFullscreen().catch(() => {
+          announce("Press Escape again to leave fullscreen.");
+        });
+        return;
+      }
+      togglePause();
+      return;
+    }
+    if (event.key.toLowerCase() === "p") {
       togglePause();
       return;
     }
@@ -499,7 +574,7 @@
     controls.down.clear();
     if (state.mode === "playing") togglePause(true);
   });
-  document.getElementById("startWorld").addEventListener("click", startWorld);
+  document.getElementById("startWorld").addEventListener("click", enterMobileGame);
   document.getElementById("beginLevel").addEventListener("click", startWorld);
   document.getElementById("resumeGame").addEventListener("click", () => togglePause(false));
   document.getElementById("restartGame").addEventListener("click", startWorld);
@@ -520,14 +595,89 @@
       sound.menu();
     }
   });
-  document.getElementById("fullscreenButton").addEventListener("click", async () => {
+  const fullscreenButton = document.getElementById("fullscreenButton");
+  const fullscreenTarget = document.querySelector(".cabinet");
+  const mobileFullscreenExit = document.getElementById("mobileFullscreenExit");
+  const mobileMoveToggle = document.getElementById("mobileMoveToggle");
+  const mobileFireButton = document.getElementById("mobileFireButton");
+  const updateFullscreenUi = () => {
+    const active = document.fullscreenElement === fullscreenTarget;
+    fullscreenButton.setAttribute("aria-pressed", String(active));
+    fullscreenButton.setAttribute(
+      "aria-label",
+      active ? "Exit fullscreen game mode" : "Enter fullscreen game mode"
+    );
+    fullscreenButton.lastChild.textContent = active ? " Exit full screen" : " Full screen";
+    fullscreenTarget.classList.toggle("is-fullscreen", active);
+    document.body.classList.toggle("mobile-game-active", active && isMobileGameView());
+    if (!active) {
+      controls.down.clear();
+      fullscreenTarget.classList.remove("is-mobile-expanded");
+      screen.orientation?.unlock?.();
+      document.getElementById("gameCanvas")?.focus({ preventScroll: true });
+    }
+  };
+  fullscreenButton.addEventListener("click", async () => {
     try {
-      if (!document.fullscreenElement) await document.querySelector(".game-section").requestFullscreen();
+      if (!document.fullscreenElement) await fullscreenTarget.requestFullscreen();
       else await document.exitFullscreen();
     } catch {
       announce("Fullscreen mode is not available in this browser.");
     }
   });
+  document.addEventListener("fullscreenchange", updateFullscreenUi);
+  updateFullscreenUi();
+
+  mobileFullscreenExit.addEventListener("click", async () => {
+    controls.down.clear();
+    if (document.fullscreenElement) await document.exitFullscreen();
+    fullscreenTarget.classList.remove("is-mobile-expanded");
+    document.body.classList.remove("mobile-game-active");
+    screen.orientation?.unlock?.();
+  });
+  const updateMobileMoveLabel = () => {
+    const input = mobileMoveModes[mobileMoveModeIndex];
+    mobileMoveToggle.textContent = input === "up" ? "MOVE" : "TURN";
+    mobileMoveToggle.setAttribute("aria-label", input === "up" ? "Hold to move forward" : "Hold to turn left");
+  };
+  let mobileMovePointerId = null;
+  const pressMobileMove = (event) => {
+    event.preventDefault();
+    if (mobileMovePointerId !== null) return;
+    mobileMovePointerId = event.pointerId;
+    const input = mobileMoveModes[mobileMoveModeIndex];
+    controls.down.add(input);
+    mobileMoveToggle.classList.add("active");
+  };
+  const clearMobileMove = (event, advanceMode) => {
+    event.preventDefault();
+    if (event.pointerId !== mobileMovePointerId) return;
+    mobileMoveModes.forEach((input) => controls.down.delete(input));
+    mobileMoveToggle.classList.remove("active");
+    mobileMovePointerId = null;
+    if (advanceMode) {
+      mobileMoveModeIndex = (mobileMoveModeIndex + 1) % mobileMoveModes.length;
+      updateMobileMoveLabel();
+    }
+  };
+  mobileMoveToggle.addEventListener("pointerdown", pressMobileMove);
+  mobileMoveToggle.addEventListener("pointerup", (event) => clearMobileMove(event, true));
+  mobileMoveToggle.addEventListener("pointercancel", (event) => clearMobileMove(event, false));
+  const pressMobileFire = (event) => {
+    event.preventDefault();
+    controls.down.add("action");
+    controls.pressed.add("action");
+    mobileFireButton.classList.add("active");
+  };
+  const releaseMobileFire = (event) => {
+    event.preventDefault();
+    controls.down.delete("action");
+    mobileFireButton.classList.remove("active");
+  };
+  mobileFireButton.addEventListener("pointerdown", pressMobileFire);
+  ["pointerup", "pointercancel", "pointerleave"].forEach((type) =>
+    mobileFireButton.addEventListener(type, releaseMobileFire));
+  updateMobileMoveLabel();
 
   bindTouchControls();
   bindArchiveInteractions();

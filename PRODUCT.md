@@ -16,7 +16,11 @@ Success means visitors immediately recognise BOYOWORLD, understand the arrow/Spa
 
 Deep-link station warp buttons (in the Banshees, world and music sections) start the game and teleport BOYO directly to the matching signal station, turning content browsing into immediate play.
 
-Media playback is proximity-led and performance-aware: Enter World authorizes playback, only nearby or visible billboards decode, one source is audible, and enemy detail scales to a bounded nearest-crowd budget.
+Media playback is proximity-led and performance-aware: Enter World authorizes playback, only the active source and at most two nearby/in-view screens decode, and exactly one source is audible across the 18 landscape displays, 15-screen TikTok Alley and two Banshees screens. Audio fades continuously from near-full at 8 units to silence at 60.
+
+TikTok Alley is a deliberately clear walkable destination: local videos autoplay by proximity, every screen links to its source, and age-gated posts hand off to TikTok for authenticated playback.
+
+Mobile visitors enter gameplay in one tap with fullscreen/landscape enhancement when supported, simplified MOVE/TURN and FIRE overlays, and an always-visible exit control.
 
 ## Brand Personality
 
@@ -32,6 +36,8 @@ Punk-chaotic, confrontational, funny, Welsh, surreal, and professionally constru
 6. **Promotion is part of play: billboards, landmarks, rewards, social tiles and merch.**
 7. **Mounted motion must read instantly:** the wooden toy horse and posed rider share a stable gameplay root while remaining visibly articulated.
 8. **Defeats speak in-world:** BOYO's comic callout is immediate, temporary, reduced-motion safe and announced accessibly.
+9. **Navigation is graphic and legible:** fitted labels, district bands, signposts and minimap symbols lead visitors without blocking play.
+10. **Victory is earned spectacle:** a mounted rear, full camera orbit and screenward leap precede the cabinet reward.
 
 ## Accessibility & Inclusion
 

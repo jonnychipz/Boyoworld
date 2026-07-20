@@ -101,6 +101,52 @@
     }
   ];
 
+  // 15 TikTok gallery portrait videos (newest-first)
+  const TIKTOK_GALLERY_SOURCES = [
+    { src: "assets/tiktok-gallery/boyo-01.mp4", id: "7648670517238730006", label: "LIVE DOCUMENTS", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7648670517238730006" },
+    { src: "assets/tiktok-gallery/boyo-02.mp4", id: "7627545119566073110", label: "BATTLE PANIC", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7627545119566073110" },
+    { src: "assets/tiktok-gallery/boyo-03.mp4", id: "7619364492010343702", label: "HIGH ON LIFE", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7619364492010343702" },
+    { src: "assets/tiktok-gallery/boyo-04.mp4", id: "7615712891869678851", label: "BOOTCUT DENIM", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7615712891869678851" },
+    { src: "assets/tiktok-gallery/boyo-05.mp4", id: "7599376993511116054", label: "NORMAL FACE", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7599376993511116054" },
+    { src: "assets/tiktok-gallery/boyo-06.mp4", id: "7592335944011762966", label: "SCRATCH & SNIFF", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7592335944011762966" },
+    { src: "assets/tiktok-gallery/boyo-07.mp4", id: "7591264423742934294", label: "FULL MOON 2", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7591264423742934294" },
+    { src: "assets/tiktok-gallery/boyo-08.mp4", id: "7591254868870958358", label: "FULL MOON", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7591254868870958358" },
+    { src: "assets/tiktok-gallery/boyo-09.mp4", id: "7590880902985780502", label: "LEVELING UP", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7590880902985780502" },
+    { src: "assets/tiktok-gallery/boyo-10.mp4", id: "7589740720076918038", label: "ALBUM BTS", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7589740720076918038" },
+    { src: "assets/tiktok-gallery/boyo-11.mp4", id: "7587161206012562691", label: "CHRISTMAS FILMS 2", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7587161206012562691" },
+    { src: "assets/tiktok-gallery/boyo-12.mp4", id: "7586800323251997974", label: "CHRISTMAS FILMS 1", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7586800323251997974" },
+    { src: "assets/tiktok-gallery/boyo-13.mp4", id: "7585237955367816470", label: "BOYO LIVE", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7585237955367816470" },
+    { src: "assets/tiktok-gallery/boyo-14.mp4", id: "7584912647728991510", label: "MAD IN THE VALLEY", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7584912647728991510" },
+    { src: "assets/tiktok-gallery/boyo-15.mp4", id: "7575975465240825110", label: "RED BRICK", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7575975465240825110" }
+  ];
+
+  const TIKTOK_FEATURED_LINKS = [
+    { label: "KELLY CLIP 01", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7654288168899874070" },
+    { label: "KELLY CLIP 02", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7659723319125626134" },
+    { label: "KELLY CLIP 03", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7661774256556018966" },
+    { label: "WEAKIE TAPDOWN", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7638949274058902806?q=weakie%20tapdown&t=1784572975479" }
+  ];
+
+  // 2 Banshees TikTok video sources
+  const BANSHEES_VIDEO_SOURCES = [
+    { src: "assets/banshees/banshees-01.mp4", id: "7661072748499733782", label: "BANSHEES 01 · TIKTOK" },
+    { src: "assets/banshees/banshees-02.mp4", id: "7654762225353198870", label: "BANSHEES 02 · TIKTOK" }
+  ];
+  const BANSHEES_VIDEO_SITES = [
+    { x: 70, y: 8, z: 94 },
+    { x: 104, y: 8, z: 70 }
+  ];
+
+  // TikTok Alley layout: 15 portrait screens along x=-108, facing east (toward world center)
+  const TIKTOK_ALLEY_X = -108;
+  const TIKTOK_ALLEY_Z_START = -88;
+  const TIKTOK_ALLEY_Z_STEP = 12;
+  const TIKTOK_ALLEY_CLEARANCE = { minX: -116, maxX: -86, minZ: -98, maxZ: 94 };
+  const TIKTOK_FEATURED_SITES = TIKTOK_FEATURED_LINKS.map((_, index) => ({
+    x: -106 + index * 10,
+    z: 103
+  }));
+
   // 18 displays: each of the nine official YouTube/TikTok sources appears twice.
   const VIDEO_BILLBOARDS = [
     { x: -28, y: 10, z: -36, s: 0 },
@@ -111,11 +157,11 @@
     { x: 58, y: 10, z: -72, s: 5 },
     { x: -58, y: 10, z: 72, s: 6 },
     { x: 58, y: 10, z: 72, s: 7 },
-    { x: -92, y: 10, z: -48, s: 8 },
+    { x: -72, y: 10, z: -48, s: 8 },
     { x: 92, y: 10, z: 8, s: 0 },
-    { x: -92, y: 10, z: 8, s: 1 },
+    { x: -72, y: 10, z: 8, s: 1 },
     { x: 92, y: 10, z: 52, s: 2 },
-    { x: -92, y: 10, z: 52, s: 3 },
+    { x: -72, y: 10, z: 52, s: 3 },
     { x: 92, y: 10, z: -48, s: 4 },
     { x: -32, y: 12, z: -104, s: 5 },
     { x: 32, y: 12, z: -104, s: 6 },
@@ -124,7 +170,7 @@
   ];
 
   const SIGNAL_STATIONS = [
-    { id: "red-brick", label: "RED BRICK",  poster: "assets/video-red-brick.jpg",  x: -90, z:  28, color: 0xe21c3d, section: "#world" },
+    { id: "red-brick", label: "RED BRICK",  poster: "assets/video-red-brick.jpg",  x: -78, z:  28, color: 0xe21c3d, section: "#world" },
     { id: "spitfire",  label: "SPITFIRE",   poster: "assets/video-spitfire.jpg",   x:  86, z: -32, color: 0xff4a82, section: "#music" },
     { id: "fuming",    label: "FUMING",     poster: "assets/video-fuming.jpg",     x:   0, z: -96, color: 0xffd33d, section: "#music" },
     { id: "raw-pap",   label: "RAW PAP",    poster: "assets/video-raw-pap.jpg",    x:  36, z:  88, color: 0x40f5c3, section: "#world" },
@@ -155,6 +201,22 @@
     });
   }
 
+  // Polished font family for all in-world labels
+  const LABEL_FONT_FAMILY = "Bahnschrift, 'Aptos Display', 'Arial Narrow', 'Segoe UI', sans-serif";
+
+  // Fit text into maxWidth, shrinking fontSize down to minSize, with optional wrapping.
+  // Returns the font size used and whether wrapping occurred.
+  function fitCanvasText(ctx, text, maxWidth, initFontSize, fontWeight, minSize = 18) {
+    let size = initFontSize;
+    while (size >= minSize) {
+      ctx.font = `${fontWeight} ${size}px ${LABEL_FONT_FAMILY}`;
+      if (ctx.measureText(text).width <= maxWidth) return { size, wrapped: false };
+      size -= 2;
+    }
+    ctx.font = `${fontWeight} ${minSize}px ${LABEL_FONT_FAMILY}`;
+    return { size: minSize, wrapped: ctx.measureText(text).width > maxWidth };
+  }
+
   function roundedCanvasTexture(text, options = {}) {
     const {
       width = 512,
@@ -163,7 +225,8 @@
       foreground = "#ffffff",
       accent = "#e21c3d",
       subtext = "",
-      fontSize = 54
+      fontSize = 54,
+      minFontSize = 16
     } = options;
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -178,13 +241,16 @@
     context.lineWidth = 6;
     context.stroke();
     context.fillStyle = foreground;
-    context.font = `900 ${fontSize}px Segoe UI, Arial, sans-serif`;
+    const pad = Math.round(width * 0.045);
+    const { size } = fitCanvasText(context, text, width - pad * 2, fontSize, 900, minFontSize);
+    context.font = `900 ${size}px ${LABEL_FONT_FAMILY}`;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fillText(text, width / 2, subtext ? height * 0.42 : height / 2);
     if (subtext) {
       context.fillStyle = accent;
-      context.font = "800 25px Consolas, monospace";
+      const { size: subSize } = fitCanvasText(context, subtext, width - pad * 2, 25, 800, 12);
+      context.font = `800 ${subSize}px ${LABEL_FONT_FAMILY}`;
       context.fillText(subtext, width / 2, height * 0.76);
     }
     const texture = new THREE.CanvasTexture(canvas);
@@ -251,7 +317,34 @@
       this.activeAudibleName = "";
       this.activeAudibleDist = -1;
       this.bansheesVolume = 0;
-      this.pointer = { dragging: false, x: 0, y: 0, pinchDistance: 0, pinchX: 0, pinchY: 0 };
+      this.galleryVideoSources = [];
+      this.bansheesVideoSourcesArr = [];
+      this.bansheesVideoScreens = [];
+      this.tiktokGallery = [];
+      this.clickableMediaScreens = [];
+      this.featuredTikTokPanels = [];
+      this.celebrationPhase = "";
+      this.celebrationProgress = 0;
+      this.celebrationStartedAt = 0;
+      this.celebrationPlayerPos = new THREE.Vector3();
+      this.celebrationPlayerRotation = 0;
+      this.celebrationCameraOrbit = 0;
+      this.wayfindingCount = 0;
+      this.labelFitCount = 0;
+      this.activeVolume = 0;
+      this.speechAnchor = "rider.head";
+      this.pointer = {
+        dragging: false,
+        x: 0,
+        y: 0,
+        startX: 0,
+        startY: 0,
+        moved: false,
+        pinchDistance: 0,
+        pinchX: 0,
+        pinchY: 0
+      };
+      this.pointerNdc = new THREE.Vector2();
       this.activePointers = new Map();
       this.temp = {
         a: new THREE.Vector3(),
@@ -300,7 +393,30 @@
             moonVisible: Boolean(this.moon?.visible),
             starCount: this.starCount,
             streetArtifactCount: this.streetArtifactCount
-          })
+          }),
+          getGalleryCount: () => this.tiktokGallery?.length || 0,
+          getGalleryLinks: () => this.tiktokGallery?.map((screen) => screen.sourceUrl) || [],
+          openGalleryLink: (index = 0) => this.openExternalMediaUrl(
+            this.tiktokGallery?.[index]?.sourceUrl,
+            this.tiktokGallery?.[index]?.label
+          ),
+          openFeaturedTikTok: (index = 0) => this.openExternalMediaUrl(
+            this.featuredTikTokPanels?.[index]?.sourceUrl,
+            this.featuredTikTokPanels?.[index]?.label
+          ),
+          getBansheesSourceCount: () => this.bansheesVideoSourcesArr?.length || 0,
+          getPlayingMedia: () => {
+            const all = [
+              ...(this.videoSources || []),
+              ...(this.galleryVideoSources || []),
+              ...(this.bansheesVideoSourcesArr || [])
+            ];
+            return all.map((s) => ({ label: s.label, paused: s.video.paused, blocked: s.playBlocked }));
+          },
+          getCelebration: () => ({ phase: this.celebrationPhase, progress: this.celebrationProgress }),
+          getWayfindingCount: () => this.wayfindingCount,
+          getLabelFit: () => ({ count: this.labelFitCount }),
+          getSpeechAnchor: () => this.speechAnchor
         };
       }
     }
@@ -366,6 +482,7 @@
       this.createDistricts();
       this.createVideoBillboards();
       this.createBansheesLandmark();
+      this.createTikTokAlley();
       this.primeMedia();
       this.createBuildings();
       this.createWorldProps();
@@ -375,6 +492,7 @@
       this.createPortals();
       this.createCoins();
       this.createSignalStations();
+      this.createWayfinding();
       this.createAtmosphere();
     }
 
@@ -799,7 +917,14 @@
         [-88, -54, 49, 83],
         [55, 89, 51, 85]
       ];
-      const reservedMedia = [...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE];
+      const tiktokAlleySites = TIKTOK_GALLERY_SOURCES.map((_, i) => ({
+        x: TIKTOK_ALLEY_X,
+        z: TIKTOK_ALLEY_Z_START + i * TIKTOK_ALLEY_Z_STEP
+      }));
+      const reservedMedia = [
+        ...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE,
+        ...BANSHEES_VIDEO_SITES, ...tiktokAlleySites, ...TIKTOK_FEATURED_SITES
+      ];
 
       for (let index = 0; index < 42; index += 1) {
         let x;
@@ -811,6 +936,7 @@
           z = rand(-108, 108);
           attempts += 1;
           blocked = Math.abs(x) < 13 || Math.abs(z) < 13 ||
+            this.isInTikTokAlleyClearance(x, z, 6) ||
             reserved.some(([minX, maxX, minZ, maxZ]) => x > minX && x < maxX && z > minZ && z < maxZ) ||
             reservedMedia.some((site) => Math.hypot(x - site.x, z - site.z) < 23);
         } while (attempts < 120 && blocked);
@@ -1249,10 +1375,23 @@
       });
     }
 
+    isInTikTokAlleyClearance(x, z, margin = 0) {
+      return x >= TIKTOK_ALLEY_CLEARANCE.minX - margin &&
+        x <= TIKTOK_ALLEY_CLEARANCE.maxX + margin &&
+        z >= TIKTOK_ALLEY_CLEARANCE.minZ - margin &&
+        z <= TIKTOK_ALLEY_CLEARANCE.maxZ + margin;
+    }
+
     isNearMediaSite(x, z, clearance = 13) {
-      return [...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE].some(
+      // Check billboard sites, signal stations, banshees main site
+      if ([
+        ...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE,
+        ...BANSHEES_VIDEO_SITES, ...TIKTOK_FEATURED_SITES
+      ].some(
         (site) => Math.hypot(x - site.x, z - site.z) < clearance
-      );
+      )) return true;
+      if (this.isInTikTokAlleyClearance(x, z, clearance * 0.3)) return true;
+      return false;
     }
 
     findClearPropPosition(centerX, centerZ, spread, clearance = 13) {
@@ -1435,7 +1574,8 @@
       context.rotate(rand(-0.035, 0.035));
       context.textAlign = "center";
       context.textBaseline = "middle";
-      context.font = "1000 104px Segoe UI Black, Arial Black, sans-serif";
+      const { size } = fitCanvasText(context, text, 900, 104, 1000, 36);
+      context.font = `1000 ${size}px ${LABEL_FONT_FAMILY}`;
       context.lineWidth = 16;
       context.strokeStyle = "rgba(0,0,0,.75)";
       context.strokeText(text, 0, 0);
@@ -1503,6 +1643,60 @@
       this.bansheesAudio.loop = true;
       this.bansheesAudio.preload = "metadata";
       this.bansheesAudio.volume = 0;
+      // Banshees TikTok video sources (proximity audio candidates, ideally replacing mp3)
+      this.bansheesVideoSourcesArr = BANSHEES_VIDEO_SOURCES.map((source) => {
+        const video = document.createElement("video");
+        video.src = source.src;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        video.crossOrigin = "anonymous";
+        video.volume = 0;
+        const texture = new THREE.VideoTexture(video);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        return { ...source, video, texture, currentVolume: 0, playBlocked: false, aspect: 9 / 16 };
+      });
+      const backingGeometry = new THREE.BoxGeometry(7.8, 13.8, 0.6);
+      const screenGeometry = new THREE.PlaneGeometry(6.75, 12);
+      const backingMaterial = new THREE.MeshStandardMaterial({
+        color: 0x050507, metalness: 0.76, roughness: 0.2
+      });
+      this.bansheesVideoScreens = this.bansheesVideoSourcesArr.map((source, index) => {
+        const site = BANSHEES_VIDEO_SITES[index];
+        const group = new THREE.Group();
+        const backing = new THREE.Mesh(backingGeometry, backingMaterial);
+        backing.castShadow = true;
+        group.add(backing);
+        const screen = new THREE.Mesh(
+          screenGeometry,
+          new THREE.MeshBasicMaterial({ map: source.texture, toneMapped: false })
+        );
+        screen.position.z = 0.32;
+        group.add(screen);
+        const label = this.makeLabel(
+          index ? "JOIN THE BANSHEES" : "BANSHEES RISE",
+          "AMIE1985 · TIKTOK",
+          0xffd13f,
+          7.2,
+          1.45
+        );
+        label.position.set(0, -7.8, 0.5);
+        group.add(label);
+        group.position.set(site.x, site.y, site.z);
+        group.lookAt(BANSHEES_SITE.x, site.y, BANSHEES_SITE.z);
+        this.scene.add(group);
+        this.obstacles.push({ x: site.x, z: site.z, radius: 4.2 });
+        return {
+          ...site,
+          label: source.label,
+          position: new THREE.Vector3(site.x, site.y, site.z),
+          group,
+          sourceIndex: index
+        };
+      });
     }
 
     createPortals() {
@@ -2016,11 +2210,13 @@
         depthTest: false,
         depthWrite: false
       }));
-      this.killSpeech.position.set(0.85, 6.6, 0);
+      // Centered above rider head (mask top ~5.5 in rider space)
+      this.killSpeech.position.set(0, 6.2, 0);
       this.killSpeech.scale.set(4.8, 1.55, 1);
       this.killSpeech.renderOrder = 40;
       this.killSpeech.visible = false;
       this.rider.add(this.killSpeech);
+      this.speechAnchor = "rider.head";
     }
 
     createKillSpeechTexture(phrase) {
@@ -2036,13 +2232,15 @@
       context.fill();
       context.stroke();
       context.beginPath();
-      context.moveTo(185, 190);
-      context.lineTo(120, 238);
-      context.lineTo(250, 190);
+      context.moveTo(330, 190);
+      context.lineTo(370, 238);
+      context.lineTo(410, 190);
       context.fill();
       context.stroke();
       context.fillStyle = "#0b0b0e";
-      context.font = `${phrase.length > 14 ? 700 : 900} ${phrase.length > 14 ? 62 : 78}px Arial Black, Segoe UI, sans-serif`;
+      const speechWeight = phrase.length > 14 ? 700 : 900;
+      const { size } = fitCanvasText(context, phrase, 620, 78, speechWeight, 38);
+      context.font = `${speechWeight} ${size}px ${LABEL_FONT_FAMILY}`;
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(phrase, 370, 108);
@@ -2084,7 +2282,8 @@
       const context = canvas.getContext("2d");
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = "#080808";
-      context.font = "1000 132px Arial Black, Segoe UI, sans-serif";
+      const { size } = fitCanvasText(context, text, 460, 132, 1000, 52);
+      context.font = `1000 ${size}px ${LABEL_FONT_FAMILY}`;
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(text, 256, 132);
@@ -2209,6 +2408,305 @@
       });
     }
 
+    createTikTokAlley() {
+      // 15 portrait screens at x=TIKTOK_ALLEY_X, facing east toward world centre
+      const PORTRAIT_W = 6.75;
+      const PORTRAIT_H = 12.0;
+      const ALLEY_FRAME_COLOR = 0xff2255;
+      const sharedPylonGeo = new THREE.CylinderGeometry(0.18, 0.26, 9, 10);
+      const sharedBackingGeo = new THREE.BoxGeometry(PORTRAIT_W + 0.8, PORTRAIT_H + 0.8, 0.52);
+      const sharedScreenGeo = new THREE.PlaneGeometry(PORTRAIT_W, PORTRAIT_H);
+      const pylonMat = new THREE.MeshStandardMaterial({ color: 0x18192a, metalness: 0.86, roughness: 0.22 });
+      const backingMat = new THREE.MeshStandardMaterial({ color: 0x04040a, metalness: 0.74, roughness: 0.22 });
+      const plaqueMaterial = new THREE.MeshStandardMaterial({
+        color: 0x11131a, metalness: 0.38, roughness: 0.58
+      });
+      const walkway = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+          TIKTOK_ALLEY_CLEARANCE.maxX - TIKTOK_ALLEY_X - 2,
+          TIKTOK_ALLEY_CLEARANCE.maxZ - TIKTOK_ALLEY_CLEARANCE.minZ
+        ),
+        new THREE.MeshPhysicalMaterial({
+          color: 0x292235,
+          roughness: 0.46,
+          metalness: 0.2,
+          clearcoat: 0.5,
+          clearcoatRoughness: 0.26
+        })
+      );
+      walkway.name = "TikTok Alley pedestrian corridor";
+      walkway.rotation.x = -Math.PI / 2;
+      walkway.position.set(
+        (TIKTOK_ALLEY_X + TIKTOK_ALLEY_CLEARANCE.maxX) / 2 - 1,
+        0.09,
+        (TIKTOK_ALLEY_CLEARANCE.minZ + TIKTOK_ALLEY_CLEARANCE.maxZ) / 2
+      );
+      this.scene.add(walkway);
+      const walkwayStripe = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.3, TIKTOK_ALLEY_CLEARANCE.maxZ - TIKTOK_ALLEY_CLEARANCE.minZ),
+        new THREE.MeshBasicMaterial({ color: 0xff2255 })
+      );
+      walkwayStripe.rotation.x = -Math.PI / 2;
+      walkwayStripe.position.set(walkway.position.x, 0.105, walkway.position.z);
+      this.scene.add(walkwayStripe);
+      const createPlaqueTexture = (label, subtext = "PLAY ON TIKTOK") => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 768;
+        canvas.height = 128;
+        const context = canvas.getContext("2d");
+        context.fillStyle = "#11131a";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.strokeStyle = "#ff2255";
+        context.lineWidth = 8;
+        context.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
+        const titleSize = fitCanvasText(context, label, canvas.width - 56, 50, 800, 18).size;
+        context.fillStyle = "#ffffff";
+        context.font = `800 ${titleSize}px ${LABEL_FONT_FAMILY}`;
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(label, canvas.width / 2, 48);
+        const subSize = fitCanvasText(context, subtext, canvas.width - 56, 20, 700, 12).size;
+        context.fillStyle = "#ff6a83";
+        context.font = `700 ${subSize}px ${LABEL_FONT_FAMILY}`;
+        context.fillText(subtext, canvas.width / 2, 96);
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        return texture;
+      };
+
+      this.galleryVideoSources = TIKTOK_GALLERY_SOURCES.map((source) => {
+        const video = document.createElement("video");
+        video.src = source.src;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        video.crossOrigin = "anonymous";
+        video.volume = 0;
+        const texture = new THREE.VideoTexture(video);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        return { ...source, video, texture, currentVolume: 0, playBlocked: false, aspect: 9 / 16 };
+      });
+
+      this.tiktokGallery = this.galleryVideoSources.map((source, index) => {
+        const z = TIKTOK_ALLEY_Z_START + index * TIKTOK_ALLEY_Z_STEP;
+        const group = new THREE.Group();
+
+        const pylon = new THREE.Mesh(sharedPylonGeo, pylonMat);
+        pylon.position.set(0, 4.5, 0);
+        pylon.castShadow = true;
+        group.add(pylon);
+
+        const backing = new THREE.Mesh(sharedBackingGeo, backingMat);
+        backing.position.y = PORTRAIT_H / 2 + 0.5;
+        backing.castShadow = true;
+        group.add(backing);
+
+        const screen = new THREE.Mesh(
+          sharedScreenGeo,
+          new THREE.MeshBasicMaterial({ map: source.texture, toneMapped: false })
+        );
+        screen.position.set(0, PORTRAIT_H / 2 + 0.5, 0.28);
+        screen.userData.externalUrl = source.sourceUrl;
+        screen.userData.mediaLabel = source.label;
+        this.clickableMediaScreens.push(screen);
+        group.add(screen);
+
+        const frameMat = new THREE.MeshBasicMaterial({
+          color: ALLEY_FRAME_COLOR, transparent: true, opacity: 0.22, depthWrite: false
+        });
+        const frame = new THREE.Mesh(
+          new THREE.PlaneGeometry(PORTRAIT_W + 1.6, PORTRAIT_H + 1.6),
+          frameMat
+        );
+        frame.position.set(0, PORTRAIT_H / 2 + 0.5, -0.28);
+        group.add(frame);
+
+        const plaque = new THREE.Mesh(
+          new THREE.BoxGeometry(PORTRAIT_W, 1.15, 0.25),
+          plaqueMaterial.clone()
+        );
+        plaque.position.set(0, 0.72, 0.08);
+        group.add(plaque);
+        const labelTex = createPlaqueTexture(source.label);
+        this.labelFitCount += 1;
+        const label = new THREE.Mesh(
+          new THREE.PlaneGeometry(PORTRAIT_W - 0.22, 0.92),
+          new THREE.MeshBasicMaterial({ map: labelTex, toneMapped: false })
+        );
+        label.position.set(0, 0.72, 0.215);
+        group.add(label);
+
+        group.position.set(TIKTOK_ALLEY_X, 0, z);
+        group.rotation.y = Math.PI / 2;
+
+        this.scene.add(group);
+        this.obstacles.push({ x: TIKTOK_ALLEY_X, z, radius: PORTRAIT_W * 0.52 });
+
+        return {
+          index,
+          label: source.label,
+          sourceUrl: source.sourceUrl,
+          position: new THREE.Vector3(TIKTOK_ALLEY_X, PORTRAIT_H / 2 + 0.5, z),
+          group,
+          video: source.video,
+          texture: source.texture,
+          sourceIndex: index,
+          lastVolume: 0
+        };
+      });
+
+      const entranceTex = roundedCanvasTexture("TIKTOK ALLEY", {
+        width: 768,
+        height: 160,
+        background: "rgba(4,4,12,.92)",
+        accent: "#ff2255",
+        fontSize: 68,
+        minFontSize: 28
+      });
+      this.labelFitCount += 1;
+      const entranceMat = new THREE.SpriteMaterial({ map: entranceTex, transparent: true, depthTest: false });
+      const entranceSign = new THREE.Sprite(entranceMat);
+      entranceSign.scale.set(9, 1.9, 1);
+      entranceSign.renderOrder = 22;
+      entranceSign.position.set(TIKTOK_ALLEY_X + 10, 11.5, TIKTOK_ALLEY_Z_START - 7);
+      this.scene.add(entranceSign);
+
+      const galleryLight = new THREE.PointLight(0xff2255, 12, 55, 2);
+      galleryLight.position.set(
+        TIKTOK_ALLEY_X + 4,
+        8,
+        TIKTOK_ALLEY_Z_START +
+          ((TIKTOK_GALLERY_SOURCES.length - 1) * TIKTOK_ALLEY_Z_STEP) / 2
+      );
+      galleryLight.distance = 95;
+      this.scene.add(galleryLight);
+
+      this.featuredTikTokPanels = TIKTOK_FEATURED_LINKS.map((item, index) => {
+        const site = TIKTOK_FEATURED_SITES[index];
+        const group = new THREE.Group();
+        const backing = new THREE.Mesh(
+          new THREE.BoxGeometry(8.4, 5.4, 0.55),
+          new THREE.MeshStandardMaterial({ color: 0x080910, metalness: 0.62, roughness: 0.3 })
+        );
+        backing.position.y = 3.2;
+        group.add(backing);
+        const linkTexture = createPlaqueTexture(item.label, "AGE-GATED · PLAY ON TIKTOK");
+        const linkScreen = new THREE.Mesh(
+          new THREE.PlaneGeometry(7.8, 4.8),
+          new THREE.MeshBasicMaterial({ map: linkTexture, toneMapped: false })
+        );
+        linkScreen.position.set(0, 3.2, 0.29);
+        linkScreen.userData.externalUrl = item.sourceUrl;
+        linkScreen.userData.mediaLabel = item.label;
+        this.clickableMediaScreens.push(linkScreen);
+        group.add(linkScreen);
+        const post = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.18, 0.26, 6, 10),
+          pylonMat
+        );
+        post.position.y = 2.2;
+        group.add(post);
+        group.position.set(site.x, 0, site.z);
+        group.rotation.y = Math.PI;
+        this.scene.add(group);
+        this.obstacles.push({ x: site.x, z: site.z, radius: 4.4 });
+        return { ...item, position: new THREE.Vector3(site.x, 3.2, site.z), group, screen: linkScreen };
+      });
+    }
+
+    createWayfinding() {
+      // Colored district road bands + intersection signposts
+      const intersections = [];
+      [-72, 0, 72].forEach((x) => {
+        [-72, 0, 72].forEach((z) => {
+          intersections.push({ x, z });
+        });
+      });
+
+      DISTRICTS.forEach((district) => {
+        const bandMat = new THREE.MeshBasicMaterial({
+          color: district.color, transparent: true, opacity: 0.18, depthWrite: false
+        });
+        const band = new THREE.Mesh(new THREE.PlaneGeometry(18, 8), bandMat);
+        band.rotation.x = -Math.PI / 2;
+        band.position.set(district.x, 0.06, district.z);
+        this.scene.add(band);
+      });
+
+      const postMat = new THREE.MeshStandardMaterial({ color: 0xd4d8e0, metalness: 0.68, roughness: 0.32 });
+      intersections.forEach(({ x, z }) => {
+        const post = new THREE.Group();
+
+        const pole = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.1, 0.1, 4.2, 8),
+          postMat
+        );
+        pole.position.y = 2.1;
+        post.add(pole);
+
+        DISTRICTS.forEach((district, di) => {
+          const dx = district.x - x;
+          const dz = district.z - z;
+          const dist = Math.hypot(dx, dz);
+          if (dist < 5 || dist > 120) return;
+          const angle = Math.atan2(dx, dz);
+          const boardW = 2.8;
+          const boardH = 0.7;
+          const boardMat = new THREE.MeshStandardMaterial({
+            color: district.color, roughness: 0.62, emissive: new THREE.Color(district.color), emissiveIntensity: 0.18
+          });
+          const board = new THREE.Mesh(new THREE.BoxGeometry(boardW, boardH, 0.08), boardMat);
+          const yOff = 3.6 - di * 0.82;
+          board.position.set(
+            Math.sin(angle) * (boardW / 2 + 0.18),
+            yOff,
+            Math.cos(angle) * (boardH / 2 + 0.18)
+          );
+          board.rotation.y = angle;
+          post.add(board);
+          const boardLabel = this.makeLabel(district.name, "DISTRICT →", district.color, 2.6, 0.68);
+          boardLabel.position.copy(board.position);
+          boardLabel.position.y += 0.02;
+          boardLabel.renderOrder = 24;
+          post.add(boardLabel);
+
+          const arrowGeo = new THREE.ConeGeometry(0.22, 0.44, 8);
+          const arrow = new THREE.Mesh(arrowGeo, boardMat);
+          arrow.rotation.z = -Math.PI / 2;
+          arrow.position.set(
+            Math.sin(angle) * (boardW + 0.5),
+            yOff,
+            Math.cos(angle) * 0.08
+          );
+          arrow.rotation.y = angle;
+          post.add(arrow);
+        });
+
+        if (x <= 0) {
+          const ang = Math.atan2(TIKTOK_ALLEY_X - x, 0 - z);
+          const sm = new THREE.MeshStandardMaterial({
+            color: 0xff2255, roughness: 0.62, emissive: 0xff2255, emissiveIntensity: 0.22
+          });
+          const sb = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.72, 0.08), sm);
+          sb.position.set(Math.sin(ang) * 1.9, 2.88, Math.cos(ang) * 0.12);
+          sb.rotation.y = ang;
+          post.add(sb);
+          const alleyLabel = this.makeLabel("TIKTOK ALLEY", "← 15 SCREENS", 0xff2255, 3.0, 0.7);
+          alleyLabel.position.copy(sb.position);
+          alleyLabel.position.y += 0.02;
+          alleyLabel.renderOrder = 24;
+          post.add(alleyLabel);
+        }
+
+        post.position.set(x, 0, z);
+        this.scene.add(post);
+        this.wayfindingCount += 1;
+      });
+    }
+
     makeLimb(material, x, y, z, radius, length) {
       const pivot = new THREE.Group();
       pivot.position.set(x, y, z);
@@ -2265,7 +2763,7 @@
           attempts += 1;
         } while (
           attempts < 80 &&
-          this.collidesWorld(enemy.group.position.x, enemy.group.position.z, 2.5)
+          this.collidesEnemyWorld(enemy.group.position.x, enemy.group.position.z, 2.5)
         );
         this.scene.add(enemy.group);
         this.enemies.push(enemy);
@@ -2613,11 +3111,13 @@
       context.lineWidth = 7;
       context.stroke();
       context.fillStyle = "#fff";
-      context.font = "900 48px Segoe UI, Arial, sans-serif";
+      const { size: nameSize } = fitCanvasText(context, enemy.name, 592, 48, 900, 24);
+      context.font = `900 ${nameSize}px ${LABEL_FONT_FAMILY}`;
       context.textAlign = "left";
       context.fillText(enemy.name, 24, 58);
       context.fillStyle = "#9ba0aa";
-      context.font = "800 22px Consolas, monospace";
+      const { size: typeSize } = fitCanvasText(context, enemy.type, 590, 22, 800, 14);
+      context.font = `800 ${typeSize}px ${LABEL_FONT_FAMILY}`;
       context.fillText(enemy.type, 26, 91);
       context.fillStyle = "#25252b";
       context.fillRect(24, 111, 592, 25);
@@ -2652,6 +3152,7 @@
     }
 
     makeLabel(text, subtext, color, width, height) {
+      this.labelFitCount += 1;
       const texture = roundedCanvasTexture(text, {
         accent: `#${color.toString(16).padStart(6, "0")}`,
         subtext
@@ -2674,7 +3175,11 @@
         this.pointer.dragging = true;
         this.pointer.x = event.clientX;
         this.pointer.y = event.clientY;
+        this.pointer.startX = event.clientX;
+        this.pointer.startY = event.clientY;
+        this.pointer.moved = false;
         if (this.activePointers.size === 2) {
+          this.pointer.moved = true;
           const [first, second] = [...this.activePointers.values()];
           this.pointer.pinchDistance = Math.hypot(first.x - second.x, first.y - second.y);
           this.pointer.pinchX = (first.x + second.x) / 2;
@@ -2686,6 +3191,7 @@
         if (!this.pointer.dragging || this.paused || !this.activePointers.has(event.pointerId)) return;
         this.activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
         if (this.activePointers.size >= 2) {
+          this.pointer.moved = true;
           const [first, second] = [...this.activePointers.values()];
           const distance = Math.hypot(first.x - second.x, first.y - second.y);
           const midpointX = (first.x + second.x) / 2;
@@ -2706,12 +3212,28 @@
         }
         const deltaX = event.clientX - this.pointer.x;
         const deltaY = event.clientY - this.pointer.y;
+        if (
+          Math.hypot(
+            event.clientX - this.pointer.startX,
+            event.clientY - this.pointer.startY
+          ) > 8
+        ) {
+          this.pointer.moved = true;
+        }
         this.pointer.x = event.clientX;
         this.pointer.y = event.clientY;
         this.yaw += deltaX * 0.006;
         this.pitch = clamp(this.pitch - deltaY * 0.004, -0.58, 0.24);
       };
+      this.onPointerCancel = (event) => {
+        this.pointer.moved = true;
+        this.activePointers.delete(event.pointerId);
+        this.pointer.dragging = this.activePointers.size > 0;
+        this.pointer.pinchDistance = 0;
+        this.renderer.domElement.releasePointerCapture?.(event.pointerId);
+      };
       this.onPointerUp = (event) => {
+        const shouldOpenMedia = this.activePointers.size === 1 && !this.pointer.moved;
         this.activePointers.delete(event.pointerId);
         this.pointer.dragging = this.activePointers.size > 0;
         this.pointer.pinchDistance = 0;
@@ -2721,6 +3243,7 @@
           this.pointer.y = remaining.y;
         }
         this.renderer.domElement.releasePointerCapture?.(event.pointerId);
+        if (shouldOpenMedia) this.openClickableMedia(event);
       };
       this.onWheel = (event) => {
         event.preventDefault();
@@ -2729,8 +3252,32 @@
       this.renderer.domElement.addEventListener("pointerdown", this.onPointerDown);
       this.renderer.domElement.addEventListener("pointermove", this.onPointerMove);
       this.renderer.domElement.addEventListener("pointerup", this.onPointerUp);
-      this.renderer.domElement.addEventListener("pointercancel", this.onPointerUp);
+      this.renderer.domElement.addEventListener("pointercancel", this.onPointerCancel);
       this.renderer.domElement.addEventListener("wheel", this.onWheel, { passive: false });
+    }
+
+    openClickableMedia(event) {
+      const rect = this.renderer.domElement.getBoundingClientRect();
+      this.pointerNdc.set(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -((event.clientY - rect.top) / rect.height) * 2 + 1
+      );
+      this.raycaster.setFromCamera(this.pointerNdc, this.camera);
+      const intersections = this.raycaster.intersectObjects(this.clickableMediaScreens, false);
+      const target = intersections[0]?.object;
+      const url = target?.userData?.externalUrl;
+      return this.openExternalMediaUrl(url, target?.userData?.mediaLabel);
+    }
+
+    openExternalMediaUrl(url, label = "TIKTOK") {
+      if (!url) return false;
+      window.open(url, "_blank", "noopener,noreferrer");
+      this.options.onMediaSignal?.(
+        `${label || "TIKTOK"} · OPENED`,
+        0,
+        1
+      );
+      return true;
     }
 
     animate() {
@@ -2929,6 +3476,20 @@
       this.updateParticles(delta);
     }
 
+    finishCelebration() {
+      this.celebrationPhase = "complete";
+      this.celebrationProgress = 1;
+      this.player.position.copy(this.celebrationPlayerPos);
+      this.player.rotation.y = this.celebrationPlayerRotation;
+      if (this.horseNeck) this.horseNeck.rotation.x = 0;
+      if (this.horseHead) this.horseHead.rotation.x = 0;
+      if (this.horseTail) this.horseTail.rotation.x = -0.24;
+      if (this.rider) this.rider.rotation.x = 0;
+      this.horseLegs?.forEach((leg) => {
+        if (leg.front) leg.upperPivot.rotation.x = 0;
+      });
+    }
+
     hitEnemy(enemy, point) {
       enemy.health -= 1;
       enemy.hitFlash = 0.15;
@@ -2955,8 +3516,11 @@
         this.celebrate();
         this.completionTimer = window.setTimeout(() => {
           this.completionTimer = null;
-          if (!this.destroyed) this.options.onComplete?.();
-        }, this.reducedMotion ? 0 : 900);
+          if (!this.destroyed) {
+            this.finishCelebration();
+            this.options.onComplete?.();
+          }
+        }, this.reducedMotion ? 800 : 3600);
       }
     }
 
@@ -3005,8 +3569,8 @@
           direction.normalize();
           const nextX = enemy.group.position.x + direction.x * enemy.speed * delta;
           const nextZ = enemy.group.position.z + direction.z * enemy.speed * delta;
-          if (!this.collidesWorld(nextX, enemy.group.position.z, enemy.radius)) enemy.group.position.x = nextX;
-          if (!this.collidesWorld(enemy.group.position.x, nextZ, enemy.radius)) enemy.group.position.z = nextZ;
+          if (!this.collidesEnemyWorld(nextX, enemy.group.position.z, enemy.radius)) enemy.group.position.x = nextX;
+          if (!this.collidesEnemyWorld(enemy.group.position.x, nextZ, enemy.radius)) enemy.group.position.z = nextZ;
           enemy.group.rotation.y = Math.atan2(direction.x, direction.z);
         } else {
           enemy.wanderTimer -= delta;
@@ -3026,10 +3590,10 @@
             -HALF_WORLD,
             HALF_WORLD
           );
-          if (!this.collidesWorld(nextX, enemy.group.position.z, enemy.radius)) {
+          if (!this.collidesEnemyWorld(nextX, enemy.group.position.z, enemy.radius)) {
             enemy.group.position.x = nextX;
           }
-          if (!this.collidesWorld(enemy.group.position.x, nextZ, enemy.radius)) {
+          if (!this.collidesEnemyWorld(enemy.group.position.x, nextZ, enemy.radius)) {
             enemy.group.position.z = nextZ;
           }
           enemy.group.rotation.y = enemy.wanderAngle;
@@ -3132,6 +3696,55 @@
 
     updateCamera(delta) {
       if (!this.player) return;
+      // Celebration owns the camera for every phase.
+      if (this.celebrating) {
+        const elapsed = (performance.now() - this.celebrationStartedAt) / 1000;
+        const focus = this.temp.a.copy(this.celebrationPlayerPos).add(new THREE.Vector3(0, 4.5, 0));
+        if (this.reducedMotion) {
+          this.camera.position.set(
+            this.celebrationPlayerPos.x + 12,
+            this.celebrationPlayerPos.y + 8,
+            this.celebrationPlayerPos.z + 15
+          );
+          this.camera.lookAt(focus);
+          return;
+        }
+        if (elapsed < 0.8) {
+          const t = clamp(elapsed / 0.8, 0, 1);
+          this.camera.position.set(
+            this.celebrationPlayerPos.x + 15 - t * 2,
+            this.celebrationPlayerPos.y + 8 + t * 2,
+            this.celebrationPlayerPos.z + 16 - t * 2
+          );
+          this.camera.lookAt(focus);
+          return;
+        }
+        if (elapsed < 3.2) {
+          const orbitRadius = 20;
+          const orbitAngle = ((elapsed - 0.8) / 2.4) * Math.PI * 2 + Math.PI;
+          const orbitX = this.celebrationPlayerPos.x + Math.sin(orbitAngle) * orbitRadius;
+          const orbitZ = this.celebrationPlayerPos.z + Math.cos(orbitAngle) * orbitRadius;
+          const orbitY = this.celebrationPlayerPos.y + 9 + Math.sin(elapsed * 1.5) * 2;
+          this.camera.position.set(orbitX, orbitY, orbitZ);
+          this.camera.lookAt(
+            this.celebrationPlayerPos.x,
+            this.celebrationPlayerPos.y + 4,
+            this.celebrationPlayerPos.z
+          );
+          return;
+        }
+        if (elapsed < 3.6) {
+          const t = clamp((elapsed - 3.2) / 0.4, 0, 1);
+          const radius = 20 - t * 14;
+          this.camera.position.set(
+            this.celebrationPlayerPos.x,
+            this.celebrationPlayerPos.y + 9 - t * 2,
+            this.celebrationPlayerPos.z - radius
+          );
+          this.camera.lookAt(focus.x, focus.y + t * 1.5, focus.z);
+          return;
+        }
+      }
       const target = this.player.position.clone().add(new THREE.Vector3(0, 4.25, 0));
       const horizontal = Math.cos(this.pitch) * this.cameraDistance;
       const followPos = new THREE.Vector3(
@@ -3191,7 +3804,7 @@
             const age = this.elapsed - this.killSpeechStartedAt;
             const pop = clamp(age / 0.16, 0, 1);
             this.killSpeech.scale.set(4.8 * pop, 1.55 * pop, 1);
-            this.killSpeech.position.y = 6.6 + Math.sin(age * 5) * 0.08;
+            this.killSpeech.position.y = 6.2 + Math.sin(age * 5) * 0.08;
             this.killSpeech.material.opacity = clamp(remaining / 0.22, 0, 1);
           }
         }
@@ -3201,30 +3814,54 @@
 
     updateProximityAudio(delta) {
       if (!this.videoBillboards) return;
-      this.audioVolumeTimer -= delta;
-
-      // Build list of all proximity audio candidates
-      const candidates = this.videoBillboards.map((bb, i) => ({
-        type: "billboard", index: i,
-        dist: bb.position.distanceTo(this.player.position)
-      }));
-      if (this.bansheesPosition) {
-        candidates.push({
+      const candidates = [
+        ...this.videoBillboards.map((bb, i) => ({
+          type: "billboard", index: i,
+          dist: bb.position.distanceTo(this.player.position)
+        })),
+        ...(this.tiktokGallery || []).map((screen, i) => ({
+          type: "gallery", index: i,
+          dist: screen.position.distanceTo(this.player.position)
+        })),
+        ...(this.bansheesVideoSourcesArr || []).map((_, i) => ({
+          type: "bansheesVideo", index: i,
+          dist: this.bansheesVideoScreens[i]
+            ? this.player.position.distanceTo(this.bansheesVideoScreens[i].position)
+            : Infinity
+        })),
+        ...(this.bansheesPosition ? [{
           type: "banshees", index: -1,
           dist: this.player.position.distanceTo(this.bansheesPosition)
-        });
-      }
+        }] : [])
+      ];
       candidates.sort((a, b) => a.dist - b.dist);
-      const nearest = candidates[0];
+      const bansheesVideoCandidates = candidates.filter((c) => c.type === "bansheesVideo");
+      const filteredCandidates = candidates.filter((c) => {
+        if (c.type === "banshees" && bansheesVideoCandidates.some((bv) => bv.dist < 50)) return false;
+        return true;
+      });
+
+      const nearest = filteredCandidates[0];
       const nearestDist = nearest ? nearest.dist : Infinity;
 
-      // Refresh the currently selected source before applying hysteresis.
       if (this.audioActiveSource) {
-        if (this.audioActiveSource.type === "billboard") {
-          this.audioActiveDist = this.videoBillboards[this.audioActiveSource.index].position
-            .distanceTo(this.player.position);
-        } else if (this.bansheesPosition) {
-          this.audioActiveDist = this.player.position.distanceTo(this.bansheesPosition);
+        switch (this.audioActiveSource.type) {
+          case "billboard":
+            this.audioActiveDist = this.videoBillboards[this.audioActiveSource.index]?.position
+              .distanceTo(this.player.position) ?? Infinity;
+            break;
+          case "gallery":
+            this.audioActiveDist = this.tiktokGallery[this.audioActiveSource.index]?.position
+              .distanceTo(this.player.position) ?? Infinity;
+            break;
+          case "bansheesVideo":
+            this.audioActiveDist = this.bansheesVideoScreens[this.audioActiveSource.index]?.position
+              .distanceTo(this.player.position) ?? Infinity;
+            break;
+          case "banshees":
+            this.audioActiveDist = this.bansheesPosition
+              ? this.player.position.distanceTo(this.bansheesPosition) : Infinity;
+            break;
         }
       }
       const activeIsOutOfRange = this.audioActiveDist >= 50;
@@ -3237,106 +3874,151 @@
         this.audioActiveDist = nearestDist;
       }
 
-      if (this.audioVolumeTimer > 0) return;
-      this.audioVolumeTimer = 0.18;
-
       const enabled = this.options.soundEnabled?.() !== false;
-      // Smoothstep curve: full at ≤10 units, silent at ≥50.
       const volForDist = (d) => {
         if (!enabled) return 0;
-        const t = clamp((d - 10) / 40, 0, 1);
+        const t = clamp((d - 8) / 52, 0, 1);
         return 1 - t * t * (3 - 2 * t);
       };
+      const smooth = 1 - Math.pow(0.01, delta);
 
-      const activeBillboard = enabled &&
-        this.audioActiveSource?.type === "billboard" &&
-        this.audioActiveDist < 50
-        ? this.videoBillboards[this.audioActiveSource.index]
-        : null;
-      const activeVideoSource = activeBillboard
-        ? this.videoSources[activeBillboard.sourceIndex]
-        : null;
+      let activeVideoSource = null;
+      if (enabled && this.audioActiveSource && this.audioActiveDist < 60) {
+        switch (this.audioActiveSource.type) {
+          case "billboard":
+            activeVideoSource = this.videoSources[
+              this.videoBillboards[this.audioActiveSource.index]?.sourceIndex
+            ] || null;
+            break;
+          case "gallery":
+            activeVideoSource = this.galleryVideoSources[this.audioActiveSource.index] || null;
+            break;
+          case "bansheesVideo":
+            activeVideoSource = this.bansheesVideoSourcesArr[this.audioActiveSource.index] || null;
+            break;
+        }
+      }
       this.updateMediaPlayback(activeVideoSource);
 
-      // Hard-mute every inactive source so smoothing can never create overlap.
-      this.videoSources.forEach((source) => {
+      const allVideoSources = [
+        ...(this.videoSources || []),
+        ...(this.galleryVideoSources || []),
+        ...(this.bansheesVideoSourcesArr || [])
+      ];
+      allVideoSources.forEach((source) => {
         if (source !== activeVideoSource) {
           source.currentVolume = 0;
           source.video.muted = true;
           source.video.volume = 0;
         }
       });
-      this.videoBillboards.forEach((bb) => {
-        bb.lastVolume = 0;
-      });
+      this.videoBillboards?.forEach((bb) => { bb.lastVolume = 0; });
+      this.tiktokGallery?.forEach((screen) => { screen.lastVolume = 0; });
+
       const bansheesActive = enabled &&
         this.audioActiveSource?.type === "banshees" &&
-        this.audioActiveDist < 50;
-      if (this.bansheesAudio && !bansheesActive) {
-        this.bansheesVolume = 0;
-        this.bansheesAudio.volume = 0;
+        this.audioActiveDist < 60;
+      if (this.bansheesAudio) {
+        if (!bansheesActive) {
+          this.bansheesVolume = 0;
+          this.bansheesAudio.volume = 0;
+        }
       }
 
       let activeName = "";
       let activeDist = Infinity;
+      let activeVol = 0;
 
-      if (this.audioActiveSource && this.audioActiveDist < 50) {
+      if (this.audioActiveSource && this.audioActiveDist < 60) {
         const vol = volForDist(this.audioActiveDist);
-        if (this.audioActiveSource.type === "billboard") {
-          const bb = this.videoBillboards[this.audioActiveSource.index];
-          if (bb) {
-            const source = this.videoSources[bb.sourceIndex];
-            source.currentVolume += (vol - source.currentVolume) * 0.35;
-            source.video.muted = source.currentVolume < 0.05;
-            source.video.volume = source.currentVolume;
-            bb.lastVolume = Math.round(source.currentVolume * 100);
-            if (vol > 0.05 && source.video.paused) {
-              source.video.play()
-                .then(() => { source.playBlocked = false; })
-                .catch((error) => {
-                  if (error?.name !== "AbortError") source.playBlocked = true;
-                });
-            }
-            activeName = bb.label;
-            activeDist = this.audioActiveDist;
+        if (activeVideoSource) {
+          activeVideoSource.currentVolume += (vol - activeVideoSource.currentVolume) * smooth;
+          activeVideoSource.video.muted = activeVideoSource.currentVolume < 0.02;
+          activeVideoSource.video.volume = clamp(activeVideoSource.currentVolume, 0, 1);
+          if (vol > 0.02 && activeVideoSource.video.paused) {
+            activeVideoSource.video.play()
+              .then(() => { activeVideoSource.playBlocked = false; })
+              .catch((error) => {
+                if (error?.name !== "AbortError") activeVideoSource.playBlocked = true;
+              });
           }
+          if (this.audioActiveSource.type === "billboard") {
+            const bb = this.videoBillboards[this.audioActiveSource.index];
+            if (bb) { bb.lastVolume = Math.round(activeVideoSource.currentVolume * 100); activeName = bb.label; }
+          } else if (this.audioActiveSource.type === "gallery") {
+            const sc = this.tiktokGallery[this.audioActiveSource.index];
+            if (sc) { sc.lastVolume = Math.round(activeVideoSource.currentVolume * 100); activeName = sc.label; }
+          } else if (this.audioActiveSource.type === "bansheesVideo") {
+            activeName = activeVideoSource.label;
+          }
+          activeVol = activeVideoSource.currentVolume;
+          activeDist = this.audioActiveDist;
         } else if (this.audioActiveSource.type === "banshees" && this.bansheesAudio) {
           const target = volForDist(this.audioActiveDist);
-          this.bansheesVolume += (target - this.bansheesVolume) * 0.35;
-          this.bansheesAudio.volume = this.bansheesVolume;
-          if (target > 0.04 && this.bansheesAudio.paused) this.bansheesAudio.play().catch(() => {});
+          this.bansheesVolume += (target - this.bansheesVolume) * smooth;
+          this.bansheesAudio.volume = clamp(this.bansheesVolume, 0, 1);
+          if (target > 0.02 && this.bansheesAudio.paused) this.bansheesAudio.play().catch(() => {});
           activeName = "BANSHEES RISE";
+          activeVol = this.bansheesVolume;
           activeDist = this.audioActiveDist;
         }
       }
 
+      this.activeVolume = activeVol;
       this.activeAudibleName = activeName;
       this.activeAudibleDist = activeDist < Infinity ? Math.round(activeDist) : -1;
       const liveStation = this.signalStations.find((station) => station.active);
       if (liveStation) {
         this.options.onMediaSignal?.(
           `SIGNAL STATION · ${liveStation.label}`,
-          liveStation.position.distanceTo(this.player.position)
+          liveStation.position.distanceTo(this.player.position),
+          this.activeVolume
         );
       } else {
-        this.options.onMediaSignal?.(activeName, activeDist < Infinity ? activeDist : -1);
+        this.options.onMediaSignal?.(activeName, activeDist < Infinity ? activeDist : -1, activeVol);
       }
     }
 
     updateMediaPlayback(activeVideoSource) {
-      const desiredSources = new Set();
-      if (activeVideoSource) desiredSources.add(activeVideoSource);
       const forward = this.camera.getWorldDirection(this.temp.c);
-      this.videoBillboards.forEach((billboard) => {
+
+      const visibleSources = new Set();
+      if (activeVideoSource) visibleSources.add(activeVideoSource);
+
+      const scored = [];
+      this.videoBillboards?.forEach((billboard) => {
         const offset = this.temp.b.copy(billboard.position).sub(this.camera.position);
         const distance = offset.length();
         if (distance > 88) return;
         if (forward.dot(offset.normalize()) > -0.05) {
-          desiredSources.add(this.videoSources[billboard.sourceIndex]);
+          scored.push({ source: this.videoSources[billboard.sourceIndex], dist: distance });
         }
       });
-      this.videoSources.forEach((source) => {
-        const shouldPlay = desiredSources.has(source);
+      this.tiktokGallery?.forEach((screen) => {
+        const offset = this.temp.b.copy(screen.position).sub(this.camera.position);
+        const distance = offset.length();
+        if (distance > 88) return;
+        if (forward.dot(offset.normalize()) > -0.05) {
+          scored.push({ source: this.galleryVideoSources[screen.sourceIndex], dist: distance });
+        }
+      });
+      this.bansheesVideoScreens?.forEach((screen) => {
+        const offset = this.temp.b.copy(screen.position).sub(this.camera.position);
+        const distance = offset.length();
+        if (distance <= 88 && forward.dot(offset.normalize()) > -0.05) {
+          scored.push({ source: this.bansheesVideoSourcesArr[screen.sourceIndex], dist: distance });
+        }
+      });
+      scored.sort((a, b) => a.dist - b.dist);
+      scored.slice(0, 2).forEach((item) => visibleSources.add(item.source));
+
+      const allSources = [
+        ...(this.videoSources || []),
+        ...(this.galleryVideoSources || []),
+        ...(this.bansheesVideoSourcesArr || [])
+      ];
+      allSources.forEach((source) => {
+        const shouldPlay = visibleSources.has(source);
         if (shouldPlay && source.video.paused) {
           source.video.muted = true;
           source.video.play()
@@ -3495,6 +4177,19 @@
         );
         context.stroke();
       });
+      // TikTok Alley gallery markers (pink squares)
+      context.fillStyle = "#ff2255";
+      this.tiktokGallery?.forEach((screen) => {
+        const mx = ((screen.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width;
+        const my = ((screen.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height;
+        context.fillRect(mx - 1, my - 1.5, 2, 3);
+      });
+      this.bansheesVideoScreens?.forEach((screen) => {
+        context.fillStyle = "#ffd13f";
+        const mx = ((screen.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width;
+        const my = ((screen.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height;
+        context.fillRect(mx - 2, my - 2, 4, 4);
+      });
       const playerX = ((this.player.position.x + HALF_WORLD) / (HALF_WORLD * 2)) * width;
       const playerY = ((this.player.position.z + HALF_WORLD) / (HALF_WORLD * 2)) * height;
       context.save();
@@ -3510,6 +4205,24 @@
       context.restore();
       context.strokeStyle = "rgba(255,255,255,.45)";
       context.strokeRect(0.5, 0.5, width - 1, height - 1);
+      const MINIMAP_LEGEND = [
+        ["#8d6cff", "D"],
+        ["#50dfff", "TV"],
+        ["#ff2255", "TT"],
+        ["#ffd13f", "B"],
+        ["#5df5c8", "S"]
+      ];
+      context.fillStyle = "rgba(5,5,7,.88)";
+      context.fillRect(2, height - 14, width - 4, 12);
+      context.font = `700 8px ${LABEL_FONT_FAMILY}`;
+      context.textBaseline = "middle";
+      MINIMAP_LEGEND.forEach(([color, label], index) => {
+        const x = 7 + index * 34;
+        context.fillStyle = color;
+        context.fillRect(x, height - 10, 4, 4);
+        context.fillStyle = "#fff";
+        context.fillText(label, x + 7, height - 8);
+      });
     }
 
     collidesWorld(x, z, radius) {
@@ -3521,9 +4234,20 @@
       });
     }
 
+    collidesEnemyWorld(x, z, radius) {
+      return this.isInTikTokAlleyClearance(x, z, radius + 1.5) ||
+        this.collidesWorld(x, z, radius);
+    }
+
     celebrate() {
       if (this.celebrating) return;
       this.celebrating = true;
+      this.celebrationPhase = "rearing";
+      this.celebrationProgress = 0;
+      this.celebrationStartedAt = performance.now();
+      this.celebrationPlayerPos = this.player.position.clone();
+      this.celebrationPlayerRotation = this.player.rotation.y;
+      this.celebrationCameraOrbit = 0;
       this.spawnBurst(this.player.position.clone().add(new THREE.Vector3(0, 3, 0)), 0xffffff, 120);
       this.options.onTarget?.("25 SURREALS DEFEATED · WORLD CLEARED");
     }
@@ -3532,7 +4256,11 @@
       if (this.mediaPrimePromise) {
         const activeVideoSource = this.audioActiveSource?.type === "billboard"
           ? this.videoSources[this.videoBillboards[this.audioActiveSource.index]?.sourceIndex]
-          : null;
+          : this.audioActiveSource?.type === "gallery"
+            ? this.galleryVideoSources[this.audioActiveSource.index]
+            : this.audioActiveSource?.type === "bansheesVideo"
+              ? this.bansheesVideoSourcesArr[this.audioActiveSource.index]
+              : null;
         this.updateMediaPlayback(activeVideoSource);
         if (this.audioActiveSource?.type === "banshees" && this.bansheesAudio?.paused) {
           this.bansheesAudio.play().catch(() => {});
@@ -3540,20 +4268,38 @@
         return this.mediaPrimePromise;
       }
       this.mediaPrimed = true;
-      const attempts = this.videoSources?.map((source) => {
+      const candidates = (this.videoSources || []).slice(0, 3);
+      const attempts = candidates.map((source) => {
         source.video.volume = 0;
-        source.video.muted = false;
+        source.video.muted = true;
         return source.video.play()
-          .then(() => { source.playBlocked = false; })
+          .then(() => { source.playBlocked = false; source.video.pause(); })
           .catch((error) => {
             if (error?.name !== "AbortError") source.playBlocked = true;
           });
-      }) || [];
+      });
+      const allSources = [
+        ...(this.videoSources || []).slice(3),
+        ...(this.galleryVideoSources || []),
+        ...(this.bansheesVideoSourcesArr || [])
+      ];
+      const primeRemaining = async () => {
+        for (const source of allSources) {
+          source.video.volume = 0;
+          source.video.muted = true;
+          await source.video.play()
+            .then(() => { source.playBlocked = false; source.video.pause(); })
+            .catch((error) => {
+              if (error?.name !== "AbortError") source.playBlocked = true;
+            });
+        }
+      };
       if (this.bansheesAudio) {
         this.bansheesAudio.volume = 0;
         attempts.push(this.bansheesAudio.play().catch(() => {}));
       }
       this.mediaPrimePromise = Promise.allSettled(attempts).then(() => {
+        primeRemaining().catch(() => {});
         if (!this.destroyed) this.updateMediaPlayback(null);
       });
       return this.mediaPrimePromise;
@@ -3566,6 +4312,15 @@
         billboard.video.muted = true;
         billboard.video.pause();
       });
+      const allExtra = [
+        ...(this.galleryVideoSources || []),
+        ...(this.bansheesVideoSourcesArr || [])
+      ];
+      allExtra.forEach((source) => {
+        source.video.volume = 0;
+        source.video.muted = true;
+        source.video.pause();
+      });
       if (this.bansheesAudio) {
         this.bansheesAudio.volume = 0;
         this.bansheesAudio.pause();
@@ -3573,8 +4328,57 @@
     }
 
     updateCelebration(delta) {
-      this.player.rotation.y += delta * 3;
-      this.player.position.y = Math.abs(Math.sin(this.elapsed * 5)) * 0.65;
+      const celebDur = this.reducedMotion ? 0.8 : 3.6;
+      const elapsed = (performance.now() - this.celebrationStartedAt) / 1000;
+      this.celebrationProgress = clamp(elapsed / celebDur, 0, 1);
+
+      if (this.reducedMotion) {
+        this.celebrationPhase = "static";
+        this.updateParticles(delta);
+        return;
+      }
+
+      if (elapsed < 0.8) {
+        this.celebrationPhase = "rearing";
+        const t = elapsed / 0.8;
+        const ease = t * t;
+        if (this.horseNeck) this.horseNeck.rotation.x = ease * -0.7;
+        if (this.horseHead) this.horseHead.rotation.x = ease * -0.35;
+        if (this.horseTail) this.horseTail.rotation.x = -0.24 + ease * 0.6;
+        if (this.rider) this.rider.rotation.x = ease * 0.38;
+        this.player.position.y = ease * 1.2;
+        if (this.horseLegs) {
+          this.horseLegs.forEach((leg) => {
+            if (leg.front) leg.upperPivot.rotation.x = -ease * 0.9;
+          });
+        }
+        this.spawnBurst(this.player.position.clone().add(new THREE.Vector3(0, 4, 0)), 0xffd23f, 8);
+      } else if (elapsed < 3.2) {
+        this.celebrationPhase = "orbit";
+        const t = (elapsed - 0.8) / 2.4;
+        this.celebrationCameraOrbit = t * Math.PI * 2;
+        if (this.horseNeck) this.horseNeck.rotation.x = -0.38 + Math.sin(elapsed * 2) * 0.08;
+        if (this.rider) this.rider.rotation.x = 0.2;
+        this.player.position.y = 1.2 + Math.sin(elapsed * 3) * 0.18;
+        this.player.rotation.y += delta * 0.72;
+        if (elapsed % 0.5 < delta) {
+          this.spawnBurst(this.player.position.clone().add(new THREE.Vector3(rand(-2, 2), rand(1, 5), rand(-2, 2))), 0xe21c3d, 12);
+        }
+      } else if (elapsed < 3.6) {
+        this.celebrationPhase = "leap";
+        const t = (elapsed - 3.2) / 0.4;
+        if (this.horseNeck) this.horseNeck.rotation.x = -0.7 * (1 - t);
+        if (this.rider) this.rider.rotation.x = 0.2 * (1 - t);
+        this.player.position.y = 1.2 + t * 3.5;
+      } else {
+        this.celebrationPhase = "complete";
+        if (this.horseNeck) this.horseNeck.rotation.x = 0;
+        if (this.horseHead) this.horseHead.rotation.x = 0;
+        if (this.horseTail) this.horseTail.rotation.x = -0.24;
+        if (this.rider) this.rider.rotation.x = 0;
+        if (this.horseLegs) this.horseLegs.forEach((leg) => { if (leg.front) leg.upperPivot.rotation.x = 0; });
+      }
+
       this.updateParticles(delta);
     }
 
@@ -3611,8 +4415,22 @@
         activeAudibleSource: this.activeAudibleName || null,
         activeAudibleDist: this.activeAudibleDist,
         mediaPrimed: this.mediaPrimed,
-        playingMediaCount: this.videoSources?.filter((source) => !source.video.paused).length || 0,
-        blockedMediaCount: this.videoSources?.filter((source) => source.playBlocked).length || 0,
+        playingMediaCount: [
+          ...(this.videoSources || []),
+          ...(this.galleryVideoSources || []),
+          ...(this.bansheesVideoSourcesArr || [])
+        ].filter((source) => !source.video.paused).length,
+        blockedMediaCount: [
+          ...(this.videoSources || []),
+          ...(this.galleryVideoSources || []),
+          ...(this.bansheesVideoSourcesArr || [])
+        ].filter((source) => source.playBlocked).length,
+        audibleMediaCount: [
+          ...(this.videoSources || []),
+          ...(this.galleryVideoSources || []),
+          ...(this.bansheesVideoSourcesArr || [])
+        ].filter((source) => !source.video.muted && source.video.volume > 0.01).length +
+          (this.bansheesAudio && this.bansheesAudio.volume > 0.01 ? 1 : 0),
         // Camera / intro
         cameraIntro: !this.introComplete,
         cameraIntroProgress: this.introComplete ? 1 : this.introProgress,
@@ -3642,6 +4460,26 @@
         fullEnemyLodCount: this.fullDetailEnemies.size,
         faceEnemyLodCount: this.faceDetailEnemies.size,
         streetArtifactCategories: { ...this.streetArtifactCategories },
+        galleryCount: this.tiktokGallery?.length || 0,
+        gallerySourceLabels: this.galleryVideoSources?.map((source) => source.label) || [],
+        galleryLinkCount: this.tiktokGallery?.filter((screen) => screen.sourceUrl).length || 0,
+        featuredTikTokCount: this.featuredTikTokPanels?.length || 0,
+        featuredTikTokLinks: this.featuredTikTokPanels?.map((panel) => panel.sourceUrl) || [],
+        alleyIntrusionCount: this.obstacles.filter((obstacle) =>
+          obstacle.x > TIKTOK_ALLEY_X + 4 &&
+          obstacle.x < TIKTOK_ALLEY_CLEARANCE.maxX &&
+          obstacle.z >= TIKTOK_ALLEY_CLEARANCE.minZ &&
+          obstacle.z <= TIKTOK_ALLEY_CLEARANCE.maxZ
+        ).length,
+        bansheesSourceCount: this.bansheesVideoSourcesArr?.length || 0,
+        bansheesSourceLabels: this.bansheesVideoSourcesArr?.map((source) => source.label) || [],
+        activeVolume: Number(this.activeVolume.toFixed(3)),
+        celebrationPhase: this.celebrationPhase,
+        celebrationProgress: Number(this.celebrationProgress.toFixed(3)),
+        wayfindingCount: this.wayfindingCount,
+        labelFitCount: this.labelFitCount,
+        labelFitStatus: this.labelFitCount > 0,
+        speechAnchor: this.speechAnchor,
         yaw: Number(this.yaw.toFixed(3)),
         cameraDistance: Number(this.cameraDistance.toFixed(2)),
         worldComplete: this.worldComplete,
@@ -3716,7 +4554,7 @@
       this.renderer.domElement.removeEventListener("pointerdown", this.onPointerDown);
       this.renderer.domElement.removeEventListener("pointermove", this.onPointerMove);
       this.renderer.domElement.removeEventListener("pointerup", this.onPointerUp);
-      this.renderer.domElement.removeEventListener("pointercancel", this.onPointerUp);
+      this.renderer.domElement.removeEventListener("pointercancel", this.onPointerCancel);
       this.renderer.domElement.removeEventListener("wheel", this.onWheel);
       this.stopWorldAudio();
       this.videoSources?.forEach((source) => {
@@ -3727,6 +4565,18 @@
       });
       this.videoBillboards?.forEach((bb) => {
         bb.video.pause();
+      });
+      this.galleryVideoSources?.forEach((source) => {
+        source.video.pause();
+        source.video.removeAttribute("src");
+        source.video.load();
+        source.texture.dispose();
+      });
+      this.bansheesVideoSourcesArr?.forEach((source) => {
+        source.video.pause();
+        source.video.removeAttribute("src");
+        source.video.load();
+        source.texture.dispose();
       });
       if (this.bansheesAudio) {
         this.bansheesAudio.pause();

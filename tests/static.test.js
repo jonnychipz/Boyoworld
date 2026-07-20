@@ -42,7 +42,7 @@ test("builds the procedural BOYO character and city", () => {
   assert.match(world, /PANEL_W \* 0\.48/);
   assert.match(world, /BANSHEES_SITE/);
   assert.match(world, /attempts < 80/);
-  assert.match(world, /collidesWorld\(nextX, enemy\.group\.position\.z, enemy\.radius\)/);
+  assert.match(world, /collidesEnemyWorld\(nextX, enemy\.group\.position\.z, enemy\.radius\)/);
   assert.equal(existsSync(join(root, "assets/mask-dragon.png")), true);
   assert.match(world, /assets\/mask-dragon\.png/);
   assert.match(html, /class="mask-dragon"/);
@@ -261,4 +261,107 @@ test("getState exposes extended display, media and camera fields", () => {
   assert.match(world, /moonVisible:\s*Boolean\(this\.moon\?\.visible\)/);
   assert.match(world, /starCount:\s*this\.starCount/);
   assert.match(world, /streetArtifactCount:\s*this\.streetArtifactCount/);
+});
+
+test("ships the 15-screen TikTok Alley and two Banshees videos", () => {
+  for (let index = 1; index <= 15; index += 1) {
+    const name = `assets/tiktok-gallery/boyo-${String(index).padStart(2, "0")}.mp4`;
+    assert.equal(existsSync(join(root, name)), true, `${name} is missing`);
+  }
+  for (let index = 1; index <= 2; index += 1) {
+    assert.equal(existsSync(join(root, `assets/banshees/banshees-0${index}.mp4`)), true);
+  }
+  assert.match(world, /const TIKTOK_GALLERY_SOURCES = \[/);
+  assert.match(world, /createTikTokAlley\(\)/);
+  assert.match(world, /galleryCount:\s*this\.tiktokGallery/);
+  assert.match(world, /gallerySourceLabels:/);
+  assert.match(world, /const BANSHEES_VIDEO_SOURCES = \[/);
+  assert.match(world, /this\.bansheesVideoScreens =/);
+  assert.match(world, /bansheesSourceCount:/);
+  assert.match(world, /7661072748499733782/);
+  assert.match(world, /7654762225353198870/);
+  assert.match(world, /7589740720076918038/);
+  assert.match(world, /TIKTOK_ALLEY_CLEARANCE/);
+  assert.match(world, /TikTok Alley pedestrian corridor/);
+  assert.match(world, /new THREE\.BoxGeometry\(PORTRAIT_W, 1\.15, 0\.25\)/);
+  assert.match(world, /collidesEnemyWorld/);
+  assert.match(world, /galleryLinkCount:/);
+  assert.match(world, /alleyIntrusionCount:/);
+  assert.match(world, /openClickableMedia/);
+  assert.match(world, /AGE-GATED · PLAY ON TIKTOK/);
+  for (const id of [
+    "7654288168899874070",
+    "7659723319125626134",
+    "7661774256556018966",
+    "7638949274058902806"
+  ]) {
+    assert.match(world, new RegExp(id));
+  }
+});
+
+test("uses bounded adaptive media with continuous one-source audio", () => {
+  assert.match(world, /const t = clamp\(\(d - 8\) \/ 52, 0, 1\)/);
+  assert.match(world, /const smooth = 1 - Math\.pow\(0\.01, delta\)/);
+  assert.match(world, /source\.video\.muted = true;\s*source\.video\.volume = 0/);
+  assert.match(world, /scored\.slice\(0, 2\)/);
+  assert.match(world, /activeVolume:/);
+  assert.match(world, /audibleMediaCount:/);
+  assert.match(game, /Math\.round\(volume \* 100\)/);
+});
+
+test("owns the victory camera and exposes celebration progress", () => {
+  assert.match(world, /this\.reducedMotion \? 800 : 3600/);
+  assert.match(world, /celebrationPhase = "rearing"/);
+  assert.match(world, /celebrationPhase = "orbit"/);
+  assert.match(world, /celebrationPhase = "leap"/);
+  assert.match(world, /Math\.PI \* 2 \+ Math\.PI/);
+  assert.match(world, /Celebration owns the camera for every phase/);
+  assert.match(world, /celebrationProgress:/);
+});
+
+test("fits labels, anchors speech and adds wayfinding", () => {
+  assert.match(world, /function fitCanvasText/);
+  assert.match(world, /Bahnschrift/);
+  assert.match(world, /fitCanvasText\(context, enemy\.name/);
+  assert.match(world, /fitCanvasText\(context, phrase/);
+  assert.match(world, /speechAnchor:\s*this\.speechAnchor/);
+  assert.match(world, /this\.speechAnchor = "rider\.head"/);
+  assert.match(world, /createWayfinding\(\)/);
+  assert.match(world, /wayfindingCount:/);
+  assert.match(world, /labelFitStatus:/);
+});
+
+test("uses a noise gunshot, one-line mask brand and fully linked marquee", () => {
+  assert.match(game, /audio\.createBuffer\(/);
+  assert.match(game, /crackFilter\.type = "bandpass"/);
+  assert.match(game, /bodyFilter\.type = "lowpass"/);
+  assert.match(html, /class="mini-mark"[\s\S]*?boyo-mask-reference\.png[\s\S]*?brand-boyo[\s\S]*?brand-world/);
+  assert.match(html, /id="game-title"[\s\S]*?boyo-mask-reference\.png[\s\S]*?brand-boyo[\s\S]*?brand-world/);
+  const marquee = html.match(/<section class="visual-archive"[\s\S]*?<\/section>/)?.[0] || "";
+  assert.doesNotMatch(marquee, /<a(?![^>]*\shref=)[^>]*>/);
+  assert.match(marquee, /boyoworld\.com/);
+  assert.match(marquee, /instagram\.com\/boyoworld/);
+  assert.match(marquee, /youtube\.com\/@BOYOWORLD/);
+});
+
+test("fullscreen targets the cabinet and Escape returns to the page", () => {
+  assert.match(game, /const fullscreenTarget = document\.querySelector\("\.cabinet"\)/);
+  assert.match(game, /fullscreenTarget\.requestFullscreen\(\)/);
+  assert.match(game, /document\.addEventListener\("fullscreenchange", updateFullscreenUi\)/);
+  assert.match(game, /if \(document\.fullscreenElement\)/);
+  assert.match(game, /document\.exitFullscreen\(\)\.catch/);
+  assert.match(html, /id="fullscreenButton"[\s\S]*?aria-pressed="false"/);
+  assert.match(html, /class="cabinet"[\s\S]*?id="touchControls"/);
+  assert.match(world, /this\.onPointerCancel =/);
+  assert.match(world, /pointercancel", this\.onPointerCancel/);
+  assert.match(game, /enterMobileGame/);
+  assert.match(game, /screen\.orientation\?\.lock\?\.\("landscape"\)/);
+  assert.match(game, /mobileFullscreenExit/);
+  assert.match(game, /mobileMoveToggle/);
+  assert.match(game, /mobileMovePointerId/);
+  assert.match(game, /clearMobileMove\(event, true\)/);
+  assert.match(game, /mobileFireButton/);
+  assert.match(html, /id="mobileFullscreenExit"/);
+  assert.match(html, /id="mobileMoveToggle"/);
+  assert.match(html, /id="mobileFireButton"/);
 });

@@ -23,6 +23,7 @@ No engine or implementation terminology appears in public-facing copy.
 - Reflective puddles, richer violet-dusk fog (`FogExp2`), emissive portals and luminous street-pool streetlights
 - Collision-safe buildings, bins, pillars, landmark and lamp posts
 - **18 BOYO TV video billboard displays** in a balanced symmetric layout, backed by **9 shared local video sources** (six verified BOYOWORLD YouTube videos and three newest playable @boyo_world TikToks); all are normalized to 16:9, swivel to face player, and use circular collision/spawn-clearance zones
+- **TikTok Alley** is a signed line of 15 portrait screens beside a protected full-length pedestrian corridor; screens use physical under-screen plaques and click through to their source posts. Four age-gated community posts use direct TikTok handoff panels. Two current Banshees portrait screens sit by the landmark.
 - Media is primed during the Enter World gesture; only nearby/in-view sources continue decoding, keeping autoplay authorized and reducing CPU/video contention
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME/TONEDEF) with poster, glow pad, pylon, beacon; visual proximity feedback; deep-link buttons warp BOYO to the station from any page section
 - Thirty collectible BOYO coins
@@ -32,7 +33,7 @@ No engine or implementation terminology appears in public-facing copy.
 
 ## Audio
 
-- **Unified proximity arbitration**: at most one audible source across all 18 billboards and Banshees audio. Full volume ≤ 10 units, silent ≥ 50. 4-unit hysteresis prevents rapid switching. All other sources muted but visually active. HUD signal readout shows nearest active source and distance.
+- **Unified proximity arbitration**: exactly one audible source across landscape video, TikTok Alley and Banshees. A frame-rate-independent curve is near-full ≤8 units and silent ≥60; 4-unit hysteresis stabilizes switching. The active decoder stays playing off-camera while visuals are capped at two additional nearby/in-view sources.
 - Pause / fail / reward / menu silence and pause all sources; resume restores behaviour.
 - Enemy crowd LOD hard-caps full geometry and facial detail, so close mobs cannot multiply draw calls without limit.
 
@@ -49,6 +50,10 @@ Fifty uniquely named surreal humanoids retain their health, targets and combat t
 ## Motion
 
 Movement conveys state. Respect reduced motion by removing decorative camera shake, particles, scrolling marquees, portal motion and tile choreography while preserving essential game movement. Cinematic intro skips immediately.
+
+Mobile entry is one tap: cabinet fullscreen plus an optional landscape lock, with a MOVE/TURN toggle, FIRE button and persistent top-right exit. Unsupported fullscreen/orientation APIs fall back to a fixed full-window cabinet.
+
+Victory owns the camera for 3.6 seconds: mounted rear, full 360-degree orbit, then a leap toward screen. Reduced motion receives a short static acknowledgement. Canvas labels use a shared padded display-font fit helper, and wayfinding combines district road bands, intersection arrows and a compact minimap legend.
 
 Every enemy defeat replaces the BOYO-anchored comic bubble with a phrase for 1.5–2 seconds. It scales/fades in standard motion, changes without decorative animation in reduced mode, and mirrors the phrase into the accessible live announcement. Bulk debug defeats use the same path.
 
