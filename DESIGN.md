@@ -23,7 +23,7 @@ No engine or implementation terminology appears in public-facing copy.
 - Reflective puddles, richer violet-dusk fog (`FogExp2`), emissive portals and luminous street-pool streetlights
 - Collision-safe buildings, bins, pillars, landmark and lamp posts
 - **18 BOYO TV video billboard displays** in a balanced symmetric layout, backed by **9 shared local video sources** (six verified BOYOWORLD YouTube videos and three newest playable @boyo_world TikToks); all are normalized to 16:9, swivel to face player, and use circular collision/spawn-clearance zones
-- **TikTok Alley** is a signed line of 15 portrait screens beside a protected full-length pedestrian corridor; screens use physical under-screen plaques and click through to their source posts. Four age-gated community posts use direct TikTok handoff panels. Two current Banshees portrait screens sit by the landmark.
+- **TikTok Alley** is a signed line of 15 portrait screens beside a protected full-length pedestrian corridor; screens use physical under-screen plaques and click through to their source posts. Two current Banshees portrait screens sit by the landmark.
 - Media is primed during the Enter World gesture; only nearby/in-view sources continue decoding, keeping autoplay authorized and reducing CPU/video contention
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME/TONEDEF) with poster, glow pad, pylon, beacon; visual proximity feedback; deep-link buttons warp BOYO to the station from any page section
 - Thirty collectible BOYO coins

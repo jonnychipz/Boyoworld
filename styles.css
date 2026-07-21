@@ -1394,6 +1394,16 @@ img {
     url("assets/channel-banner.jpg") center / cover;
 }
 
+.game-menu {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-menu:focus-visible {
+  outline: 3px solid var(--cp-game-screen-ink);
+  outline-offset: -6px;
+}
+
 .menu-mask {
   position: relative;
   width: min(100%, 210px);

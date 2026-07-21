@@ -28,7 +28,6 @@ BOYOWORLD is one large third-person night-city game running directly in the brow
 - Collect **30 spinning BOYO coins** for score and health
 - **18 BOYO TV video billboard displays** arranged symmetrically across the city and backed by **9 shared local video sources** — six verified BOYOWORLD YouTube videos plus the three latest playable @boyo_world TikToks, all aspect-fitted with Y-swivel, beacons, labels and protected clearance zones
 - **TikTok Alley** adds 15 newest-first, locally optimized portrait clips beside a protected obstruction-free pedestrian corridor; each screen uses a physical under-screen plaque and opens its original TikTok post
-- Four supplied age-gated Kelly Hughes posts appear as direct **Play on TikTok** panels so TikTok can authenticate and autoplay them according to the viewer's settings
 - Two current @amie1985 **Banshees feature screens** flank the landmark and join the shared media system
 - Adaptive media playback keeps only nearby/in-view sources decoding; Enter World primes media during the user gesture so proximity autoplay and audio remain reliable
 - **5 proximity signal stations** (RED BRICK, SPITFIRE, FUMING, RAW PAP, PAY ME) with poster, glow pad, pylon and beacon; deep-link warp buttons on the page teleport BOYO to each station

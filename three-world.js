@@ -120,13 +120,6 @@
     { src: "assets/tiktok-gallery/boyo-15.mp4", id: "7575975465240825110", label: "RED BRICK", sourceUrl: "https://www.tiktok.com/@boyo_world/video/7575975465240825110" }
   ];
 
-  const TIKTOK_FEATURED_LINKS = [
-    { label: "KELLY CLIP 01", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7654288168899874070" },
-    { label: "KELLY CLIP 02", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7659723319125626134" },
-    { label: "KELLY CLIP 03", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7661774256556018966" },
-    { label: "WEAKIE TAPDOWN", sourceUrl: "https://www.tiktok.com/@kellyhughes597/video/7638949274058902806?q=weakie%20tapdown&t=1784572975479" }
-  ];
-
   // 2 Banshees TikTok video sources
   const BANSHEES_VIDEO_SOURCES = [
     { src: "assets/banshees/banshees-01.mp4", id: "7661072748499733782", label: "BANSHEES 01 · TIKTOK" },
@@ -142,10 +135,6 @@
   const TIKTOK_ALLEY_Z_START = -88;
   const TIKTOK_ALLEY_Z_STEP = 12;
   const TIKTOK_ALLEY_CLEARANCE = { minX: -116, maxX: -86, minZ: -98, maxZ: 94 };
-  const TIKTOK_FEATURED_SITES = TIKTOK_FEATURED_LINKS.map((_, index) => ({
-    x: -106 + index * 10,
-    z: 103
-  }));
 
   // 18 displays: each of the nine official YouTube/TikTok sources appears twice.
   const VIDEO_BILLBOARDS = [
@@ -322,7 +311,6 @@
       this.bansheesVideoScreens = [];
       this.tiktokGallery = [];
       this.clickableMediaScreens = [];
-      this.featuredTikTokPanels = [];
       this.celebrationPhase = "";
       this.celebrationProgress = 0;
       this.celebrationStartedAt = 0;
@@ -399,10 +387,6 @@
           openGalleryLink: (index = 0) => this.openExternalMediaUrl(
             this.tiktokGallery?.[index]?.sourceUrl,
             this.tiktokGallery?.[index]?.label
-          ),
-          openFeaturedTikTok: (index = 0) => this.openExternalMediaUrl(
-            this.featuredTikTokPanels?.[index]?.sourceUrl,
-            this.featuredTikTokPanels?.[index]?.label
           ),
           getBansheesSourceCount: () => this.bansheesVideoSourcesArr?.length || 0,
           getPlayingMedia: () => {
@@ -923,7 +907,7 @@
       }));
       const reservedMedia = [
         ...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE,
-        ...BANSHEES_VIDEO_SITES, ...tiktokAlleySites, ...TIKTOK_FEATURED_SITES
+        ...BANSHEES_VIDEO_SITES, ...tiktokAlleySites
       ];
 
       for (let index = 0; index < 42; index += 1) {
@@ -1386,7 +1370,7 @@
       // Check billboard sites, signal stations, banshees main site
       if ([
         ...VIDEO_BILLBOARDS, ...SIGNAL_STATIONS, BANSHEES_SITE,
-        ...BANSHEES_VIDEO_SITES, ...TIKTOK_FEATURED_SITES
+        ...BANSHEES_VIDEO_SITES
       ].some(
         (site) => Math.hypot(x - site.x, z - site.z) < clearance
       )) return true;
@@ -2584,37 +2568,6 @@
       galleryLight.distance = 95;
       this.scene.add(galleryLight);
 
-      this.featuredTikTokPanels = TIKTOK_FEATURED_LINKS.map((item, index) => {
-        const site = TIKTOK_FEATURED_SITES[index];
-        const group = new THREE.Group();
-        const backing = new THREE.Mesh(
-          new THREE.BoxGeometry(8.4, 5.4, 0.55),
-          new THREE.MeshStandardMaterial({ color: 0x080910, metalness: 0.62, roughness: 0.3 })
-        );
-        backing.position.y = 3.2;
-        group.add(backing);
-        const linkTexture = createPlaqueTexture(item.label, "AGE-GATED · PLAY ON TIKTOK");
-        const linkScreen = new THREE.Mesh(
-          new THREE.PlaneGeometry(7.8, 4.8),
-          new THREE.MeshBasicMaterial({ map: linkTexture, toneMapped: false })
-        );
-        linkScreen.position.set(0, 3.2, 0.29);
-        linkScreen.userData.externalUrl = item.sourceUrl;
-        linkScreen.userData.mediaLabel = item.label;
-        this.clickableMediaScreens.push(linkScreen);
-        group.add(linkScreen);
-        const post = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.18, 0.26, 6, 10),
-          pylonMat
-        );
-        post.position.y = 2.2;
-        group.add(post);
-        group.position.set(site.x, 0, site.z);
-        group.rotation.y = Math.PI;
-        this.scene.add(group);
-        this.obstacles.push({ x: site.x, z: site.z, radius: 4.4 });
-        return { ...item, position: new THREE.Vector3(site.x, 3.2, site.z), group, screen: linkScreen };
-      });
     }
 
     createWayfinding() {
@@ -4463,8 +4416,6 @@
         galleryCount: this.tiktokGallery?.length || 0,
         gallerySourceLabels: this.galleryVideoSources?.map((source) => source.label) || [],
         galleryLinkCount: this.tiktokGallery?.filter((screen) => screen.sourceUrl).length || 0,
-        featuredTikTokCount: this.featuredTikTokPanels?.length || 0,
-        featuredTikTokLinks: this.featuredTikTokPanels?.map((panel) => panel.sourceUrl) || [],
         alleyIntrusionCount: this.obstacles.filter((obstacle) =>
           obstacle.x > TIKTOK_ALLEY_X + 4 &&
           obstacle.x < TIKTOK_ALLEY_CLEARANCE.maxX &&

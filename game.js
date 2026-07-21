@@ -574,7 +574,30 @@
     controls.down.clear();
     if (state.mode === "playing") togglePause(true);
   });
-  document.getElementById("startWorld").addEventListener("click", enterMobileGame);
+  let menuTapStart = null;
+  ui.menu.addEventListener("pointerdown", (event) => {
+    menuTapStart = { x: event.clientX, y: event.clientY };
+  });
+  ui.menu.addEventListener("pointerup", (event) => {
+    if (state.mode !== "menu" || !menuTapStart) return;
+    const distance = Math.hypot(
+      event.clientX - menuTapStart.x,
+      event.clientY - menuTapStart.y
+    );
+    menuTapStart = null;
+    if (distance > 12 || event.target.closest("button, a")) return;
+    enterMobileGame();
+  });
+  ui.menu.addEventListener("pointercancel", () => { menuTapStart = null; });
+  ui.menu.addEventListener("keydown", (event) => {
+    if (state.mode !== "menu" || !["Enter", " "].includes(event.key)) return;
+    event.preventDefault();
+    enterMobileGame();
+  });
+  document.getElementById("startWorld").addEventListener("click", (event) => {
+    event.stopPropagation();
+    enterMobileGame();
+  });
   document.getElementById("beginLevel").addEventListener("click", startWorld);
   document.getElementById("resumeGame").addEventListener("click", () => togglePause(false));
   document.getElementById("restartGame").addEventListener("click", startWorld);

@@ -18,7 +18,7 @@ Deep-link station warp buttons (in the Banshees, world and music sections) start
 
 Media playback is proximity-led and performance-aware: Enter World authorizes playback, only the active source and at most two nearby/in-view screens decode, and exactly one source is audible across the 18 landscape displays, 15-screen TikTok Alley and two Banshees screens. Audio fades continuously from near-full at 8 units to silence at 60.
 
-TikTok Alley is a deliberately clear walkable destination: local videos autoplay by proximity, every screen links to its source, and age-gated posts hand off to TikTok for authenticated playback.
+TikTok Alley is a deliberately clear walkable destination: local videos autoplay by proximity and every screen links to its source.
 
 Mobile visitors enter gameplay in one tap with fullscreen/landscape enhancement when supported, simplified MOVE/TURN and FIRE overlays, and an always-visible exit control.
 

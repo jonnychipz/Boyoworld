@@ -288,15 +288,6 @@ test("ships the 15-screen TikTok Alley and two Banshees videos", () => {
   assert.match(world, /galleryLinkCount:/);
   assert.match(world, /alleyIntrusionCount:/);
   assert.match(world, /openClickableMedia/);
-  assert.match(world, /AGE-GATED · PLAY ON TIKTOK/);
-  for (const id of [
-    "7654288168899874070",
-    "7659723319125626134",
-    "7661774256556018966",
-    "7638949274058902806"
-  ]) {
-    assert.match(world, new RegExp(id));
-  }
 });
 
 test("uses bounded adaptive media with continuous one-source audio", () => {
@@ -355,6 +346,10 @@ test("fullscreen targets the cabinet and Escape returns to the page", () => {
   assert.match(world, /this\.onPointerCancel =/);
   assert.match(world, /pointercancel", this\.onPointerCancel/);
   assert.match(game, /enterMobileGame/);
+  assert.match(game, /ui\.menu\.addEventListener\("pointerup"/);
+  assert.match(game, /event\.target\.closest\("button, a"\)/);
+  assert.match(game, /ui\.menu\.addEventListener\("keydown"/);
+  assert.match(html, /Tap anywhere to enter BOYOWORLD/);
   assert.match(game, /screen\.orientation\?\.lock\?\.\("landscape"\)/);
   assert.match(game, /mobileFullscreenExit/);
   assert.match(game, /mobileMoveToggle/);
