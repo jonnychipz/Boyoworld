@@ -19,6 +19,8 @@ test("ships one flagship game", () => {
   assert.match(world, /class BoyoThreeWorld/);
   assert.doesNotMatch(html, /phaser/i);
   assert.equal(existsSync(join(root, "assets/vendor/phaser.min.js")), false);
+  assert.match(html, /game\.js\?v=20260721-mobile-arrows/);
+  assert.match(html, /three-world\.js\?v=20260721-mobile-arrows/);
 });
 
 test("creates the 50-enemy surreal city", () => {
