@@ -56,7 +56,7 @@ BOYOWORLD is one large third-person night-city game running directly in the brow
 | `P` / `Escape` | Pause |
 | `R` | Restart |
 
-On mobile, **Enter the world** requests cabinet fullscreen and landscape orientation when supported. Fullscreen uses a simple **MOVE / TURN** toggle, a large **FIRE** button and a top-right **×** exit; browsers that block fullscreen/orientation lock fall back to a full-window portrait-safe mode.
+On mobile, **Enter the world** requests cabinet fullscreen and landscape orientation when supported. Fullscreen uses a four-arrow D-pad, a large **FIRE** button and a top-right **×** exit; browsers that block fullscreen/orientation lock fall back to a full-window portrait-safe mode.
 
 ## The world
 

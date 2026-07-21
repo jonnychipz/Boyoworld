@@ -352,10 +352,14 @@
           </div>
         </div>
         <div class="mobile-fullscreen-controls" id="mobileFullscreenControls" aria-label="Mobile fullscreen controls">
-          <button id="mobileMoveToggle" class="mobile-move-toggle" type="button" aria-pressed="false">
-            MOVE
-          </button>
-          <button id="mobileFireButton" class="mobile-fire-button" type="button">FIRE</button>
+          <div class="mobile-fullscreen-dpad" aria-label="Movement controls">
+            <button data-input="up" type="button" aria-label="Move forward">↑</button>
+            <button data-input="left" type="button" aria-label="Turn left">←</button>
+            <button data-input="down" type="button" aria-label="Move backward">↓</button>
+            <button data-input="right" type="button" aria-label="Turn right">→</button>
+          </div>
+          <button id="mobileFireButton" class="mobile-fire-button" data-input="action"
+            type="button" aria-label="Fire">FIRE</button>
         </div>
         <button id="mobileFullscreenExit" class="mobile-fullscreen-exit" type="button"
           aria-label="Exit fullscreen game mode">×</button>

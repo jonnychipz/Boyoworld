@@ -1953,7 +1953,6 @@ kbd {
   user-select: none;
 }
 
-.mobile-move-toggle,
 .mobile-fire-button {
   width: clamp(76px, 19vw, 104px);
   height: clamp(76px, 19vw, 104px);
@@ -1966,12 +1965,35 @@ kbd {
   font-weight: 1000;
 }
 
+.mobile-fullscreen-dpad {
+  width: clamp(162px, 44vw, 208px);
+  display: grid;
+  grid-template-columns: repeat(3, clamp(50px, 13vw, 64px));
+  grid-template-rows: repeat(2, clamp(50px, 13vw, 64px));
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.mobile-fullscreen-dpad button {
+  border: 2px solid var(--cp-game-white);
+  border-radius: 0.75rem;
+  background: var(--cp-game-black-65);
+  color: var(--cp-game-white);
+  font-size: clamp(1.15rem, 5vw, 1.7rem);
+  font-weight: 1000;
+}
+
+.mobile-fullscreen-dpad button:nth-child(1) { grid-column: 2; }
+.mobile-fullscreen-dpad button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.mobile-fullscreen-dpad button:nth-child(3) { grid-column: 2; grid-row: 2; }
+.mobile-fullscreen-dpad button:nth-child(4) { grid-column: 3; grid-row: 2; }
+
 .mobile-fire-button {
   background: var(--cp-game-red-dark);
   box-shadow: 0 0 0 6px var(--cp-game-red-20);
 }
 
-.mobile-move-toggle.active,
+.mobile-fullscreen-dpad button.active,
 .mobile-fire-button.active {
   background: var(--cp-game-red);
   transform: scale(0.94);

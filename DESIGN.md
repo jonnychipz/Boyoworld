@@ -51,7 +51,7 @@ Fifty uniquely named surreal humanoids retain their health, targets and combat t
 
 Movement conveys state. Respect reduced motion by removing decorative camera shake, particles, scrolling marquees, portal motion and tile choreography while preserving essential game movement. Cinematic intro skips immediately.
 
-Mobile entry is one tap: cabinet fullscreen plus an optional landscape lock, with a MOVE/TURN toggle, FIRE button and persistent top-right exit. Unsupported fullscreen/orientation APIs fall back to a fixed full-window cabinet.
+Mobile entry is one tap: cabinet fullscreen plus an optional landscape lock, with a four-arrow D-pad, FIRE button and persistent top-right exit. Unsupported fullscreen/orientation APIs fall back to a fixed full-window cabinet.
 
 Victory owns the camera for 3.6 seconds: mounted rear, full 360-degree orbit, then a leap toward screen. Reduced motion receives a short static acknowledgement. Canvas labels use a shared padded display-font fit helper, and wayfinding combines district road bands, intersection arrows and a compact minimap legend.
 

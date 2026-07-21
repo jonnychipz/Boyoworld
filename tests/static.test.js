@@ -352,11 +352,8 @@ test("fullscreen targets the cabinet and Escape returns to the page", () => {
   assert.match(html, /Tap anywhere to enter BOYOWORLD/);
   assert.match(game, /screen\.orientation\?\.lock\?\.\("landscape"\)/);
   assert.match(game, /mobileFullscreenExit/);
-  assert.match(game, /mobileMoveToggle/);
-  assert.match(game, /mobileMovePointerId/);
-  assert.match(game, /clearMobileMove\(event, true\)/);
-  assert.match(game, /mobileFireButton/);
   assert.match(html, /id="mobileFullscreenExit"/);
-  assert.match(html, /id="mobileMoveToggle"/);
+  assert.match(html, /class="mobile-fullscreen-dpad"/);
+  assert.match(html, /class="mobile-fire-button" data-input="action"/);
   assert.match(html, /id="mobileFireButton"/);
 });

@@ -72,8 +72,6 @@
   };
 
   const controls = { down: new Set(), pressed: new Set() };
-  const mobileMoveModes = ["up", "left"];
-  let mobileMoveModeIndex = 0;
 
   function announce(message) {
     ui.announcements.textContent = "";
@@ -621,8 +619,6 @@
   const fullscreenButton = document.getElementById("fullscreenButton");
   const fullscreenTarget = document.querySelector(".cabinet");
   const mobileFullscreenExit = document.getElementById("mobileFullscreenExit");
-  const mobileMoveToggle = document.getElementById("mobileMoveToggle");
-  const mobileFireButton = document.getElementById("mobileFireButton");
   const updateFullscreenUi = () => {
     const active = document.fullscreenElement === fullscreenTarget;
     fullscreenButton.setAttribute("aria-pressed", String(active));
@@ -658,50 +654,6 @@
     document.body.classList.remove("mobile-game-active");
     screen.orientation?.unlock?.();
   });
-  const updateMobileMoveLabel = () => {
-    const input = mobileMoveModes[mobileMoveModeIndex];
-    mobileMoveToggle.textContent = input === "up" ? "MOVE" : "TURN";
-    mobileMoveToggle.setAttribute("aria-label", input === "up" ? "Hold to move forward" : "Hold to turn left");
-  };
-  let mobileMovePointerId = null;
-  const pressMobileMove = (event) => {
-    event.preventDefault();
-    if (mobileMovePointerId !== null) return;
-    mobileMovePointerId = event.pointerId;
-    const input = mobileMoveModes[mobileMoveModeIndex];
-    controls.down.add(input);
-    mobileMoveToggle.classList.add("active");
-  };
-  const clearMobileMove = (event, advanceMode) => {
-    event.preventDefault();
-    if (event.pointerId !== mobileMovePointerId) return;
-    mobileMoveModes.forEach((input) => controls.down.delete(input));
-    mobileMoveToggle.classList.remove("active");
-    mobileMovePointerId = null;
-    if (advanceMode) {
-      mobileMoveModeIndex = (mobileMoveModeIndex + 1) % mobileMoveModes.length;
-      updateMobileMoveLabel();
-    }
-  };
-  mobileMoveToggle.addEventListener("pointerdown", pressMobileMove);
-  mobileMoveToggle.addEventListener("pointerup", (event) => clearMobileMove(event, true));
-  mobileMoveToggle.addEventListener("pointercancel", (event) => clearMobileMove(event, false));
-  const pressMobileFire = (event) => {
-    event.preventDefault();
-    controls.down.add("action");
-    controls.pressed.add("action");
-    mobileFireButton.classList.add("active");
-  };
-  const releaseMobileFire = (event) => {
-    event.preventDefault();
-    controls.down.delete("action");
-    mobileFireButton.classList.remove("active");
-  };
-  mobileFireButton.addEventListener("pointerdown", pressMobileFire);
-  ["pointerup", "pointercancel", "pointerleave"].forEach((type) =>
-    mobileFireButton.addEventListener(type, releaseMobileFire));
-  updateMobileMoveLabel();
-
   bindTouchControls();
   bindArchiveInteractions();
 

@@ -20,7 +20,7 @@ Media playback is proximity-led and performance-aware: Enter World authorizes pl
 
 TikTok Alley is a deliberately clear walkable destination: local videos autoplay by proximity and every screen links to its source.
 
-Mobile visitors enter gameplay in one tap with fullscreen/landscape enhancement when supported, simplified MOVE/TURN and FIRE overlays, and an always-visible exit control.
+Mobile visitors enter gameplay in one tap with fullscreen/landscape enhancement when supported, an arrow D-pad and FIRE overlay, and an always-visible exit control.
 
 ## Brand Personality
 
